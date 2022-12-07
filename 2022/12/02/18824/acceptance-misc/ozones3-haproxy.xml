@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.0.1 (Python 3.8.10 on linux)" generated="20221202 11:33:28.624" rpa="false" schemaversion="3">
+<suite id="s1" name="ozones3-haproxy" source="/opt/hadoop/smoketest/basic/basic.robot">
+<test id="s1-t1" name="Check webui static resources" line="29">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit HTTP user</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221202 11:32:51.271" endtime="20221202 11:32:51.271"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>curl --negotiate -u : -s -I http://${SCM}:9876/static/bootstrap-3.4.1/js/bootstrap.min.js</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221202 11:32:51.285" level="INFO">Running command 'curl --negotiate -u : -s -I http://scm:9876/static/bootstrap-3.4.1/js/bootstrap.min.js 2&gt;&amp;1'.</msg>
+<msg timestamp="20221202 11:32:51.509" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221202 11:32:51.509" level="INFO">${output} = HTTP/1.1 200 OK
+Date: Fri, 02 Dec 2022 11:32:51 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Fri, 02 Dec 2022 11:00:34 GMT
+Content-Typ...</msg>
+<status status="PASS" starttime="20221202 11:32:51.274" endtime="20221202 11:32:51.509"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221202 11:32:51.512" level="INFO">HTTP/1.1 200 OK
+Date: Fri, 02 Dec 2022 11:32:51 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Fri, 02 Dec 2022 11:00:34 GMT
+Content-Type: application/javascript
+Accept-Ranges: bytes
+Content-Length: 39680
+</msg>
+<status status="PASS" starttime="20221202 11:32:51.511" endtime="20221202 11:32:51.512"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221202 11:32:51.513" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221202 11:32:51.512" endtime="20221202 11:32:51.513"/>
+</kw>
+<status status="PASS" starttime="20221202 11:32:51.273" endtime="20221202 11:32:51.513"/>
+</kw>
+<msg timestamp="20221202 11:32:51.513" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221202 11:32:51.273" endtime="20221202 11:32:51.515"/>
+</kw>
+<msg timestamp="20221202 11:32:51.515" level="INFO">${result} = HTTP/1.1 200 OK
+Date: Fri, 02 Dec 2022 11:32:51 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Fri, 02 Dec 2022 11:00:34 GMT
+Content-Typ...</msg>
+<status status="PASS" starttime="20221202 11:32:51.272" endtime="20221202 11:32:51.515"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>200</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221202 11:32:51.517" endtime="20221202 11:32:51.517"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221202 11:32:51.269" endtime="20221202 11:32:51.530"/>
+</test>
+<test id="s1-t2" name="Basic Freon smoketest" line="34">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221202 11:32:51.538" endtime="20221202 11:32:51.539"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>10</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20221202 11:32:51.545" level="INFO">${random} = L196vgSaTd</msg>
+<status status="PASS" starttime="20221202 11:32:51.544" endtime="20221202 11:32:51.545"/>
+</kw>
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221202 11:32:51.582" level="INFO">Running command 'ozone freon ockg  -t 1 -n1 -p L196vgSaTd  2&gt;&amp;1'.</msg>
+<msg timestamp="20221202 11:33:04.227" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221202 11:33:04.228" level="INFO">${output} = 2022-12-02 11:32:55,029 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-02 11:32:55,223 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221202 11:32:51.572" endtime="20221202 11:33:04.228"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221202 11:33:04.229" level="INFO">2022-12-02 11:32:55,029 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-02 11:32:55,223 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2022-12-02 11:32:55,223 [main] INFO impl.MetricsSystemImpl: ozone-freon metrics system started
+2022-12-02 11:32:55,603 [main] INFO freon.BaseFreonGenerator: Executing test with prefix L196vgSaTd and number-of-tests 1
+2022-12-02 11:32:55,738 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:32:56,744 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:32:57,745 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:32:58,746 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:32:59,614 [main] INFO rpc.RpcClient: Creating Volume: vol1, with hadoop as owner and space quota set to -1 bytes, counts quota set to -1
+2022-12-02 11:32:59,746 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:32:59,769 [main] INFO rpc.RpcClient: Creating Bucket: vol1/bucket1, with server-side default bucket layout, hadoop as owner, Versioning false, Storage Type set to DISK and Encryption set to false 
+2022-12-02 11:33:00,747 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:33:00,806 [pool-2-thread-1] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2022-12-02 11:33:01,200 [pool-2-thread-1] INFO metrics.MetricRegistries: Loaded MetricRegistries class org.apache.ratis.metrics.impl.MetricRegistriesImpl
+2022-12-02 11:33:01,764 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:33:02,765 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:33:03,765 [Thread-3] INFO freon.ProgressBar: Progress: 100.00 % (1 out of 1)
+2022-12-02 11:33:03,865 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-create, count=1, min=3353.237627, max=3353.237627, mean=3353.237627, stddev=0.0, median=3353.237627, p75=3353.237627, p95=3353.237627, p98=3353.237627, p99=3353.237627, p999=3353.237627, mean_rate=0.24678999598232304, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2022-12-02 11:33:03,870 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 8
+2022-12-02 11:33:03,877 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2022-12-02 11:33:03,877 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 1</msg>
+<status status="PASS" starttime="20221202 11:33:04.228" endtime="20221202 11:33:04.229"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221202 11:33:04.230" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221202 11:33:04.229" endtime="20221202 11:33:04.230"/>
+</kw>
+<status status="PASS" starttime="20221202 11:32:51.570" endtime="20221202 11:33:04.231"/>
+</kw>
+<msg timestamp="20221202 11:33:04.231" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221202 11:32:51.569" endtime="20221202 11:33:04.231"/>
+</kw>
+<msg timestamp="20221202 11:33:04.232" level="INFO">${result} = 2022-12-02 11:32:55,029 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-02 11:32:55,223 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221202 11:32:51.568" endtime="20221202 11:33:04.232"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221202 11:33:04.232" endtime="20221202 11:33:04.233"/>
+</kw>
+<status status="PASS" starttime="20221202 11:32:51.545" endtime="20221202 11:33:04.233"/>
+</kw>
+<kw name="Freon OCKV" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockv ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221202 11:33:04.238" level="INFO">Running command 'ozone freon ockv  -t 1 -n1 -p L196vgSaTd  2&gt;&amp;1'.</msg>
+<msg timestamp="20221202 11:33:11.158" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221202 11:33:11.158" level="INFO">${output} = 2022-12-02 11:33:06,364 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-02 11:33:06,633 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221202 11:33:04.236" endtime="20221202 11:33:11.158"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221202 11:33:11.159" level="INFO">2022-12-02 11:33:06,364 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-02 11:33:06,633 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2022-12-02 11:33:06,633 [main] INFO impl.MetricsSystemImpl: ozone-freon metrics system started
+2022-12-02 11:33:06,921 [main] INFO freon.BaseFreonGenerator: Executing test with prefix L196vgSaTd and number-of-tests 1
+2022-12-02 11:33:07,022 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:33:08,028 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:33:08,585 [main] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2022-12-02 11:33:09,028 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2022-12-02 11:33:10,029 [Thread-3] INFO freon.ProgressBar: Progress: 100.00 % (1 out of 1)
+2022-12-02 11:33:10,798 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-validate, count=1, min=59.485555, max=59.485555, mean=59.485555, stddev=0.0, median=59.485555, p75=59.485555, p95=59.485555, p98=59.485555, p99=59.485555, p999=59.485555, mean_rate=0.9731996437953057, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2022-12-02 11:33:10,799 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 4
+2022-12-02 11:33:10,799 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2022-12-02 11:33:10,799 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 1</msg>
+<status status="PASS" starttime="20221202 11:33:11.159" endtime="20221202 11:33:11.160"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221202 11:33:11.160" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221202 11:33:11.160" endtime="20221202 11:33:11.160"/>
+</kw>
+<status status="PASS" starttime="20221202 11:33:04.235" endtime="20221202 11:33:11.161"/>
+</kw>
+<msg timestamp="20221202 11:33:11.161" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221202 11:33:04.235" endtime="20221202 11:33:11.161"/>
+</kw>
+<msg timestamp="20221202 11:33:11.162" level="INFO">${result} = 2022-12-02 11:33:06,364 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-02 11:33:06,633 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221202 11:33:04.234" endtime="20221202 11:33:11.162"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221202 11:33:11.162" endtime="20221202 11:33:11.162"/>
+</kw>
+<status status="PASS" starttime="20221202 11:33:04.233" endtime="20221202 11:33:11.163"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221202 11:32:51.531" endtime="20221202 11:33:11.163"/>
+</test>
+<doc>Smoketest ozone cluster startup</doc>
+<status status="PASS" starttime="20221202 11:32:51.122" endtime="20221202 11:33:11.169"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="ozones3-haproxy">ozones3-haproxy</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

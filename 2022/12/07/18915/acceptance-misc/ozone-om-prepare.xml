@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.0.1 (Python 3.8.10 on linux)" generated="20221207 03:18:59.783" rpa="false" schemaversion="3">
+<suite id="s1" name="ozone-om-prepare">
+<suite id="s1-s1" name="Om-Cancel-Prepare" source="/opt/hadoop/smoketest/omha/om-cancel-prepare.robot">
+<kw name="Generate volume and bucket names" type="SETUP">
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20221207 03:12:38.213" level="INFO">${random} = 60872</msg>
+<status status="PASS" starttime="20221207 03:12:38.213" endtime="20221207 03:12:38.213"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${volume_name}</arg>
+<arg>${random}-volume-for-cancel</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221207 03:12:38.215" level="INFO">${volume_name} = 60872-volume-for-cancel</msg>
+<status status="PASS" starttime="20221207 03:12:38.213" endtime="20221207 03:12:38.215"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${bucket_name}</arg>
+<arg>${random}-bucket-for-cancel</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221207 03:12:38.216" level="INFO">${bucket_name} = 60872-bucket-for-cancel</msg>
+<status status="PASS" starttime="20221207 03:12:38.215" endtime="20221207 03:12:38.216"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:38.212" endtime="20221207 03:12:38.217"/>
+</kw>
+<test id="s1-s1-t1" name="Cancel Ozone Manager Prepare" line="33">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:12:38.218" endtime="20221207 03:12:38.219"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin om cancelprepare -id=omservice</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:38.224" level="INFO">Running command 'ozone admin om cancelprepare -id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:41.331" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:41.331" level="INFO">${output} = com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+...</msg>
+<status status="PASS" starttime="20221207 03:12:38.220" endtime="20221207 03:12:41.331"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:41.333" level="INFO">com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+	at org.apache.hadoop.ozone.om.OzoneManager.checkLeaderStatus(OzoneManager.java:4129)
+	at org.apache.hadoop.ozone.om.ratis.utils.OzoneManagerRatisUtils.checkLeaderStatus(OzoneManagerRatisUtils.java:446)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.processRequest(OzoneManagerProtocolServerSideTranslatorPB.java:181)
+	at org.apache.hadoop.hdds.server.OzoneProtocolMessageDispatcher.processRequest(OzoneProtocolMessageDispatcher.java:87)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitRequest(OzoneManagerProtocolServerSideTranslatorPB.java:147)
+	at org.apache.hadoop.ozone.protocol.proto.OzoneManagerProtocolProtos$OzoneManagerService$2.callBlockingMethod(OzoneManagerProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server.processCall(ProtobufRpcEngine.java:465)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:578)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:556)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1093)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1043)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:971)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/javax.security.auth.Subject.doAs(Subject.java:423)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1878)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2976)
+, while invoking $Proxy20.submitRequest over nodeId=om2,nodeAddress=om2:9862 after 1 failover attempts. Trying to failover immediately.
+Cancel prepare succeeded, cluster can now accept write requests.</msg>
+<status status="PASS" starttime="20221207 03:12:41.332" endtime="20221207 03:12:41.333"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:41.333" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:41.333" endtime="20221207 03:12:41.333"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:38.220" endtime="20221207 03:12:41.334"/>
+</kw>
+<msg timestamp="20221207 03:12:41.334" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:38.219" endtime="20221207 03:12:41.335"/>
+</kw>
+<msg timestamp="20221207 03:12:41.335" level="INFO">${result} = com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+...</msg>
+<status status="PASS" starttime="20221207 03:12:38.219" endtime="20221207 03:12:41.335"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>3min</arg>
+<arg>5sec</arg>
+<arg>Should contain</arg>
+<arg>${result}</arg>
+<arg>Cancel prepare succeeded</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Cancel prepare succeeded</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:12:41.336" endtime="20221207 03:12:41.336"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:41.335" endtime="20221207 03:12:41.336"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:12:38.217" endtime="20221207 03:12:41.336"/>
+</test>
+<test id="s1-s1-t2" name="Test write operations" line="37">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:12:41.338" endtime="20221207 03:12:41.338"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh volume create /${volume_name}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:41.342" level="INFO">Running command 'ozone sh volume create /60872-volume-for-cancel 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:43.862" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:43.862" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:12:41.340" endtime="20221207 03:12:43.862"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:43.864" level="INFO"/>
+<status status="PASS" starttime="20221207 03:12:43.863" endtime="20221207 03:12:43.864"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:43.864" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:43.864" endtime="20221207 03:12:43.864"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:41.339" endtime="20221207 03:12:43.865"/>
+</kw>
+<msg timestamp="20221207 03:12:43.865" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:41.339" endtime="20221207 03:12:43.865"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:41.339" endtime="20221207 03:12:43.866"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh bucket create /${volume_name}/${bucket_name}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:43.869" level="INFO">Running command 'ozone sh bucket create /60872-volume-for-cancel/60872-bucket-for-cancel 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:46.522" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:46.522" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:12:43.867" endtime="20221207 03:12:46.522"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:46.524" level="INFO"/>
+<status status="PASS" starttime="20221207 03:12:46.523" endtime="20221207 03:12:46.524"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:46.524" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:46.524" endtime="20221207 03:12:46.525"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:43.866" endtime="20221207 03:12:46.525"/>
+</kw>
+<msg timestamp="20221207 03:12:46.525" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:43.866" endtime="20221207 03:12:46.525"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:43.866" endtime="20221207 03:12:46.525"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone sh key put /${volume_name}/${bucket_name}/cancel-key /opt/hadoop/NOTICE.txt</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:46.530" level="INFO">Running command 'ozone sh key put /60872-volume-for-cancel/60872-bucket-for-cancel/cancel-key /opt/hadoop/NOTICE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:51.187" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:51.187" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:12:46.527" endtime="20221207 03:12:51.187"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:51.188" level="INFO"/>
+<status status="PASS" starttime="20221207 03:12:51.187" endtime="20221207 03:12:51.188"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:51.189" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:51.188" endtime="20221207 03:12:51.189"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:46.526" endtime="20221207 03:12:51.189"/>
+</kw>
+<msg timestamp="20221207 03:12:51.189" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:46.526" endtime="20221207 03:12:51.189"/>
+</kw>
+<msg timestamp="20221207 03:12:51.190" level="INFO">${result} = </msg>
+<status status="PASS" starttime="20221207 03:12:46.526" endtime="20221207 03:12:51.190"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone sh key info /${volume_name}/${bucket_name}/cancel-key</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:51.194" level="INFO">Running command 'ozone sh key info /60872-volume-for-cancel/60872-bucket-for-cancel/cancel-key 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:54.048" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:54.048" level="INFO">${output} = {
+  "volumeName" : "60872-volume-for-cancel",
+  "bucketName" : "60872-bucket-for-cancel",
+  "name" : "cancel-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:12:49.036Z",
+  "modificationT...</msg>
+<status status="PASS" starttime="20221207 03:12:51.191" endtime="20221207 03:12:54.048"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:54.050" level="INFO">{
+  "volumeName" : "60872-volume-for-cancel",
+  "bucketName" : "60872-bucket-for-cancel",
+  "name" : "cancel-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:12:49.036Z",
+  "modificationTime" : "2022-12-07T03:12:50.796Z",
+  "replicationConfig" : {
+    "replicationFactor" : "THREE",
+    "requiredNodes" : 3,
+    "replicationType" : "RATIS"
+  },
+  "metadata" : { },
+  "ozoneKeyLocations" : [ {
+    "containerID" : 4,
+    "localID" : 109611004723200103,
+    "length" : 17539,
+    "offset" : 0,
+    "keyOffset" : 0
+  } ]
+}</msg>
+<status status="PASS" starttime="20221207 03:12:54.049" endtime="20221207 03:12:54.050"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:54.050" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:54.050" endtime="20221207 03:12:54.051"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:51.191" endtime="20221207 03:12:54.051"/>
+</kw>
+<msg timestamp="20221207 03:12:54.051" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:51.190" endtime="20221207 03:12:54.051"/>
+</kw>
+<msg timestamp="20221207 03:12:54.052" level="INFO">${result} = {
+  "volumeName" : "60872-volume-for-cancel",
+  "bucketName" : "60872-bucket-for-cancel",
+  "name" : "cancel-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:12:49.036Z",
+  "modificationT...</msg>
+<status status="PASS" starttime="20221207 03:12:51.190" endtime="20221207 03:12:54.052"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>\"name\" : \"cancel-key\"</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:12:54.052" endtime="20221207 03:12:54.052"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:12:41.337" endtime="20221207 03:12:54.052"/>
+</test>
+<doc>Smoke test for ozone manager cancel prepare</doc>
+<status status="PASS" starttime="20221207 03:12:38.159" endtime="20221207 03:12:54.054"/>
+</suite>
+<suite id="s1-s2" name="Om-Prepare" source="/opt/hadoop/smoketest/omha/om-prepare.robot">
+<kw name="Create Specific OM data for prepare" type="SETUP">
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=om-prepare</arg>
+<arg>n=100</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:58.917" level="INFO">Running command 'ozone freon ockg --om-service-id=omservice -t 1 -n100 -p om-prepare  2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:13:17.731" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:13:17.731" level="INFO">${output} = 2022-12-07 03:13:00,215 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-07 03:13:00,329 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221207 03:12:58.913" endtime="20221207 03:13:17.731"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:13:17.732" level="INFO">2022-12-07 03:13:00,215 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-07 03:13:00,329 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2022-12-07 03:13:00,329 [main] INFO impl.MetricsSystemImpl: ozone-freon metrics system started
+2022-12-07 03:13:00,485 [main] INFO freon.BaseFreonGenerator: Executing test with prefix om-prepare and number-of-tests 100
+2022-12-07 03:13:00,543 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:13:01,091 [main] INFO retry.RetryInvocationHandler: com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.createNotLeaderException(OzoneManagerProtocolServerSideTranslatorPB.java:248)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.createLeaderErrorException(OzoneManagerProtocolServerSideTranslatorPB.java:235)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitReadRequestToOM(OzoneManagerProtocolServerSideTranslatorPB.java:228)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.processRequest(OzoneManagerProtocolServerSideTranslatorPB.java:175)
+	at org.apache.hadoop.hdds.server.OzoneProtocolMessageDispatcher.processRequest(OzoneProtocolMessageDispatcher.java:87)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitRequest(OzoneManagerProtocolServerSideTranslatorPB.java:147)
+	at org.apache.hadoop.ozone.protocol.proto.OzoneManagerProtocolProtos$OzoneManagerService$2.callBlockingMethod(OzoneManagerProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server.processCall(ProtobufRpcEngine.java:465)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:578)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:556)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1093)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1043)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:971)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/javax.security.auth.Subject.doAs(Subject.java:423)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1878)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2976)
+, while invoking $Proxy23.submitRequest over nodeId=om2,nodeAddress=om2:9862 after 1 failover attempts. Trying to failover immediately.
+2022-12-07 03:13:01,551 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:13:01,879 [pool-2-thread-1] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2022-12-07 03:13:02,134 [pool-2-thread-1] INFO metrics.MetricRegistries: Loaded MetricRegistries class org.apache.ratis.metrics.impl.MetricRegistriesImpl
+2022-12-07 03:13:02,551 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:13:03,551 [Thread-3] INFO freon.ProgressBar: Progress: 6.00 % (6 out of 100)
+2022-12-07 03:13:04,553 [Thread-3] INFO freon.ProgressBar: Progress: 16.00 % (16 out of 100)
+2022-12-07 03:13:05,556 [Thread-3] INFO freon.ProgressBar: Progress: 25.00 % (25 out of 100)
+2022-12-07 03:13:06,559 [Thread-3] INFO freon.ProgressBar: Progress: 38.00 % (38 out of 100)
+2022-12-07 03:13:07,559 [Thread-3] INFO freon.ProgressBar: Progress: 50.00 % (50 out of 100)
+2022-12-07 03:13:08,560 [Thread-3] INFO freon.ProgressBar: Progress: 60.00 % (60 out of 100)
+2022-12-07 03:13:09,560 [Thread-3] INFO freon.ProgressBar: Progress: 60.00 % (60 out of 100)
+2022-12-07 03:13:10,561 [Thread-3] INFO freon.ProgressBar: Progress: 60.00 % (60 out of 100)
+2022-12-07 03:13:11,562 [Thread-3] INFO freon.ProgressBar: Progress: 70.00 % (70 out of 100)
+2022-12-07 03:13:12,563 [Thread-3] INFO freon.ProgressBar: Progress: 79.00 % (79 out of 100)
+2022-12-07 03:13:13,564 [Thread-3] INFO freon.ProgressBar: Progress: 79.00 % (79 out of 100)
+2022-12-07 03:13:14,564 [Thread-3] INFO freon.ProgressBar: Progress: 79.00 % (79 out of 100)
+2022-12-07 03:13:15,565 [Thread-3] INFO freon.ProgressBar: Progress: 88.00 % (88 out of 100)
+2022-12-07 03:13:16,566 [Thread-3] INFO freon.ProgressBar: Progress: 100.00 % (100 out of 100)
+2022-12-07 03:13:17,353 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-create, count=100, min=52.560163, max=2591.498483, mean=152.92291710890996, stddev=384.81374631873734, median=83.956739, p75=101.816795, p95=134.067979, p98=2557.363987, p99=2591.498483, p999=2591.498483, mean_rate=6.208978539214057, m1=6.552026648777594, m5=6.590082872292971, m15=6.596675908802938, rate_unit=events/second, duration_unit=milliseconds
+2022-12-07 03:13:17,354 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 17
+2022-12-07 03:13:17,354 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2022-12-07 03:13:17,354 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 100</msg>
+<status status="PASS" starttime="20221207 03:13:17.731" endtime="20221207 03:13:17.732"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:13:17.733" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:13:17.732" endtime="20221207 03:13:17.733"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:58.913" endtime="20221207 03:13:17.733"/>
+</kw>
+<msg timestamp="20221207 03:13:17.733" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:58.913" endtime="20221207 03:13:17.735"/>
+</kw>
+<msg timestamp="20221207 03:13:17.735" level="INFO">${result} = 2022-12-07 03:13:00,215 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-07 03:13:00,329 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221207 03:12:58.912" endtime="20221207 03:13:17.738"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:13:17.738" endtime="20221207 03:13:17.739"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:58.911" endtime="20221207 03:13:17.739"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20221207 03:13:17.740" level="INFO">${random} = 90685</msg>
+<status status="PASS" starttime="20221207 03:13:17.739" endtime="20221207 03:13:17.740"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${volume_name}</arg>
+<arg>${random}-volume-for-prepare</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221207 03:13:17.741" level="INFO">${volume_name} = 90685-volume-for-prepare</msg>
+<status status="PASS" starttime="20221207 03:13:17.740" endtime="20221207 03:13:17.741"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${bucket_name}</arg>
+<arg>${random}-bucket-for-prepare</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221207 03:13:17.743" level="INFO">${bucket_name} = 90685-bucket-for-prepare</msg>
+<status status="PASS" starttime="20221207 03:13:17.742" endtime="20221207 03:13:17.743"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh volume create /${volume_name}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:13:17.747" level="INFO">Running command 'ozone sh volume create /90685-volume-for-prepare 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:13:20.174" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:13:20.175" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:13:17.745" endtime="20221207 03:13:20.175"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:13:20.176" level="INFO"/>
+<status status="PASS" starttime="20221207 03:13:20.175" endtime="20221207 03:13:20.176"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:13:20.176" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:13:20.176" endtime="20221207 03:13:20.177"/>
+</kw>
+<status status="PASS" starttime="20221207 03:13:17.744" endtime="20221207 03:13:20.177"/>
+</kw>
+<msg timestamp="20221207 03:13:20.177" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:13:17.744" endtime="20221207 03:13:20.177"/>
+</kw>
+<status status="PASS" starttime="20221207 03:13:17.743" endtime="20221207 03:13:20.178"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh bucket create /${volume_name}/${bucket_name}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:13:20.181" level="INFO">Running command 'ozone sh bucket create /90685-volume-for-prepare/90685-bucket-for-prepare 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:13:22.777" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:13:22.777" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:13:20.179" endtime="20221207 03:13:22.777"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:13:22.778" level="INFO"/>
+<status status="PASS" starttime="20221207 03:13:22.778" endtime="20221207 03:13:22.778"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:13:22.779" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:13:22.778" endtime="20221207 03:13:22.779"/>
+</kw>
+<status status="PASS" starttime="20221207 03:13:20.178" endtime="20221207 03:13:22.779"/>
+</kw>
+<msg timestamp="20221207 03:13:22.779" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:13:20.178" endtime="20221207 03:13:22.780"/>
+</kw>
+<status status="PASS" starttime="20221207 03:13:20.178" endtime="20221207 03:13:22.780"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh key put /${volume_name}/${bucket_name}/prepare-key /opt/hadoop/NOTICE.txt</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:13:22.784" level="INFO">Running command 'ozone sh key put /90685-volume-for-prepare/90685-bucket-for-prepare/prepare-key /opt/hadoop/NOTICE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:13:27.336" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:13:27.337" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:13:22.781" endtime="20221207 03:13:27.337"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:13:27.338" level="INFO"/>
+<status status="PASS" starttime="20221207 03:13:27.337" endtime="20221207 03:13:27.338"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:13:27.338" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:13:27.338" endtime="20221207 03:13:27.338"/>
+</kw>
+<status status="PASS" starttime="20221207 03:13:22.781" endtime="20221207 03:13:27.339"/>
+</kw>
+<msg timestamp="20221207 03:13:27.339" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:13:22.781" endtime="20221207 03:13:27.339"/>
+</kw>
+<status status="PASS" starttime="20221207 03:13:22.780" endtime="20221207 03:13:27.339"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:58.910" endtime="20221207 03:13:27.339"/>
+</kw>
+<test id="s1-s2-t1" name="Prepare Ozone Manager" line="39">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:13:27.341" endtime="20221207 03:13:27.342"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin om prepare -id=omservice</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:13:27.346" level="INFO">Running command 'ozone admin om prepare -id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:18:27.341" level="FAIL">Test timeout 5 minutes exceeded.</msg>
+<status status="FAIL" starttime="20221207 03:13:27.344" endtime="20221207 03:18:27.341"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20221207 03:18:27.341" endtime="20221207 03:18:27.341"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" starttime="20221207 03:18:27.342" endtime="20221207 03:18:27.342"/>
+</kw>
+<status status="FAIL" starttime="20221207 03:13:27.343" endtime="20221207 03:18:27.342"/>
+</kw>
+<msg timestamp="20221207 03:18:27.342" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="FAIL" starttime="20221207 03:13:27.343" endtime="20221207 03:18:27.342"/>
+</kw>
+<status status="FAIL" starttime="20221207 03:13:27.342" endtime="20221207 03:18:27.343"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>3min</arg>
+<arg>10sec</arg>
+<arg>Should contain</arg>
+<arg>${result}</arg>
+<arg>OM Preparation successful!</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20221207 03:18:27.343" endtime="20221207 03:18:27.343"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="FAIL" starttime="20221207 03:13:27.340" endtime="20221207 03:18:27.344">Test timeout 5 minutes exceeded.</status>
+</test>
+<test id="s1-s2-t2" name="Checks if the expected data is present in OM" line="43">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:18:27.346" endtime="20221207 03:18:27.346"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone sh key info /${volume_name}/${bucket_name}/prepare-key</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:18:27.350" level="INFO">Running command 'ozone sh key info /90685-volume-for-prepare/90685-bucket-for-prepare/prepare-key 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:18:30.112" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:18:30.112" level="INFO">${output} = {
+  "volumeName" : "90685-volume-for-prepare",
+  "bucketName" : "90685-bucket-for-prepare",
+  "name" : "prepare-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:13:25.152Z",
+  "modificati...</msg>
+<status status="PASS" starttime="20221207 03:18:27.347" endtime="20221207 03:18:30.112"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:18:30.113" level="INFO">{
+  "volumeName" : "90685-volume-for-prepare",
+  "bucketName" : "90685-bucket-for-prepare",
+  "name" : "prepare-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:13:25.152Z",
+  "modificationTime" : "2022-12-07T03:13:26.965Z",
+  "replicationConfig" : {
+    "replicationFactor" : "THREE",
+    "requiredNodes" : 3,
+    "replicationType" : "RATIS"
+  },
+  "metadata" : { },
+  "ozoneKeyLocations" : [ {
+    "containerID" : 4,
+    "localID" : 109611004723200204,
+    "length" : 17539,
+    "offset" : 0,
+    "keyOffset" : 0
+  } ]
+}</msg>
+<status status="PASS" starttime="20221207 03:18:30.112" endtime="20221207 03:18:30.113"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:18:30.114" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:18:30.113" endtime="20221207 03:18:30.114"/>
+</kw>
+<status status="PASS" starttime="20221207 03:18:27.347" endtime="20221207 03:18:30.114"/>
+</kw>
+<msg timestamp="20221207 03:18:30.114" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:18:27.347" endtime="20221207 03:18:30.115"/>
+</kw>
+<msg timestamp="20221207 03:18:30.115" level="INFO">${result} = {
+  "volumeName" : "90685-volume-for-prepare",
+  "bucketName" : "90685-bucket-for-prepare",
+  "name" : "prepare-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:13:25.152Z",
+  "modificati...</msg>
+<status status="PASS" starttime="20221207 03:18:27.346" endtime="20221207 03:18:30.115"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>\"name\" : \"prepare-key\"</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:18:30.115" endtime="20221207 03:18:30.115"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:18:27.345" endtime="20221207 03:18:30.116"/>
+</test>
+<test id="s1-s2-t3" name="Test write operation fails" line="47">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:18:30.117" endtime="20221207 03:18:30.117"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<var>${result}</var>
+<arg>ozone sh key put /${volume_name}/${bucket_name}/prepare-key2 /opt/hadoop/NOTICE.txt</arg>
+<arg>255</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:18:30.120" level="INFO">Running command 'ozone sh key put /90685-volume-for-prepare/90685-bucket-for-prepare/prepare-key2 /opt/hadoop/NOTICE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:18:32.619" level="INFO">${rc} = 255</msg>
+<msg timestamp="20221207 03:18:32.619" level="INFO">${output} = NOT_SUPPORTED_OPERATION_WHEN_PREPARED Cannot apply write request CreateKey when OM is in prepare mode.</msg>
+<status status="PASS" starttime="20221207 03:18:30.118" endtime="20221207 03:18:32.619"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:18:32.621" level="INFO">NOT_SUPPORTED_OPERATION_WHEN_PREPARED Cannot apply write request CreateKey when OM is in prepare mode.</msg>
+<status status="PASS" starttime="20221207 03:18:32.620" endtime="20221207 03:18:32.621"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:18:32.622" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:18:32.621" endtime="20221207 03:18:32.622"/>
+</kw>
+<msg timestamp="20221207 03:18:32.622" level="INFO">${result} = NOT_SUPPORTED_OPERATION_WHEN_PREPARED Cannot apply write request CreateKey when OM is in prepare mode.</msg>
+<status status="PASS" starttime="20221207 03:18:30.117" endtime="20221207 03:18:32.622"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>OM is in prepare mode</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:18:32.622" endtime="20221207 03:18:32.623"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>ozone sh key info /${volume_name}/${bucket_name}/prepare-key2</arg>
+<arg>255</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:18:32.626" level="INFO">Running command 'ozone sh key info /90685-volume-for-prepare/90685-bucket-for-prepare/prepare-key2 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:18:35.222" level="INFO">${rc} = 255</msg>
+<msg timestamp="20221207 03:18:35.222" level="INFO">${output} = KEY_NOT_FOUND Key:prepare-key2 not found</msg>
+<status status="PASS" starttime="20221207 03:18:32.624" endtime="20221207 03:18:35.222"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:18:35.223" level="INFO">KEY_NOT_FOUND Key:prepare-key2 not found</msg>
+<status status="PASS" starttime="20221207 03:18:35.222" endtime="20221207 03:18:35.223"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:18:35.224" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:18:35.223" endtime="20221207 03:18:35.224"/>
+</kw>
+<status status="PASS" starttime="20221207 03:18:32.623" endtime="20221207 03:18:35.224"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:18:30.116" endtime="20221207 03:18:35.225"/>
+</test>
+<doc>Smoke test to test preparing OMs in an OM HA cluster.</doc>
+<status status="FAIL" starttime="20221207 03:12:58.857" endtime="20221207 03:18:35.226"/>
+</suite>
+<suite id="s1-s3" name="Om-Prepare" source="/opt/hadoop/smoketest/omha/om-prepare.robot">
+<kw name="Create Specific OM data for prepare" type="SETUP">
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=om-prepare</arg>
+<arg>n=100</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:11:44.161" level="INFO">Running command 'ozone freon ockg --om-service-id=omservice -t 1 -n100 -p om-prepare  2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:06.913" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:06.913" level="INFO">${output} = 2022-12-07 03:11:45,851 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-07 03:11:45,970 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221207 03:11:44.156" endtime="20221207 03:12:06.913"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:06.914" level="INFO">2022-12-07 03:11:45,851 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-07 03:11:45,970 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2022-12-07 03:11:45,970 [main] INFO impl.MetricsSystemImpl: ozone-freon metrics system started
+2022-12-07 03:11:46,141 [main] INFO freon.BaseFreonGenerator: Executing test with prefix om-prepare and number-of-tests 100
+2022-12-07 03:11:46,227 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:11:46,869 [main] INFO retry.RetryInvocationHandler: com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.createNotLeaderException(OzoneManagerProtocolServerSideTranslatorPB.java:248)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.createLeaderErrorException(OzoneManagerProtocolServerSideTranslatorPB.java:235)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitReadRequestToOM(OzoneManagerProtocolServerSideTranslatorPB.java:228)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.processRequest(OzoneManagerProtocolServerSideTranslatorPB.java:175)
+	at org.apache.hadoop.hdds.server.OzoneProtocolMessageDispatcher.processRequest(OzoneProtocolMessageDispatcher.java:87)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitRequest(OzoneManagerProtocolServerSideTranslatorPB.java:147)
+	at org.apache.hadoop.ozone.protocol.proto.OzoneManagerProtocolProtos$OzoneManagerService$2.callBlockingMethod(OzoneManagerProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server.processCall(ProtobufRpcEngine.java:465)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:578)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:556)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1093)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1043)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:971)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/javax.security.auth.Subject.doAs(Subject.java:423)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1878)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2976)
+, while invoking $Proxy23.submitRequest over nodeId=om2,nodeAddress=om2:9862 after 1 failover attempts. Trying to failover immediately.
+2022-12-07 03:11:47,061 [main] INFO rpc.RpcClient: Creating Volume: vol1, with hadoop as owner and space quota set to -1 bytes, counts quota set to -1
+2022-12-07 03:11:47,229 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:11:47,293 [main] INFO rpc.RpcClient: Creating Bucket: vol1/bucket1, with server-side default bucket layout, hadoop as owner, Versioning false, Storage Type set to DISK and Encryption set to false 
+2022-12-07 03:11:48,230 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:11:48,448 [pool-2-thread-1] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2022-12-07 03:11:48,776 [pool-2-thread-1] INFO metrics.MetricRegistries: Loaded MetricRegistries class org.apache.ratis.metrics.impl.MetricRegistriesImpl
+2022-12-07 03:11:49,230 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 100)
+2022-12-07 03:11:50,253 [Thread-3] INFO freon.ProgressBar: Progress: 1.00 % (1 out of 100)
+2022-12-07 03:11:51,253 [Thread-3] INFO freon.ProgressBar: Progress: 5.00 % (5 out of 100)
+2022-12-07 03:11:52,255 [Thread-3] INFO freon.ProgressBar: Progress: 11.00 % (11 out of 100)
+2022-12-07 03:11:53,256 [Thread-3] INFO freon.ProgressBar: Progress: 17.00 % (17 out of 100)
+2022-12-07 03:11:54,257 [Thread-3] INFO freon.ProgressBar: Progress: 22.00 % (22 out of 100)
+2022-12-07 03:11:55,259 [Thread-3] INFO freon.ProgressBar: Progress: 29.00 % (29 out of 100)
+2022-12-07 03:11:56,260 [Thread-3] INFO freon.ProgressBar: Progress: 38.00 % (38 out of 100)
+2022-12-07 03:11:57,260 [Thread-3] INFO freon.ProgressBar: Progress: 46.00 % (46 out of 100)
+2022-12-07 03:11:58,261 [Thread-3] INFO freon.ProgressBar: Progress: 52.00 % (52 out of 100)
+2022-12-07 03:11:59,261 [Thread-3] INFO freon.ProgressBar: Progress: 52.00 % (52 out of 100)
+2022-12-07 03:12:00,261 [Thread-3] INFO freon.ProgressBar: Progress: 52.00 % (52 out of 100)
+2022-12-07 03:12:01,262 [Thread-3] INFO freon.ProgressBar: Progress: 59.00 % (59 out of 100)
+2022-12-07 03:12:02,264 [Thread-3] INFO freon.ProgressBar: Progress: 67.00 % (67 out of 100)
+2022-12-07 03:12:03,265 [Thread-3] INFO freon.ProgressBar: Progress: 77.00 % (77 out of 100)
+2022-12-07 03:12:04,267 [Thread-3] INFO freon.ProgressBar: Progress: 87.00 % (87 out of 100)
+2022-12-07 03:12:05,268 [Thread-3] INFO freon.ProgressBar: Progress: 96.00 % (96 out of 100)
+2022-12-07 03:12:06,269 [Thread-3] INFO freon.ProgressBar: Progress: 100.00 % (100 out of 100)
+2022-12-07 03:12:06,541 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-create, count=100, min=66.415802, max=2638.366867, mean=177.38082883901728, stddev=342.7129234057426, median=122.980416, p75=144.116507, p95=235.131699, p98=374.987369, p99=2585.276147, p999=2638.366867, mean_rate=5.237658155596978, m1=2.897020964413022, m5=2.5077770791512237, m15=2.436417675403863, rate_unit=events/second, duration_unit=milliseconds
+2022-12-07 03:12:06,541 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 20
+2022-12-07 03:12:06,541 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2022-12-07 03:12:06,542 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 100</msg>
+<status status="PASS" starttime="20221207 03:12:06.913" endtime="20221207 03:12:06.914"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:06.917" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:06.916" endtime="20221207 03:12:06.917"/>
+</kw>
+<status status="PASS" starttime="20221207 03:11:44.156" endtime="20221207 03:12:06.917"/>
+</kw>
+<msg timestamp="20221207 03:12:06.918" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:11:44.155" endtime="20221207 03:12:06.919"/>
+</kw>
+<msg timestamp="20221207 03:12:06.920" level="INFO">${result} = 2022-12-07 03:11:45,851 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2022-12-07 03:11:45,970 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20221207 03:11:44.155" endtime="20221207 03:12:06.920"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:12:06.920" endtime="20221207 03:12:06.920"/>
+</kw>
+<status status="PASS" starttime="20221207 03:11:44.153" endtime="20221207 03:12:06.921"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20221207 03:12:06.921" level="INFO">${random} = 16956</msg>
+<status status="PASS" starttime="20221207 03:12:06.921" endtime="20221207 03:12:06.921"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${volume_name}</arg>
+<arg>${random}-volume-for-prepare</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221207 03:12:06.923" level="INFO">${volume_name} = 16956-volume-for-prepare</msg>
+<status status="PASS" starttime="20221207 03:12:06.921" endtime="20221207 03:12:06.923"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${bucket_name}</arg>
+<arg>${random}-bucket-for-prepare</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20221207 03:12:06.926" level="INFO">${bucket_name} = 16956-bucket-for-prepare</msg>
+<status status="PASS" starttime="20221207 03:12:06.924" endtime="20221207 03:12:06.926"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh volume create /${volume_name}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:06.931" level="INFO">Running command 'ozone sh volume create /16956-volume-for-prepare 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:09.575" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:09.575" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:12:06.927" endtime="20221207 03:12:09.575"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:09.576" level="INFO"/>
+<status status="PASS" starttime="20221207 03:12:09.576" endtime="20221207 03:12:09.577"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:09.577" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:09.577" endtime="20221207 03:12:09.577"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:06.927" endtime="20221207 03:12:09.578"/>
+</kw>
+<msg timestamp="20221207 03:12:09.578" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:06.927" endtime="20221207 03:12:09.578"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:06.926" endtime="20221207 03:12:09.578"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh bucket create /${volume_name}/${bucket_name}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:09.582" level="INFO">Running command 'ozone sh bucket create /16956-volume-for-prepare/16956-bucket-for-prepare 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:12.106" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:12.106" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:12:09.580" endtime="20221207 03:12:12.106"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:12.107" level="INFO"/>
+<status status="PASS" starttime="20221207 03:12:12.106" endtime="20221207 03:12:12.107"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:12.108" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:12.107" endtime="20221207 03:12:12.108"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:09.579" endtime="20221207 03:12:12.108"/>
+</kw>
+<msg timestamp="20221207 03:12:12.108" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:09.579" endtime="20221207 03:12:12.109"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:09.578" endtime="20221207 03:12:12.109"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh key put /${volume_name}/${bucket_name}/prepare-key /opt/hadoop/NOTICE.txt</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:12.113" level="INFO">Running command 'ozone sh key put /16956-volume-for-prepare/16956-bucket-for-prepare/prepare-key /opt/hadoop/NOTICE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:17.026" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:17.026" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20221207 03:12:12.111" endtime="20221207 03:12:17.026"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:17.027" level="INFO"/>
+<status status="PASS" starttime="20221207 03:12:17.027" endtime="20221207 03:12:17.027"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:17.028" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:17.028" endtime="20221207 03:12:17.028"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:12.110" endtime="20221207 03:12:17.028"/>
+</kw>
+<msg timestamp="20221207 03:12:17.029" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:12.110" endtime="20221207 03:12:17.029"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:12.109" endtime="20221207 03:12:17.029"/>
+</kw>
+<status status="PASS" starttime="20221207 03:11:44.153" endtime="20221207 03:12:17.030"/>
+</kw>
+<test id="s1-s3-t1" name="Prepare Ozone Manager" line="39">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:12:17.032" endtime="20221207 03:12:17.032"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin om prepare -id=omservice</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:17.036" level="INFO">Running command 'ozone admin om prepare -id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:24.730" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:24.730" level="INFO">${output} = com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+...</msg>
+<status status="PASS" starttime="20221207 03:12:17.033" endtime="20221207 03:12:24.730"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:24.731" level="INFO">com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+	at org.apache.hadoop.ozone.om.OzoneManager.checkLeaderStatus(OzoneManager.java:4129)
+	at org.apache.hadoop.ozone.om.ratis.utils.OzoneManagerRatisUtils.checkLeaderStatus(OzoneManagerRatisUtils.java:446)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.processRequest(OzoneManagerProtocolServerSideTranslatorPB.java:181)
+	at org.apache.hadoop.hdds.server.OzoneProtocolMessageDispatcher.processRequest(OzoneProtocolMessageDispatcher.java:87)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitRequest(OzoneManagerProtocolServerSideTranslatorPB.java:147)
+	at org.apache.hadoop.ozone.protocol.proto.OzoneManagerProtocolProtos$OzoneManagerService$2.callBlockingMethod(OzoneManagerProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server.processCall(ProtobufRpcEngine.java:465)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:578)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:556)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1093)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1043)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:971)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/javax.security.auth.Subject.doAs(Subject.java:423)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1878)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:2976)
+, while invoking $Proxy20.submitRequest over nodeId=om2,nodeAddress=om2:9862 after 1 failover attempts. Trying to failover immediately.
+Ozone Manager Prepare Request successfully returned with Transaction Id : [413].
+
+Checking individual OM instances for prepare request completion...
+OM : [om1], Prepare Status : [PREPARE_COMPLETED], Current Transaction Id : [413]
+OM : [om3], Prepare Status : [PREPARE_COMPLETED], Current Transaction Id : [413]
+OM : [om2], Prepare Status : [PREPARE_COMPLETED], Current Transaction Id : [413]
+
+OM Preparation successful! 
+All OMs are prepared
+No new write requests will be allowed until preparation is cancelled or upgrade/downgrade is done.</msg>
+<status status="PASS" starttime="20221207 03:12:24.730" endtime="20221207 03:12:24.731"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:24.732" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:24.731" endtime="20221207 03:12:24.732"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:17.033" endtime="20221207 03:12:24.732"/>
+</kw>
+<msg timestamp="20221207 03:12:24.732" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:17.033" endtime="20221207 03:12:24.733"/>
+</kw>
+<msg timestamp="20221207 03:12:24.733" level="INFO">${result} = com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om2 is not the leader. Could not determine the leader node.
+...</msg>
+<status status="PASS" starttime="20221207 03:12:17.032" endtime="20221207 03:12:24.733"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>3min</arg>
+<arg>10sec</arg>
+<arg>Should contain</arg>
+<arg>${result}</arg>
+<arg>OM Preparation successful!</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>OM Preparation successful!</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:12:24.734" endtime="20221207 03:12:24.734"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:24.733" endtime="20221207 03:12:24.734"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:12:17.030" endtime="20221207 03:12:24.734"/>
+</test>
+<test id="s1-s3-t2" name="Checks if the expected data is present in OM" line="43">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:12:24.736" endtime="20221207 03:12:24.737"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone sh key info /${volume_name}/${bucket_name}/prepare-key</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:24.741" level="INFO">Running command 'ozone sh key info /16956-volume-for-prepare/16956-bucket-for-prepare/prepare-key 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:27.916" level="INFO">${rc} = 0</msg>
+<msg timestamp="20221207 03:12:27.916" level="INFO">${output} = {
+  "volumeName" : "16956-volume-for-prepare",
+  "bucketName" : "16956-bucket-for-prepare",
+  "name" : "prepare-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:12:14.774Z",
+  "modificati...</msg>
+<status status="PASS" starttime="20221207 03:12:24.738" endtime="20221207 03:12:27.917"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:27.918" level="INFO">{
+  "volumeName" : "16956-volume-for-prepare",
+  "bucketName" : "16956-bucket-for-prepare",
+  "name" : "prepare-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:12:14.774Z",
+  "modificationTime" : "2022-12-07T03:12:16.640Z",
+  "replicationConfig" : {
+    "replicationFactor" : "THREE",
+    "requiredNodes" : 3,
+    "replicationType" : "RATIS"
+  },
+  "metadata" : { },
+  "ozoneKeyLocations" : [ {
+    "containerID" : 4,
+    "localID" : 109611004723200101,
+    "length" : 17539,
+    "offset" : 0,
+    "keyOffset" : 0
+  } ]
+}</msg>
+<status status="PASS" starttime="20221207 03:12:27.917" endtime="20221207 03:12:27.918"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:27.919" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:27.918" endtime="20221207 03:12:27.919"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:24.738" endtime="20221207 03:12:27.919"/>
+</kw>
+<msg timestamp="20221207 03:12:27.919" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20221207 03:12:24.738" endtime="20221207 03:12:27.920"/>
+</kw>
+<msg timestamp="20221207 03:12:27.920" level="INFO">${result} = {
+  "volumeName" : "16956-volume-for-prepare",
+  "bucketName" : "16956-bucket-for-prepare",
+  "name" : "prepare-key",
+  "dataSize" : 17539,
+  "creationTime" : "2022-12-07T03:12:14.774Z",
+  "modificati...</msg>
+<status status="PASS" starttime="20221207 03:12:24.737" endtime="20221207 03:12:27.920"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>\"name\" : \"prepare-key\"</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:12:27.920" endtime="20221207 03:12:27.921"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:12:24.735" endtime="20221207 03:12:27.921"/>
+</test>
+<test id="s1-s3-t3" name="Test write operation fails" line="47">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20221207 03:12:27.922" endtime="20221207 03:12:27.923"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<var>${result}</var>
+<arg>ozone sh key put /${volume_name}/${bucket_name}/prepare-key2 /opt/hadoop/NOTICE.txt</arg>
+<arg>255</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:27.926" level="INFO">Running command 'ozone sh key put /16956-volume-for-prepare/16956-bucket-for-prepare/prepare-key2 /opt/hadoop/NOTICE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:30.251" level="INFO">${rc} = 255</msg>
+<msg timestamp="20221207 03:12:30.251" level="INFO">${output} = NOT_SUPPORTED_OPERATION_WHEN_PREPARED Cannot apply write request CreateKey when OM is in prepare mode.</msg>
+<status status="PASS" starttime="20221207 03:12:27.924" endtime="20221207 03:12:30.251"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:30.253" level="INFO">NOT_SUPPORTED_OPERATION_WHEN_PREPARED Cannot apply write request CreateKey when OM is in prepare mode.</msg>
+<status status="PASS" starttime="20221207 03:12:30.252" endtime="20221207 03:12:30.253"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:30.253" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:30.253" endtime="20221207 03:12:30.253"/>
+</kw>
+<msg timestamp="20221207 03:12:30.254" level="INFO">${result} = NOT_SUPPORTED_OPERATION_WHEN_PREPARED Cannot apply write request CreateKey when OM is in prepare mode.</msg>
+<status status="PASS" starttime="20221207 03:12:27.923" endtime="20221207 03:12:30.254"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>OM is in prepare mode</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20221207 03:12:30.254" endtime="20221207 03:12:30.254"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>ozone sh key info /${volume_name}/${bucket_name}/prepare-key2</arg>
+<arg>255</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20221207 03:12:30.258" level="INFO">Running command 'ozone sh key info /16956-volume-for-prepare/16956-bucket-for-prepare/prepare-key2 2&gt;&amp;1'.</msg>
+<msg timestamp="20221207 03:12:33.225" level="INFO">${rc} = 255</msg>
+<msg timestamp="20221207 03:12:33.225" level="INFO">${output} = KEY_NOT_FOUND Key:prepare-key2 not found</msg>
+<status status="PASS" starttime="20221207 03:12:30.255" endtime="20221207 03:12:33.225"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20221207 03:12:33.226" level="INFO">KEY_NOT_FOUND Key:prepare-key2 not found</msg>
+<status status="PASS" starttime="20221207 03:12:33.226" endtime="20221207 03:12:33.226"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20221207 03:12:33.227" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20221207 03:12:33.227" endtime="20221207 03:12:33.227"/>
+</kw>
+<status status="PASS" starttime="20221207 03:12:30.254" endtime="20221207 03:12:33.227"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20221207 03:12:27.922" endtime="20221207 03:12:33.228"/>
+</test>
+<doc>Smoke test to test preparing OMs in an OM HA cluster.</doc>
+<status status="PASS" starttime="20221207 03:11:44.099" endtime="20221207 03:12:33.229"/>
+</suite>
+<status status="FAIL" starttime="N/A" endtime="N/A" elapsedtime="401394"/>
+</suite>
+<statistics>
+<total>
+<stat pass="7" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="7" fail="1" skip="0" id="s1" name="ozone-om-prepare">ozone-om-prepare</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s1" name="Om-Cancel-Prepare">ozone-om-prepare.Om-Cancel-Prepare</stat>
+<stat pass="2" fail="1" skip="0" id="s1-s2" name="Om-Prepare">ozone-om-prepare.Om-Prepare</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s3" name="Om-Prepare">ozone-om-prepare.Om-Prepare</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
