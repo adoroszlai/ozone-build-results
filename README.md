@@ -17,10 +17,10 @@ TODO:
 As this repository is quite huge, it's strongly recommended to checkout only the required parts:
 
 ```
-git clone --filter=blob:none --no-checkout --sparse https://github.com/elek/ozone-build-results
+git clone --filter=blob:none --no-checkout --sparse https://github.com/adoroszlai/ozone-build-results
 cd ozone-build-results
-git sparse-checkout add 2021
-#or git sparse-checkout add 2021/04
+git sparse-checkout add 2023
+#or git sparse-checkout add 2023/09
 git checkout master
 ```
 
