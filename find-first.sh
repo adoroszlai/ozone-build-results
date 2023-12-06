@@ -9,10 +9,10 @@ if which rg >& /dev/null; then
   cmd='rg'
 fi
 
-${cmd} "$@" 2???
+${cmd} "$@"
 
 #First build with the problem
-BUILD=$(${cmd} -l "$@" 2??? | awk -F '/' '{print $4}' | sort -n | head -n 1)
+BUILD=$(${cmd} -l "$@" | awk -F '/' '{print $4}' | sort -n | head -n 1)
 
 if [[ -z "${BUILD}" ]]; then
   exit 1
