@@ -1,0 +1,3478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.8.10 on linux)" generated="20240106 03:58:24.086" rpa="false" schemaversion="4">
+<suite id="s1" name="upgrade">
+<suite id="s1-s1" name="1.3.0-1.4.0-1-original-check-finalization" source="/opt/ozone/smoketest/upgrade/check-finalization.robot">
+<test id="s1-s1-t1" name="Check OM Finalized" line="23">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:11.972" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:11.974" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:11.974" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:11.969" endtime="20240106 03:51:11.974"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:11.975" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:11.975" endtime="20240106 03:51:11.975"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:11.975" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:11.975" endtime="20240106 03:51:11.976"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:11.968" endtime="20240106 03:51:11.976"/>
+</kw>
+<msg timestamp="20240106 03:51:11.976" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:11.968" endtime="20240106 03:51:11.977"/>
+</kw>
+<msg timestamp="20240106 03:51:11.977" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:11.967" endtime="20240106 03:51:11.977"/>
+</kw>
+<msg timestamp="20240106 03:51:11.977" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:11.967" endtime="20240106 03:51:11.977"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:11.978" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:11.977" endtime="20240106 03:51:11.978"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:11.981" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:12.023" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:12.024" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:11.979" endtime="20240106 03:51:12.024"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:12.024" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:12.024" endtime="20240106 03:51:12.024"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:12.025" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:12.025" endtime="20240106 03:51:12.025"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:11.979" endtime="20240106 03:51:12.025"/>
+</kw>
+<msg timestamp="20240106 03:51:12.025" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:11.979" endtime="20240106 03:51:12.026"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:11.978" endtime="20240106 03:51:12.026"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:11.978" endtime="20240106 03:51:12.026"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:11.967" endtime="20240106 03:51:12.026"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:11.966" endtime="20240106 03:51:12.026"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>env</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:12.028" level="INFO">Running command 'env 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:12.030" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:12.030" level="INFO">${output} = OZONE-SITE.XML_ozone.httpfs.http.auth.kerberos.principal=HTTP/httpfs@EXAMPLE.COM
+CORE-SITE.XML_hadoop.security.authentication=kerberos
+OZONE-SITE.XML_ozone.recon.db.dir=/data/metadata/recon
+OZONE-SITE...</msg>
+<status status="PASS" starttime="20240106 03:51:12.027" endtime="20240106 03:51:12.030"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:12.031" level="INFO">OZONE-SITE.XML_ozone.httpfs.http.auth.kerberos.principal=HTTP/httpfs@EXAMPLE.COM
+CORE-SITE.XML_hadoop.security.authentication=kerberos
+OZONE-SITE.XML_ozone.recon.db.dir=/data/metadata/recon
+OZONE-SITE.XML_ozone.client.failover.max.attempts=6
+OZONE-SITE.XML_ozone.s3g.kerberos.principal=s3g/s3g@EXAMPLE.COM
+KMS-SITE.XML_hadoop.kms.proxyuser.s3g.users=*
+HOSTNAME=scm1.org
+HADOOP-POLICY.XML_hdds.security.client.scm.certificate.protocol.acl=*
+OZONE-SITE.XML_hdds.grpc.tls.enabled=true
+OZONE-SITE.XML_hdds.scm.http.auth.kerberos.principal=HTTP/scm@EXAMPLE.COM
+OZONE-SITE.XML_ozone.s3.administrators=testuser,s3g
+OZONE-SITE.XML_ozone.administrators=testuser,recon,om
+OZONE-SITE.XML_ozone.recon.kerberos.principal=recon/recon@EXAMPLE.COM
+OZONE-SITE.XML_hdds.scm.kerberos.keytab.file=/etc/security/keytabs/scm.keytab
+HTTPFS-SITE.XML_httpfs.hadoop.authentication.type=kerberos
+OZONE-SITE.XML_ozone.http.filter.initializers=org.apache.hadoop.security.AuthenticationFilterInitializer
+OZONE-SITE.XML_ozone.httpfs.kerberos.principal=httpfs/httpfs@EXAMPLE.COM
+CORE-SITE.XML_dfs.data.transfer.protection=authentication
+OZONE-SITE.XML_ozone.recon.address=recon:9891
+OZONE-SITE.XML_ozone.server.default.replication=3
+HADOOP-POLICY.XML_hdds.security.client.scm.container.protocol.acl=*
+OZONE-SITE.XML_ozone.acl.authorizer.class=org.apache.hadoop.ozone.security.acl.OzoneNativeAuthorizer
+HDFS-SITE.XML_dfs.web.authentication.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_hdds.secret.key.expiry.duration=1h
+OZONE-SITE.XML_hdds.scm.kerberos.principal=scm/scm@EXAMPLE.COM
+OZONE_LOG_DIR=/var/log/hadoop
+LD_LIBRARY_PATH=/usr/local/lib
+OZONE-SITE.XML_ozone.om.nodes.omservice=om1,om2,om3
+ENSURE_SCM_INITIALIZED=/data/metadata/scm/current/VERSION
+HTTPFS-SITE.XML_hadoop.http.authentication.kerberos.principal=HTTP/httpfs@EXAMPLE.COM
+OZONE-SITE.XML_ozone.s3g.http.auth.type=kerberos
+HADOOP-POLICY.XML_ozone.om.security.client.protocol.acl=*
+OZONE-SITE.XML_ozone.filesystem.snapshot.enabled=true
+OM_SERVICE_ID=omservice
+OZONE-SITE.XML_ozone.recon.om.snapshot.task.interval.delay=1m
+CORE-SITE.XML_hadoop.http.authentication.simple.anonymous.allowed=false
+HTTPFS-SITE.XML_httpfs.hadoop.authentication.kerberos.principal=httpfs/httpfs@EXAMPLE.COM
+HADOOP-POLICY.XML_hdds.security.client.scm.block.protocol.acl=*
+OZONE-SITE.XML_hdds.datanode.http.auth.kerberos.principal=HTTP/db@EXAMPLE.COM
+OZONE-SITE.XML_hdds.scm.wait.time.after.safemode.exit=5s
+KMS-SITE.XML_hadoop.kms.proxyuser.s3g.groups=*
+OZONE-SITE.XML_hdds.scm.http.auth.type=kerberos
+OZONE-SITE.XML_hdds.container.token.enabled=true
+CORE-SITE.XML_hadoop.security.auth_to_local=DEFAULT
+OZONE-SITE.XML_ozone.httpfs.http.auth.type=kerberos
+OZONE-SITE.XML_ozone.security.enabled=true
+OZONE-SITE.XML_ozone.metadata.dirs=/data/metadata
+OZONE-SITE.XML_ozone.httpfs.http.auth.kerberos.keytab=/etc/security/keytabs/httpfs.keytab
+OZONE-SITE.XML_ozone.security.http.kerberos.enabled=true
+PATH=/opt/hadoop/libexec:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/hadoop/bin
+OZONE-SITE.XML_ozone.httpfs.kerberos.keytab.file=/etc/security/keytabs/httpfs.keytab
+PWD=/opt/hadoop
+OZONE-SITE.XML_ozone.acl.enabled=true
+HDFS-SITE.XML_dfs.datanode.kerberos.principal=dn/dn@EXAMPLE.COM
+OZONE-SITE.XML_ozone.om.kerberos.principal=om/om@EXAMPLE.COM
+OZONE-SITE.XML_ozone.scm.container.size=1GB
+JAVA_HOME=/usr/lib/jvm/jre/
+OZONE-SITE.XML_hdds.scm.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+CORE-SITE.XML_hadoop.proxyuser.httpfs.groups=*
+OZONE-SITE.XML_hdds.scm.safemode.min.datanode=3
+OZONE-SITE.XML_ozone.scm.pipeline.creation.interval=30s
+OZONE-SITE.XML_ozone.om.service.ids=omservice
+OZONE-SITE.XML_ozone.s3g.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_hdds.datanode.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+HDFS-SITE.XML_dfs.datanode.kerberos.keytab.file=/etc/security/keytabs/dn.keytab
+OZONE-SITE.XML_ozone.om.kerberos.keytab.file=/etc/security/keytabs/om.keytab
+OZONE-SITE.XML_hdds.secret.key.rotate.check.duration=1m
+OZONE-SITE.XML_ozone.s3g.kerberos.keytab.file=/etc/security/keytabs/s3g.keytab
+CORE-SITE.XML_hadoop.http.authentication.kerberos.principal=HTTP/ozone@EXAMPLE.COM
+OZONE-SITE.XML_ozone.om.http.auth.kerberos.principal=HTTP/om@EXAMPLE.COM
+OZONE-SITE.XML_ozone.recon.http.auth.type=kerberos
+OZONE-SITE.XML_ozone.s3g.secret.http.auth.type=kerberos
+OZONE-SITE.XML_ozone.scm.pipeline.allocated.timeout=2m
+HTTPFS-SITE.XML_hadoop.http.authentication.kerberos.keytab=/etc/security/keytabs/httpfs.keytab
+OZONE-SITE.XML_ozone.scm.primordial.node.id=scm1
+OZONE_DATANODE_SECURE_USER=root
+OZONE-SITE.XML_ozone.scm.pipeline.owner.container.count=1
+OZONE_UPGRADE_FROM=1.3.0
+OZONE-SITE.XML_ozone.scm.pipeline.scrub.interval=1m
+WAITFOR=kdc:88
+CORE-SITE.XML_hadoop.http.authentication.type=kerberos
+OZONE-SITE.XML_ozone.recon.http.auth.kerberos.principal=HTTP/recon@EXAMPLE.COM
+OZONE-SITE.XML_ozone.om.http.auth.type=kerberos
+OZONE-SITE.XML_hdds.secret.key.rotate.duration=5m
+SHLVL=1
+HOME=/opt/hadoop
+OZONE_CONF_DIR=/etc/hadoop
+KMS-SITE.XML_hadoop.kms.proxyuser.s3g.hosts=*
+OZONE-SITE.XML_ozone.om.ratis.enable=true
+OZONE-SITE.XML_ozone.recon.http.auth.kerberos.keytab=/etc/security/keytabs/recon.keytab
+no_proxy=om1,om2,om3,scm1,scm2,scm3,s3g,kdc,localhost,127.0.0.1
+HDFS-SITE.XML_dfs.web.authentication.kerberos.principal=HTTP/ozone@EXAMPLE.COM
+HTTPFS-SITE.XML_httpfs.hadoop.authentication.kerberos.keytab=/etc/security/keytabs/httpfs.keytab
+OZONE-SITE.XML_hdds.datanode.dir=/data/hdds
+OZONE-SITE.XML_ozone.s3g.secret.http.enabled=true
+OZONE-SITE.XML_ozone.scm.nodes.scmservice=scm1,scm2,scm3
+CORE-SITE.XML_hadoop.http.authentication.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_ozone.om.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_ozone.scm.datanode.id.dir=/data
+OZONE_UPGRADE_TO=1.4.0
+HTTPFS-SITE.XML_hadoop.http.authentication.type=kerberos
+CORE-SITE.XML_hadoop.http.authentication.signature.secret.file=/etc/security/http_secret
+OZONE-SITE.XML_ozone.s3g.http.auth.kerberos.principal=HTTP/s3g@EXAMPLE.COM
+OZONE-SITE.XML_ozone.scm.service.ids=scmservice
+OZONE-SITE.XML_ozone.om.address.omservice.om3=om3
+OZONE-SITE.XML_ozone.scm.address.scmservice.scm1=scm1.org
+OZONE-SITE.XML_ozone.om.address.omservice.om2=om2
+OZONE-SITE.XML_ozone.recon.kerberos.keytab.file=/etc/security/keytabs/recon.keytab
+OZONE-SITE.XML_ozone.scm.address.scmservice.scm2=scm2.org
+OZONE-SITE.XML_ozone.om.address.omservice.om1=om1
+OZONE-SITE.XML_hdds.block.token.enabled=true
+CORE-SITE.XML_hadoop.proxyuser.httpfs.hosts=*
+OZONE-SITE.XML_ozone.scm.ratis.enable=true
+OZONE-SITE.XML_ozone.scm.address.scmservice.scm3=scm3.org
+OZONE-SITE.XML_hdds.datanode.http.auth.type=kerberos
+HADOOP-POLICY.XML_hdds.security.client.datanode.container.protocol.acl=*
+CORE-SITE.XML_hadoop.security.key.provider.path=kms://http@kms:9600/kms
+OZONE-SITE.XML_hdds.datanode.volume.min.free.space=100MB
+CORE-SITE.XML_hadoop.security.authorization=true
+_=/usr/bin/env</msg>
+<status status="PASS" starttime="20240106 03:51:12.030" endtime="20240106 03:51:12.031"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:12.032" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:12.031" endtime="20240106 03:51:12.032"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:12.027" endtime="20240106 03:51:12.032"/>
+</kw>
+<msg timestamp="20240106 03:51:12.032" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:12.027" endtime="20240106 03:51:12.032"/>
+</kw>
+<msg timestamp="20240106 03:51:12.033" level="INFO">${result} = OZONE-SITE.XML_ozone.httpfs.http.auth.kerberos.principal=HTTP/httpfs@EXAMPLE.COM
+CORE-SITE.XML_hadoop.security.authentication=kerberos
+OZONE-SITE.XML_ozone.recon.db.dir=/data/metadata/recon
+OZONE-SITE...</msg>
+<status status="PASS" starttime="20240106 03:51:12.026" endtime="20240106 03:51:12.033"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${result}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:12.033" level="INFO">OZONE-SITE.XML_ozone.httpfs.http.auth.kerberos.principal=HTTP/httpfs@EXAMPLE.COM
+CORE-SITE.XML_hadoop.security.authentication=kerberos
+OZONE-SITE.XML_ozone.recon.db.dir=/data/metadata/recon
+OZONE-SITE.XML_ozone.client.failover.max.attempts=6
+OZONE-SITE.XML_ozone.s3g.kerberos.principal=s3g/s3g@EXAMPLE.COM
+KMS-SITE.XML_hadoop.kms.proxyuser.s3g.users=*
+HOSTNAME=scm1.org
+HADOOP-POLICY.XML_hdds.security.client.scm.certificate.protocol.acl=*
+OZONE-SITE.XML_hdds.grpc.tls.enabled=true
+OZONE-SITE.XML_hdds.scm.http.auth.kerberos.principal=HTTP/scm@EXAMPLE.COM
+OZONE-SITE.XML_ozone.s3.administrators=testuser,s3g
+OZONE-SITE.XML_ozone.administrators=testuser,recon,om
+OZONE-SITE.XML_ozone.recon.kerberos.principal=recon/recon@EXAMPLE.COM
+OZONE-SITE.XML_hdds.scm.kerberos.keytab.file=/etc/security/keytabs/scm.keytab
+HTTPFS-SITE.XML_httpfs.hadoop.authentication.type=kerberos
+OZONE-SITE.XML_ozone.http.filter.initializers=org.apache.hadoop.security.AuthenticationFilterInitializer
+OZONE-SITE.XML_ozone.httpfs.kerberos.principal=httpfs/httpfs@EXAMPLE.COM
+CORE-SITE.XML_dfs.data.transfer.protection=authentication
+OZONE-SITE.XML_ozone.recon.address=recon:9891
+OZONE-SITE.XML_ozone.server.default.replication=3
+HADOOP-POLICY.XML_hdds.security.client.scm.container.protocol.acl=*
+OZONE-SITE.XML_ozone.acl.authorizer.class=org.apache.hadoop.ozone.security.acl.OzoneNativeAuthorizer
+HDFS-SITE.XML_dfs.web.authentication.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_hdds.secret.key.expiry.duration=1h
+OZONE-SITE.XML_hdds.scm.kerberos.principal=scm/scm@EXAMPLE.COM
+OZONE_LOG_DIR=/var/log/hadoop
+LD_LIBRARY_PATH=/usr/local/lib
+OZONE-SITE.XML_ozone.om.nodes.omservice=om1,om2,om3
+ENSURE_SCM_INITIALIZED=/data/metadata/scm/current/VERSION
+HTTPFS-SITE.XML_hadoop.http.authentication.kerberos.principal=HTTP/httpfs@EXAMPLE.COM
+OZONE-SITE.XML_ozone.s3g.http.auth.type=kerberos
+HADOOP-POLICY.XML_ozone.om.security.client.protocol.acl=*
+OZONE-SITE.XML_ozone.filesystem.snapshot.enabled=true
+OM_SERVICE_ID=omservice
+OZONE-SITE.XML_ozone.recon.om.snapshot.task.interval.delay=1m
+CORE-SITE.XML_hadoop.http.authentication.simple.anonymous.allowed=false
+HTTPFS-SITE.XML_httpfs.hadoop.authentication.kerberos.principal=httpfs/httpfs@EXAMPLE.COM
+HADOOP-POLICY.XML_hdds.security.client.scm.block.protocol.acl=*
+OZONE-SITE.XML_hdds.datanode.http.auth.kerberos.principal=HTTP/db@EXAMPLE.COM
+OZONE-SITE.XML_hdds.scm.wait.time.after.safemode.exit=5s
+KMS-SITE.XML_hadoop.kms.proxyuser.s3g.groups=*
+OZONE-SITE.XML_hdds.scm.http.auth.type=kerberos
+OZONE-SITE.XML_hdds.container.token.enabled=true
+CORE-SITE.XML_hadoop.security.auth_to_local=DEFAULT
+OZONE-SITE.XML_ozone.httpfs.http.auth.type=kerberos
+OZONE-SITE.XML_ozone.security.enabled=true
+OZONE-SITE.XML_ozone.metadata.dirs=/data/metadata
+OZONE-SITE.XML_ozone.httpfs.http.auth.kerberos.keytab=/etc/security/keytabs/httpfs.keytab
+OZONE-SITE.XML_ozone.security.http.kerberos.enabled=true
+PATH=/opt/hadoop/libexec:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/hadoop/bin
+OZONE-SITE.XML_ozone.httpfs.kerberos.keytab.file=/etc/security/keytabs/httpfs.keytab
+PWD=/opt/hadoop
+OZONE-SITE.XML_ozone.acl.enabled=true
+HDFS-SITE.XML_dfs.datanode.kerberos.principal=dn/dn@EXAMPLE.COM
+OZONE-SITE.XML_ozone.om.kerberos.principal=om/om@EXAMPLE.COM
+OZONE-SITE.XML_ozone.scm.container.size=1GB
+JAVA_HOME=/usr/lib/jvm/jre/
+OZONE-SITE.XML_hdds.scm.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+CORE-SITE.XML_hadoop.proxyuser.httpfs.groups=*
+OZONE-SITE.XML_hdds.scm.safemode.min.datanode=3
+OZONE-SITE.XML_ozone.scm.pipeline.creation.interval=30s
+OZONE-SITE.XML_ozone.om.service.ids=omservice
+OZONE-SITE.XML_ozone.s3g.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_hdds.datanode.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+HDFS-SITE.XML_dfs.datanode.kerberos.keytab.file=/etc/security/keytabs/dn.keytab
+OZONE-SITE.XML_ozone.om.kerberos.keytab.file=/etc/security/keytabs/om.keytab
+OZONE-SITE.XML_hdds.secret.key.rotate.check.duration=1m
+OZONE-SITE.XML_ozone.s3g.kerberos.keytab.file=/etc/security/keytabs/s3g.keytab
+CORE-SITE.XML_hadoop.http.authentication.kerberos.principal=HTTP/ozone@EXAMPLE.COM
+OZONE-SITE.XML_ozone.om.http.auth.kerberos.principal=HTTP/om@EXAMPLE.COM
+OZONE-SITE.XML_ozone.recon.http.auth.type=kerberos
+OZONE-SITE.XML_ozone.s3g.secret.http.auth.type=kerberos
+OZONE-SITE.XML_ozone.scm.pipeline.allocated.timeout=2m
+HTTPFS-SITE.XML_hadoop.http.authentication.kerberos.keytab=/etc/security/keytabs/httpfs.keytab
+OZONE-SITE.XML_ozone.scm.primordial.node.id=scm1
+OZONE_DATANODE_SECURE_USER=root
+OZONE-SITE.XML_ozone.scm.pipeline.owner.container.count=1
+OZONE_UPGRADE_FROM=1.3.0
+OZONE-SITE.XML_ozone.scm.pipeline.scrub.interval=1m
+WAITFOR=kdc:88
+CORE-SITE.XML_hadoop.http.authentication.type=kerberos
+OZONE-SITE.XML_ozone.recon.http.auth.kerberos.principal=HTTP/recon@EXAMPLE.COM
+OZONE-SITE.XML_ozone.om.http.auth.type=kerberos
+OZONE-SITE.XML_hdds.secret.key.rotate.duration=5m
+SHLVL=1
+HOME=/opt/hadoop
+OZONE_CONF_DIR=/etc/hadoop
+KMS-SITE.XML_hadoop.kms.proxyuser.s3g.hosts=*
+OZONE-SITE.XML_ozone.om.ratis.enable=true
+OZONE-SITE.XML_ozone.recon.http.auth.kerberos.keytab=/etc/security/keytabs/recon.keytab
+no_proxy=om1,om2,om3,scm1,scm2,scm3,s3g,kdc,localhost,127.0.0.1
+HDFS-SITE.XML_dfs.web.authentication.kerberos.principal=HTTP/ozone@EXAMPLE.COM
+HTTPFS-SITE.XML_httpfs.hadoop.authentication.kerberos.keytab=/etc/security/keytabs/httpfs.keytab
+OZONE-SITE.XML_hdds.datanode.dir=/data/hdds
+OZONE-SITE.XML_ozone.s3g.secret.http.enabled=true
+OZONE-SITE.XML_ozone.scm.nodes.scmservice=scm1,scm2,scm3
+CORE-SITE.XML_hadoop.http.authentication.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_ozone.om.http.auth.kerberos.keytab=/etc/security/keytabs/HTTP.keytab
+OZONE-SITE.XML_ozone.scm.datanode.id.dir=/data
+OZONE_UPGRADE_TO=1.4.0
+HTTPFS-SITE.XML_hadoop.http.authentication.type=kerberos
+CORE-SITE.XML_hadoop.http.authentication.signature.secret.file=/etc/security/http_secret
+OZONE-SITE.XML_ozone.s3g.http.auth.kerberos.principal=HTTP/s3g@EXAMPLE.COM
+OZONE-SITE.XML_ozone.scm.service.ids=scmservice
+OZONE-SITE.XML_ozone.om.address.omservice.om3=om3
+OZONE-SITE.XML_ozone.scm.address.scmservice.scm1=scm1.org
+OZONE-SITE.XML_ozone.om.address.omservice.om2=om2
+OZONE-SITE.XML_ozone.recon.kerberos.keytab.file=/etc/security/keytabs/recon.keytab
+OZONE-SITE.XML_ozone.scm.address.scmservice.scm2=scm2.org
+OZONE-SITE.XML_ozone.om.address.omservice.om1=om1
+OZONE-SITE.XML_hdds.block.token.enabled=true
+CORE-SITE.XML_hadoop.proxyuser.httpfs.hosts=*
+OZONE-SITE.XML_ozone.scm.ratis.enable=true
+OZONE-SITE.XML_ozone.scm.address.scmservice.scm3=scm3.org
+OZONE-SITE.XML_hdds.datanode.http.auth.type=kerberos
+HADOOP-POLICY.XML_hdds.security.client.datanode.container.protocol.acl=*
+CORE-SITE.XML_hadoop.security.key.provider.path=kms://http@kms:9600/kms
+OZONE-SITE.XML_hdds.datanode.volume.min.free.space=100MB
+CORE-SITE.XML_hadoop.security.authorization=true
+_=/usr/bin/env</msg>
+<status status="PASS" starttime="20240106 03:51:12.033" endtime="20240106 03:51:12.033"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'%{OZONE_UPGRADE_FROM}' == '1.1.0'</arg>
+<arg>OM finalization not supported in version %{OZONE_UPGRADE_FROM}</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20240106 03:51:12.033" endtime="20240106 03:51:12.033"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin om finalizationstatus</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:12.036" level="INFO">Running command 'ozone admin om finalizationstatus 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:14.287" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:14.287" level="INFO">${output} = ALREADY_FINALIZED</msg>
+<status status="PASS" starttime="20240106 03:51:12.034" endtime="20240106 03:51:14.287"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:14.287" level="INFO">ALREADY_FINALIZED</msg>
+<status status="PASS" starttime="20240106 03:51:14.287" endtime="20240106 03:51:14.288"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:14.288" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:14.288" endtime="20240106 03:51:14.288"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:12.034" endtime="20240106 03:51:14.288"/>
+</kw>
+<msg timestamp="20240106 03:51:14.288" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:12.034" endtime="20240106 03:51:14.289"/>
+</kw>
+<msg timestamp="20240106 03:51:14.289" level="INFO">${result} = ALREADY_FINALIZED</msg>
+<status status="PASS" starttime="20240106 03:51:12.034" endtime="20240106 03:51:14.289"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${result}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:14.289" level="INFO">ALREADY_FINALIZED</msg>
+<status status="PASS" starttime="20240106 03:51:14.289" endtime="20240106 03:51:14.289"/>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ALREADY_FINALIZED</arg>
+<arg>FINALIZATION_DONE</arg>
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<status status="PASS" starttime="20240106 03:51:14.289" endtime="20240106 03:51:14.290"/>
+</kw>
+<tag>finalized</tag>
+<tag>om</tag>
+<timeout value="10 minutes"/>
+<status status="PASS" starttime="20240106 03:51:11.965" endtime="20240106 03:51:14.290"/>
+</test>
+<test id="s1-s1-t2" name="Check SCM Finalized" line="32">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:14.294" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:14.296" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:14.296" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:14.293" endtime="20240106 03:51:14.296"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:14.297" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:14.296" endtime="20240106 03:51:14.297"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:14.297" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:14.297" endtime="20240106 03:51:14.297"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.293" endtime="20240106 03:51:14.298"/>
+</kw>
+<msg timestamp="20240106 03:51:14.298" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:14.292" endtime="20240106 03:51:14.298"/>
+</kw>
+<msg timestamp="20240106 03:51:14.298" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:14.292" endtime="20240106 03:51:14.298"/>
+</kw>
+<msg timestamp="20240106 03:51:14.298" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:14.292" endtime="20240106 03:51:14.298"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:14.299" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:14.299" endtime="20240106 03:51:14.299"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:14.301" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:14.332" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:14.332" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:14.300" endtime="20240106 03:51:14.332"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:14.332" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:14.332" endtime="20240106 03:51:14.333"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:14.333" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:14.333" endtime="20240106 03:51:14.333"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.300" endtime="20240106 03:51:14.333"/>
+</kw>
+<msg timestamp="20240106 03:51:14.333" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:14.300" endtime="20240106 03:51:14.334"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.299" endtime="20240106 03:51:14.334"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.299" endtime="20240106 03:51:14.334"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.291" endtime="20240106 03:51:14.334"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.291" endtime="20240106 03:51:14.334"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'%{OZONE_UPGRADE_FROM}' == '1.1.0'</arg>
+<arg>HDDS finalization not supported in version %{OZONE_UPGRADE_FROM}</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20240106 03:51:14.334" endtime="20240106 03:51:14.335"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin scm finalizationstatus</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:14.337" level="INFO">Running command 'ozone admin scm finalizationstatus 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:16.520" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:16.520" level="INFO">${output} = FINALIZATION_DONE</msg>
+<status status="PASS" starttime="20240106 03:51:14.336" endtime="20240106 03:51:16.520"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:16.521" level="INFO">FINALIZATION_DONE</msg>
+<status status="PASS" starttime="20240106 03:51:16.520" endtime="20240106 03:51:16.521"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:16.521" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:16.521" endtime="20240106 03:51:16.521"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:14.335" endtime="20240106 03:51:16.521"/>
+</kw>
+<msg timestamp="20240106 03:51:16.521" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:14.335" endtime="20240106 03:51:16.522"/>
+</kw>
+<msg timestamp="20240106 03:51:16.522" level="INFO">${result} = FINALIZATION_DONE</msg>
+<status status="PASS" starttime="20240106 03:51:14.335" endtime="20240106 03:51:16.522"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${result}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:16.522" level="INFO">FINALIZATION_DONE</msg>
+<status status="PASS" starttime="20240106 03:51:16.522" endtime="20240106 03:51:16.522"/>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ALREADY_FINALIZED</arg>
+<arg>FINALIZATION_DONE</arg>
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<status status="PASS" starttime="20240106 03:51:16.522" endtime="20240106 03:51:16.523"/>
+</kw>
+<tag>finalized</tag>
+<tag>scm</tag>
+<timeout value="10 minutes"/>
+<status status="PASS" starttime="20240106 03:51:14.290" endtime="20240106 03:51:16.523"/>
+</test>
+<doc>Finalize Upgrade of the Ozone cluster</doc>
+<status status="PASS" starttime="20240106 03:51:11.926" endtime="20240106 03:51:16.524"/>
+</suite>
+<suite id="s1-s2" name="1.3.0-1.4.0-1-original-generate-old1" source="/opt/ozone/smoketest/upgrade/generate.robot">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:19.517" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:19.519" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:19.519" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:19.514" endtime="20240106 03:51:19.519"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:19.520" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:19.519" endtime="20240106 03:51:19.520"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:19.520" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:19.520" endtime="20240106 03:51:19.520"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.513" endtime="20240106 03:51:19.521"/>
+</kw>
+<msg timestamp="20240106 03:51:19.521" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:19.513" endtime="20240106 03:51:19.522"/>
+</kw>
+<msg timestamp="20240106 03:51:19.522" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:19.513" endtime="20240106 03:51:19.522"/>
+</kw>
+<msg timestamp="20240106 03:51:19.522" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:19.512" endtime="20240106 03:51:19.522"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:19.523" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:19.522" endtime="20240106 03:51:19.523"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:19.525" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:19.549" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:19.549" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:19.524" endtime="20240106 03:51:19.549"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:19.550" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:19.550" endtime="20240106 03:51:19.550"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:19.551" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:19.550" endtime="20240106 03:51:19.551"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.524" endtime="20240106 03:51:19.551"/>
+</kw>
+<msg timestamp="20240106 03:51:19.551" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:19.523" endtime="20240106 03:51:19.551"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.523" endtime="20240106 03:51:19.551"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.523" endtime="20240106 03:51:19.551"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.512" endtime="20240106 03:51:19.552"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.511" endtime="20240106 03:51:19.552"/>
+</kw>
+<test id="s1-s2-t1" name="Create a volume and bucket" line="29">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh volume create ${PREFIX}-volume</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:19.555" level="INFO">Running command 'ozone sh volume create old1-volume 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:21.892" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:21.892" level="INFO">${output} = 2024-01-06 03:51:21,809 [main] INFO rpc.RpcClient: Creating Volume: old1-volume, with testuser as owner and space quota set to -1 bytes, counts quota set to -1</msg>
+<status status="PASS" starttime="20240106 03:51:19.554" endtime="20240106 03:51:21.892"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:21.893" level="INFO">2024-01-06 03:51:21,809 [main] INFO rpc.RpcClient: Creating Volume: old1-volume, with testuser as owner and space quota set to -1 bytes, counts quota set to -1</msg>
+<status status="PASS" starttime="20240106 03:51:21.892" endtime="20240106 03:51:21.893"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:21.894" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:21.893" endtime="20240106 03:51:21.894"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:19.554" endtime="20240106 03:51:21.895"/>
+</kw>
+<msg timestamp="20240106 03:51:21.895" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:19.553" endtime="20240106 03:51:21.895"/>
+</kw>
+<msg timestamp="20240106 03:51:21.895" level="INFO">${output} = 2024-01-06 03:51:21,809 [main] INFO rpc.RpcClient: Creating Volume: old1-volume, with testuser as owner and space quota set to -1 bytes, counts quota set to -1</msg>
+<status status="PASS" starttime="20240106 03:51:19.553" endtime="20240106 03:51:21.896"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:21.896" endtime="20240106 03:51:21.896"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh bucket create /${PREFIX}-volume/${PREFIX}-bucket</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:21.900" level="INFO">Running command 'ozone sh bucket create /old1-volume/old1-bucket 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:24.226" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:24.226" level="INFO">${output} = 2024-01-06 03:51:24,171 [main] INFO rpc.RpcClient: Creating Bucket: old1-volume/old1-bucket, with server-side default bucket layout, testuser as owner, Versioning false, Storage Type set to DISK and E...</msg>
+<status status="PASS" starttime="20240106 03:51:21.898" endtime="20240106 03:51:24.226"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:24.227" level="INFO">2024-01-06 03:51:24,171 [main] INFO rpc.RpcClient: Creating Bucket: old1-volume/old1-bucket, with server-side default bucket layout, testuser as owner, Versioning false, Storage Type set to DISK and Encryption set to false </msg>
+<status status="PASS" starttime="20240106 03:51:24.226" endtime="20240106 03:51:24.227"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:24.227" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:24.227" endtime="20240106 03:51:24.227"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:21.897" endtime="20240106 03:51:24.227"/>
+</kw>
+<msg timestamp="20240106 03:51:24.227" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:21.897" endtime="20240106 03:51:24.228"/>
+</kw>
+<msg timestamp="20240106 03:51:24.228" level="INFO">${output} = 2024-01-06 03:51:24,171 [main] INFO rpc.RpcClient: Creating Bucket: old1-volume/old1-bucket, with server-side default bucket layout, testuser as owner, Versioning false, Storage Type set to DISK and E...</msg>
+<status status="PASS" starttime="20240106 03:51:21.896" endtime="20240106 03:51:24.228"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:24.228" endtime="20240106 03:51:24.228"/>
+</kw>
+<tag>create-volume-and-bucket</tag>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:19.552" endtime="20240106 03:51:24.229"/>
+</test>
+<test id="s1-s2-t2" name="Create key" line="36">
+<kw name="Execute and checkrc" library="os">
+<arg>echo "${PREFIX}: key created using Ozone Shell" &gt; /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:24.231" level="INFO">Running command 'echo "old1: key created using Ozone Shell" &gt; /tmp/sourcekey'.</msg>
+<msg timestamp="20240106 03:51:24.233" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:24.233" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:24.230" endtime="20240106 03:51:24.233"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:24.233" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:24.233" endtime="20240106 03:51:24.233"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:24.234" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:24.233" endtime="20240106 03:51:24.234"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:24.230" endtime="20240106 03:51:24.234"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh key put /${PREFIX}-volume/${PREFIX}-bucket/${PREFIX}-key /tmp/sourcekey</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:24.236" level="INFO">Running command 'ozone sh key put /old1-volume/old1-bucket/old1-key /tmp/sourcekey 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:28.776" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:28.776" level="INFO">${output} = 2024-01-06 03:51:27,061 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:27,129 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20240106 03:51:24.235" endtime="20240106 03:51:28.776"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:28.777" level="INFO">2024-01-06 03:51:27,061 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:27,129 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2024-01-06 03:51:27,129 [main] INFO impl.MetricsSystemImpl: XceiverClientMetrics metrics system started
+2024-01-06 03:51:27,361 [main] INFO metrics.MetricRegistries: Loaded MetricRegistries class org.apache.ratis.metrics.impl.MetricRegistriesImpl</msg>
+<status status="PASS" starttime="20240106 03:51:28.776" endtime="20240106 03:51:28.777"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:28.777" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:28.777" endtime="20240106 03:51:28.777"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:24.235" endtime="20240106 03:51:28.777"/>
+</kw>
+<msg timestamp="20240106 03:51:28.777" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:24.234" endtime="20240106 03:51:28.778"/>
+</kw>
+<msg timestamp="20240106 03:51:28.778" level="INFO">${output} = 2024-01-06 03:51:27,061 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:27,129 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20240106 03:51:24.234" endtime="20240106 03:51:28.778"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:28.778" endtime="20240106 03:51:28.778"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>rm /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:28.780" level="INFO">Running command 'rm /tmp/sourcekey 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:28.782" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:28.782" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:28.779" endtime="20240106 03:51:28.782"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:28.782" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:28.782" endtime="20240106 03:51:28.782"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:28.783" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:28.783" endtime="20240106 03:51:28.783"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:28.779" endtime="20240106 03:51:28.783"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:24.229" endtime="20240106 03:51:28.783"/>
+</test>
+<test id="s1-s2-t3" name="Create a bucket in s3v volume" line="42">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh bucket create /s3v/${PREFIX}-bucket</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:28.787" level="INFO">Running command 'ozone sh bucket create /s3v/old1-bucket 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:31.156" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:31.156" level="INFO">${output} = 2024-01-06 03:51:31,116 [main] INFO rpc.RpcClient: Creating Bucket: s3v/old1-bucket, with server-side default bucket layout, testuser as owner, Versioning false, Storage Type set to DISK and Encryptio...</msg>
+<status status="PASS" starttime="20240106 03:51:28.785" endtime="20240106 03:51:31.156"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:31.157" level="INFO">2024-01-06 03:51:31,116 [main] INFO rpc.RpcClient: Creating Bucket: s3v/old1-bucket, with server-side default bucket layout, testuser as owner, Versioning false, Storage Type set to DISK and Encryption set to false </msg>
+<status status="PASS" starttime="20240106 03:51:31.157" endtime="20240106 03:51:31.157"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:31.158" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:31.157" endtime="20240106 03:51:31.158"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:28.785" endtime="20240106 03:51:31.158"/>
+</kw>
+<msg timestamp="20240106 03:51:31.158" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:28.785" endtime="20240106 03:51:31.159"/>
+</kw>
+<msg timestamp="20240106 03:51:31.159" level="INFO">${output} = 2024-01-06 03:51:31,116 [main] INFO rpc.RpcClient: Creating Bucket: s3v/old1-bucket, with server-side default bucket layout, testuser as owner, Versioning false, Storage Type set to DISK and Encryptio...</msg>
+<status status="PASS" starttime="20240106 03:51:28.784" endtime="20240106 03:51:31.159"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:31.159" endtime="20240106 03:51:31.159"/>
+</kw>
+<tag>create-volume-and-bucket</tag>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:28.784" endtime="20240106 03:51:31.160"/>
+</test>
+<test id="s1-s2-t4" name="Create key in the bucket in s3v volume" line="47">
+<kw name="Execute and checkrc" library="os">
+<arg>echo "${PREFIX}: another key created using Ozone Shell" &gt; /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:31.162" level="INFO">Running command 'echo "old1: another key created using Ozone Shell" &gt; /tmp/sourcekey'.</msg>
+<msg timestamp="20240106 03:51:31.163" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:31.163" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:31.161" endtime="20240106 03:51:31.163"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:31.164" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:31.164" endtime="20240106 03:51:31.164"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:31.164" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:31.164" endtime="20240106 03:51:31.165"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:31.161" endtime="20240106 03:51:31.165"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh key put /s3v/${PREFIX}-bucket/key1-shell /tmp/sourcekey</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:31.167" level="INFO">Running command 'ozone sh key put /s3v/old1-bucket/key1-shell /tmp/sourcekey 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:35.054" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:35.054" level="INFO">${output} = 2024-01-06 03:51:33,805 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:33,878 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20240106 03:51:31.166" endtime="20240106 03:51:35.054"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:35.055" level="INFO">2024-01-06 03:51:33,805 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:33,878 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2024-01-06 03:51:33,878 [main] INFO impl.MetricsSystemImpl: XceiverClientMetrics metrics system started
+2024-01-06 03:51:34,056 [main] INFO metrics.MetricRegistries: Loaded MetricRegistries class org.apache.ratis.metrics.impl.MetricRegistriesImpl</msg>
+<status status="PASS" starttime="20240106 03:51:35.054" endtime="20240106 03:51:35.055"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:35.055" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:35.055" endtime="20240106 03:51:35.056"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:31.166" endtime="20240106 03:51:35.056"/>
+</kw>
+<msg timestamp="20240106 03:51:35.056" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:31.165" endtime="20240106 03:51:35.056"/>
+</kw>
+<msg timestamp="20240106 03:51:35.056" level="INFO">${output} = 2024-01-06 03:51:33,805 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:33,878 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20240106 03:51:31.165" endtime="20240106 03:51:35.056"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:35.057" endtime="20240106 03:51:35.057"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>rm /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:35.059" level="INFO">Running command 'rm /tmp/sourcekey 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:35.060" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:35.061" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:35.057" endtime="20240106 03:51:35.061"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:35.061" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:35.061" endtime="20240106 03:51:35.061"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:35.062" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:35.061" endtime="20240106 03:51:35.062"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.057" endtime="20240106 03:51:35.062"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:31.160" endtime="20240106 03:51:35.062"/>
+</test>
+<test id="s1-s2-t5" name="Try to create a bucket using S3 API" line="53">
+<kw name="Setup v4 headers" library="commonawslib" type="SETUP">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:35.067" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:35.069" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:35.069" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:35.066" endtime="20240106 03:51:35.069"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:35.070" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:35.069" endtime="20240106 03:51:35.070"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:35.070" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:35.070" endtime="20240106 03:51:35.070"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.065" endtime="20240106 03:51:35.071"/>
+</kw>
+<msg timestamp="20240106 03:51:35.071" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:35.065" endtime="20240106 03:51:35.072"/>
+</kw>
+<msg timestamp="20240106 03:51:35.072" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:35.065" endtime="20240106 03:51:35.072"/>
+</kw>
+<msg timestamp="20240106 03:51:35.072" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:35.064" endtime="20240106 03:51:35.072"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:35.073" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:35.073" endtime="20240106 03:51:35.073"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:35.077" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:35.101" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:35.101" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:35.075" endtime="20240106 03:51:35.101"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:35.102" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:35.102" endtime="20240106 03:51:35.102"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:35.103" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:35.102" endtime="20240106 03:51:35.103"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.075" endtime="20240106 03:51:35.103"/>
+</kw>
+<msg timestamp="20240106 03:51:35.103" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:35.075" endtime="20240106 03:51:35.104"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.074" endtime="20240106 03:51:35.104"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.073" endtime="20240106 03:51:35.104"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.064" endtime="20240106 03:51:35.104"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.064" endtime="20240106 03:51:35.104"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Setup secure v4 headers</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Setup secure v4 headers" library="commonawslib">
+<kw name="Execute And Ignore Error" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:35.107" level="INFO">Running command 'ozone s3 getsecret --om-service-id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:36.959" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:36.959" level="INFO">${output} = awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:35.105" endtime="20240106 03:51:36.959"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:36.960" level="INFO">awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:36.959" endtime="20240106 03:51:36.960"/>
+</kw>
+<msg timestamp="20240106 03:51:36.960" level="INFO">${result} = awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:35.105" endtime="20240106 03:51:36.960"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Should Contain</arg>
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20240106 03:51:36.961" level="FAIL">'awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe' does not contain 'S3_SECRET_ALREADY_EXISTS'</msg>
+<status status="FAIL" starttime="20240106 03:51:36.961" endtime="20240106 03:51:36.961"/>
+</kw>
+<msg timestamp="20240106 03:51:36.962" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20240106 03:51:36.960" endtime="20240106 03:51:36.962"/>
+</kw>
+<if>
+<branch type="IF" condition="${exists}">
+<kw name="Execute" library="os">
+<arg>ozone s3 revokesecret -y ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20240106 03:51:36.962" endtime="20240106 03:51:36.962"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20240106 03:51:36.962" endtime="20240106 03:51:36.962"/>
+</kw>
+<status status="NOT RUN" starttime="20240106 03:51:36.962" endtime="20240106 03:51:36.962"/>
+</branch>
+<status status="PASS" starttime="20240106 03:51:36.962" endtime="20240106 03:51:36.962"/>
+</if>
+<kw name="Get Regexp Matches" library="String">
+<var>${accessKey}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsAccessKey=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240106 03:51:36.963" level="INFO">${accessKey} = ['testuser/scm@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20240106 03:51:36.962" endtime="20240106 03:51:36.963"/>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey}</arg>
+<arg>testuser</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20240106 03:51:36.963" level="INFO">${accessKey} = ['testuser/scm@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20240106 03:51:36.963" endtime="20240106 03:51:36.963"/>
+</kw>
+<kw name="Get Regexp Matches" library="String">
+<var>${secret}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsSecret=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240106 03:51:36.964" level="INFO">${secret} = ['4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe']</msg>
+<status status="PASS" starttime="20240106 03:51:36.964" endtime="20240106 03:51:36.964"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240106 03:51:36.965" level="INFO">${accessKey} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:36.964" endtime="20240106 03:51:36.965"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${secret}</var>
+<arg>${secret[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240106 03:51:36.966" level="INFO">${secret} = 4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:36.965" endtime="20240106 03:51:36.966"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.signature_version s3v4</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:36.968" level="INFO">Running command 'aws configure set default.s3.signature_version s3v4 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:37.346" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:37.346" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:36.967" endtime="20240106 03:51:37.346"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:37.347" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:37.346" endtime="20240106 03:51:37.347"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:37.347" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:37.347" endtime="20240106 03:51:37.347"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:36.967" endtime="20240106 03:51:37.347"/>
+</kw>
+<msg timestamp="20240106 03:51:37.347" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:36.966" endtime="20240106 03:51:37.348"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:36.966" endtime="20240106 03:51:37.348"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_access_key_id ${accessKey}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:37.351" level="INFO">Running command 'aws configure set aws_access_key_id testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:37.715" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:37.715" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:37.349" endtime="20240106 03:51:37.715"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:37.716" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:37.715" endtime="20240106 03:51:37.716"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:37.717" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:37.716" endtime="20240106 03:51:37.717"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:37.349" endtime="20240106 03:51:37.717"/>
+</kw>
+<msg timestamp="20240106 03:51:37.717" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:37.349" endtime="20240106 03:51:37.717"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:37.348" endtime="20240106 03:51:37.718"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_secret_access_key ${secret}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:37.721" level="INFO">Running command 'aws configure set aws_secret_access_key 4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:38.094" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:38.094" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:37.719" endtime="20240106 03:51:38.094"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:38.095" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:38.095" endtime="20240106 03:51:38.095"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:38.096" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:38.095" endtime="20240106 03:51:38.096"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:37.719" endtime="20240106 03:51:38.096"/>
+</kw>
+<msg timestamp="20240106 03:51:38.096" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:37.718" endtime="20240106 03:51:38.096"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:37.718" endtime="20240106 03:51:38.097"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set region us-west-1</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:38.099" level="INFO">Running command 'aws configure set region us-west-1 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:38.475" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:38.475" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:38.098" endtime="20240106 03:51:38.475"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:38.476" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:38.475" endtime="20240106 03:51:38.476"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:38.476" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:38.476" endtime="20240106 03:51:38.476"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:38.097" endtime="20240106 03:51:38.476"/>
+</kw>
+<msg timestamp="20240106 03:51:38.476" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:38.097" endtime="20240106 03:51:38.477"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:38.097" endtime="20240106 03:51:38.477"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.addressing_style ${OZONE_S3_ADDRESS_STYLE}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:38.480" level="INFO">Running command 'aws configure set default.s3.addressing_style path 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:38.848" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:38.848" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:38.478" endtime="20240106 03:51:38.848"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:38.849" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:38.848" endtime="20240106 03:51:38.849"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:38.849" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:38.849" endtime="20240106 03:51:38.849"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:38.478" endtime="20240106 03:51:38.850"/>
+</kw>
+<msg timestamp="20240106 03:51:38.850" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:38.478" endtime="20240106 03:51:38.850"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:38.477" endtime="20240106 03:51:38.850"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.105" endtime="20240106 03:51:38.850"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.104" endtime="20240106 03:51:38.850"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Setup dummy credentials for S3</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20240106 03:51:38.851" endtime="20240106 03:51:38.851"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:35.063" endtime="20240106 03:51:38.851"/>
+</kw>
+<kw name="Generate Ozone String" library="commonawslib">
+<var>${random}</var>
+<kw name="Generate Random String" library="String">
+<var>${randStr}</var>
+<arg>10</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20240106 03:51:38.852" level="INFO">${randStr} = 3200759013</msg>
+<status status="PASS" starttime="20240106 03:51:38.851" endtime="20240106 03:51:38.852"/>
+</kw>
+<msg timestamp="20240106 03:51:38.852" level="INFO">${random} = ozone-test-3200759013</msg>
+<status status="PASS" starttime="20240106 03:51:38.851" endtime="20240106 03:51:38.852"/>
+</kw>
+<kw name="Create bucket with name" library="commonawslib">
+<var>${output}</var>
+<arg>${PREFIX}-bucket-${random}</arg>
+<kw name="Execute AWSS3APICli" library="commonawslib">
+<var>${result}</var>
+<arg>create-bucket --bucket ${bucket}</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3api --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:38.855" level="INFO">Running command 'aws s3api --endpoint-url http://s3g:9878 create-bucket --bucket old1-bucket-ozone-test-3200759013 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:40.561" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:40.561" level="INFO">${output} = {
+    "Location": "http://s3g:9878/old1-bucket-ozone-test-3200759013"
+}</msg>
+<status status="PASS" starttime="20240106 03:51:38.854" endtime="20240106 03:51:40.561"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:40.562" level="INFO">{
+    "Location": "http://s3g:9878/old1-bucket-ozone-test-3200759013"
+}</msg>
+<status status="PASS" starttime="20240106 03:51:40.562" endtime="20240106 03:51:40.562"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:40.563" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:40.562" endtime="20240106 03:51:40.563"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:38.854" endtime="20240106 03:51:40.563"/>
+</kw>
+<msg timestamp="20240106 03:51:40.563" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:38.853" endtime="20240106 03:51:40.563"/>
+</kw>
+<msg timestamp="20240106 03:51:40.564" level="INFO">${output} = {
+    "Location": "http://s3g:9878/old1-bucket-ozone-test-3200759013"
+}</msg>
+<status status="PASS" starttime="20240106 03:51:38.853" endtime="20240106 03:51:40.564"/>
+</kw>
+<msg timestamp="20240106 03:51:40.564" level="INFO">${result} = {
+    "Location": "http://s3g:9878/old1-bucket-ozone-test-3200759013"
+}</msg>
+<status status="PASS" starttime="20240106 03:51:38.853" endtime="20240106 03:51:40.564"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Location</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:40.564" endtime="20240106 03:51:40.564"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>${bucket}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:40.564" endtime="20240106 03:51:40.565"/>
+</kw>
+<msg timestamp="20240106 03:51:40.565" level="INFO">${output} = None</msg>
+<status status="PASS" starttime="20240106 03:51:38.852" endtime="20240106 03:51:40.565"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${output}</arg>
+<arg>${None}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20240106 03:51:40.565" endtime="20240106 03:51:40.565"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:35.063" endtime="20240106 03:51:40.566"/>
+</test>
+<test id="s1-s2-t6" name="Create key using S3 API" line="60">
+<kw name="Execute and checkrc" library="os">
+<arg>echo "${PREFIX}: key created using S3 API" &gt; /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:40.569" level="INFO">Running command 'echo "old1: key created using S3 API" &gt; /tmp/sourcekey'.</msg>
+<msg timestamp="20240106 03:51:40.570" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:40.570" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:40.568" endtime="20240106 03:51:40.570"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:40.571" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:40.570" endtime="20240106 03:51:40.571"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:40.571" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:40.571" endtime="20240106 03:51:40.571"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:40.567" endtime="20240106 03:51:40.572"/>
+</kw>
+<kw name="Execute AWSS3APICli and checkrc" library="commonawslib">
+<var>${output}</var>
+<arg>put-object --bucket ${PREFIX}-bucket --key key2-s3api --body /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Execute and checkrc" library="os">
+<var>${output}</var>
+<arg>aws s3api --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<arg>${expected_error_code}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:40.574" level="INFO">Running command 'aws s3api --endpoint-url http://s3g:9878 put-object --bucket old1-bucket --key key2-s3api --body /tmp/sourcekey 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:41.928" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:41.928" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:40.573" endtime="20240106 03:51:41.928"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:41.929" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:41.928" endtime="20240106 03:51:41.929"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:41.929" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:41.929" endtime="20240106 03:51:41.929"/>
+</kw>
+<msg timestamp="20240106 03:51:41.929" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:40.572" endtime="20240106 03:51:41.929"/>
+</kw>
+<msg timestamp="20240106 03:51:41.930" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:40.572" endtime="20240106 03:51:41.930"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>error</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:41.930" endtime="20240106 03:51:41.930"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>rm /tmp/sourcekey</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:41.932" level="INFO">Running command 'rm /tmp/sourcekey 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:41.934" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:41.934" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:41.931" endtime="20240106 03:51:41.934"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:41.935" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:41.934" endtime="20240106 03:51:41.935"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:41.936" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:41.935" endtime="20240106 03:51:41.936"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:41.930" endtime="20240106 03:51:41.936"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:40.566" endtime="20240106 03:51:41.936"/>
+</test>
+<doc>Generate data</doc>
+<status status="PASS" starttime="20240106 03:51:19.449" endtime="20240106 03:51:41.937"/>
+</suite>
+<suite id="s1-s3" name="1.3.0-1.4.0-1-original-validate-old1" source="/opt/ozone/smoketest/upgrade/validate.robot">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:44.956" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:44.958" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:44.958" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:44.954" endtime="20240106 03:51:44.958"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:44.959" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:44.959" endtime="20240106 03:51:44.959"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:44.959" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:44.959" endtime="20240106 03:51:44.960"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:44.953" endtime="20240106 03:51:44.960"/>
+</kw>
+<msg timestamp="20240106 03:51:44.960" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:44.953" endtime="20240106 03:51:44.961"/>
+</kw>
+<msg timestamp="20240106 03:51:44.961" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:44.953" endtime="20240106 03:51:44.961"/>
+</kw>
+<msg timestamp="20240106 03:51:44.961" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:44.952" endtime="20240106 03:51:44.961"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:44.962" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:44.961" endtime="20240106 03:51:44.962"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:44.964" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:45.007" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:45.007" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:44.963" endtime="20240106 03:51:45.007"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:45.008" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:45.007" endtime="20240106 03:51:45.008"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:45.008" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:45.008" endtime="20240106 03:51:45.008"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:44.963" endtime="20240106 03:51:45.008"/>
+</kw>
+<msg timestamp="20240106 03:51:45.009" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:44.963" endtime="20240106 03:51:45.009"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:44.962" endtime="20240106 03:51:45.009"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:44.962" endtime="20240106 03:51:45.009"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:44.952" endtime="20240106 03:51:45.009"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:44.952" endtime="20240106 03:51:45.009"/>
+</kw>
+<test id="s1-s3-t1" name="Read data from previously created key" line="29">
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20240106 03:51:45.011" level="INFO">${random} = 60366</msg>
+<status status="PASS" starttime="20240106 03:51:45.011" endtime="20240106 03:51:45.011"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh key get /${PREFIX}-volume/${PREFIX}-bucket/${PREFIX}-key /tmp/key-${random}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:45.014" level="INFO">Running command 'ozone sh key get /old1-volume/old1-bucket/old1-key /tmp/key-60366 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:48.749" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:48.749" level="INFO">${output} = 2024-01-06 03:51:47,587 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:47,656 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20240106 03:51:45.012" endtime="20240106 03:51:48.749"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:48.750" level="INFO">2024-01-06 03:51:47,587 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:47,656 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2024-01-06 03:51:47,656 [main] INFO impl.MetricsSystemImpl: XceiverClientMetrics metrics system started</msg>
+<status status="PASS" starttime="20240106 03:51:48.749" endtime="20240106 03:51:48.750"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:48.750" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:48.750" endtime="20240106 03:51:48.750"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:45.012" endtime="20240106 03:51:48.751"/>
+</kw>
+<msg timestamp="20240106 03:51:48.751" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:45.012" endtime="20240106 03:51:48.751"/>
+</kw>
+<msg timestamp="20240106 03:51:48.751" level="INFO">${output} = 2024-01-06 03:51:47,587 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2024-01-06 03:51:47,656 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20240106 03:51:45.011" endtime="20240106 03:51:48.751"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:48.751" endtime="20240106 03:51:48.752"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<var>${output}</var>
+<arg>cat /tmp/key-${random}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:48.753" level="INFO">Running command 'cat /tmp/key-60366 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:48.755" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:48.755" level="INFO">${output} = old1: key created using Ozone Shell</msg>
+<status status="PASS" starttime="20240106 03:51:48.752" endtime="20240106 03:51:48.755"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:48.756" level="INFO">old1: key created using Ozone Shell</msg>
+<status status="PASS" starttime="20240106 03:51:48.756" endtime="20240106 03:51:48.756"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:48.757" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:48.756" endtime="20240106 03:51:48.757"/>
+</kw>
+<msg timestamp="20240106 03:51:48.757" level="INFO">${output} = old1: key created using Ozone Shell</msg>
+<status status="PASS" starttime="20240106 03:51:48.752" endtime="20240106 03:51:48.757"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>${PREFIX}: key created using Ozone Shell</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:48.758" endtime="20240106 03:51:48.758"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>rm /tmp/key-${random}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:48.760" level="INFO">Running command 'rm /tmp/key-60366 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:48.761" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:48.761" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:48.759" endtime="20240106 03:51:48.761"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:48.762" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:48.762" endtime="20240106 03:51:48.762"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:48.762" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:48.762" endtime="20240106 03:51:48.763"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.758" endtime="20240106 03:51:48.763"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:45.010" endtime="20240106 03:51:48.763"/>
+</test>
+<test id="s1-s3-t2" name="Read key created with Ozone Shell using S3 API" line="37">
+<kw name="Setup v4 headers" library="commonawslib" type="SETUP">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:48.768" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:48.770" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:48.770" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:48.766" endtime="20240106 03:51:48.770"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:48.770" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:48.770" endtime="20240106 03:51:48.770"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:48.771" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:48.771" endtime="20240106 03:51:48.771"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.766" endtime="20240106 03:51:48.771"/>
+</kw>
+<msg timestamp="20240106 03:51:48.771" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:48.766" endtime="20240106 03:51:48.772"/>
+</kw>
+<msg timestamp="20240106 03:51:48.772" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:48.766" endtime="20240106 03:51:48.772"/>
+</kw>
+<msg timestamp="20240106 03:51:48.772" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:48.765" endtime="20240106 03:51:48.772"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:48.773" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:48.772" endtime="20240106 03:51:48.773"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:48.775" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:48.805" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:48.805" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:48.774" endtime="20240106 03:51:48.805"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:48.806" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:48.806" endtime="20240106 03:51:48.806"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:48.807" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:48.806" endtime="20240106 03:51:48.807"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.774" endtime="20240106 03:51:48.807"/>
+</kw>
+<msg timestamp="20240106 03:51:48.807" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:48.773" endtime="20240106 03:51:48.808"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.773" endtime="20240106 03:51:48.808"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.773" endtime="20240106 03:51:48.808"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.765" endtime="20240106 03:51:48.808"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.764" endtime="20240106 03:51:48.808"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Setup secure v4 headers</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Setup secure v4 headers" library="commonawslib">
+<kw name="Execute And Ignore Error" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:48.811" level="INFO">Running command 'ozone s3 getsecret --om-service-id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:50.694" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:50.694" level="INFO">${output} = awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:48.809" endtime="20240106 03:51:50.694"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:50.695" level="INFO">awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:50.694" endtime="20240106 03:51:50.695"/>
+</kw>
+<msg timestamp="20240106 03:51:50.695" level="INFO">${result} = awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:48.809" endtime="20240106 03:51:50.695"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Should Contain</arg>
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20240106 03:51:50.696" level="FAIL">'awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe' does not contain 'S3_SECRET_ALREADY_EXISTS'</msg>
+<status status="FAIL" starttime="20240106 03:51:50.696" endtime="20240106 03:51:50.696"/>
+</kw>
+<msg timestamp="20240106 03:51:50.697" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20240106 03:51:50.695" endtime="20240106 03:51:50.697"/>
+</kw>
+<if>
+<branch type="IF" condition="${exists}">
+<kw name="Execute" library="os">
+<arg>ozone s3 revokesecret -y ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20240106 03:51:50.697" endtime="20240106 03:51:50.697"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20240106 03:51:50.697" endtime="20240106 03:51:50.697"/>
+</kw>
+<status status="NOT RUN" starttime="20240106 03:51:50.697" endtime="20240106 03:51:50.697"/>
+</branch>
+<status status="PASS" starttime="20240106 03:51:50.697" endtime="20240106 03:51:50.697"/>
+</if>
+<kw name="Get Regexp Matches" library="String">
+<var>${accessKey}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsAccessKey=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240106 03:51:50.698" level="INFO">${accessKey} = ['testuser/scm@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20240106 03:51:50.697" endtime="20240106 03:51:50.698"/>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey}</arg>
+<arg>testuser</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20240106 03:51:50.698" level="INFO">${accessKey} = ['testuser/scm@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20240106 03:51:50.698" endtime="20240106 03:51:50.699"/>
+</kw>
+<kw name="Get Regexp Matches" library="String">
+<var>${secret}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsSecret=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240106 03:51:50.699" level="INFO">${secret} = ['4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe']</msg>
+<status status="PASS" starttime="20240106 03:51:50.699" endtime="20240106 03:51:50.699"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240106 03:51:50.700" level="INFO">${accessKey} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:50.699" endtime="20240106 03:51:50.700"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${secret}</var>
+<arg>${secret[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240106 03:51:50.701" level="INFO">${secret} = 4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:50.700" endtime="20240106 03:51:50.701"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.signature_version s3v4</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:50.704" level="INFO">Running command 'aws configure set default.s3.signature_version s3v4 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:51.089" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:51.089" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:50.702" endtime="20240106 03:51:51.089"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:51.090" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:51.089" endtime="20240106 03:51:51.090"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:51.090" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:51.090" endtime="20240106 03:51:51.090"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:50.702" endtime="20240106 03:51:51.091"/>
+</kw>
+<msg timestamp="20240106 03:51:51.091" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:50.701" endtime="20240106 03:51:51.091"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:50.701" endtime="20240106 03:51:51.091"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_access_key_id ${accessKey}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:51.094" level="INFO">Running command 'aws configure set aws_access_key_id testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:51.456" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:51.456" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:51.092" endtime="20240106 03:51:51.456"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:51.457" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:51.456" endtime="20240106 03:51:51.457"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:51.457" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:51.457" endtime="20240106 03:51:51.457"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:51.092" endtime="20240106 03:51:51.458"/>
+</kw>
+<msg timestamp="20240106 03:51:51.458" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:51.092" endtime="20240106 03:51:51.458"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:51.091" endtime="20240106 03:51:51.458"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_secret_access_key ${secret}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:51.461" level="INFO">Running command 'aws configure set aws_secret_access_key 4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:51.844" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:51.844" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:51.460" endtime="20240106 03:51:51.844"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:51.845" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:51.844" endtime="20240106 03:51:51.845"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:51.845" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:51.845" endtime="20240106 03:51:51.846"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:51.459" endtime="20240106 03:51:51.846"/>
+</kw>
+<msg timestamp="20240106 03:51:51.846" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:51.459" endtime="20240106 03:51:51.846"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:51.458" endtime="20240106 03:51:51.847"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set region us-west-1</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:51.849" level="INFO">Running command 'aws configure set region us-west-1 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:52.220" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:52.220" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:51.848" endtime="20240106 03:51:52.220"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:52.221" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:52.220" endtime="20240106 03:51:52.221"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:52.221" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:52.221" endtime="20240106 03:51:52.221"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:51.847" endtime="20240106 03:51:52.222"/>
+</kw>
+<msg timestamp="20240106 03:51:52.222" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:51.847" endtime="20240106 03:51:52.222"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:51.847" endtime="20240106 03:51:52.222"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.addressing_style ${OZONE_S3_ADDRESS_STYLE}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:52.225" level="INFO">Running command 'aws configure set default.s3.addressing_style path 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:52.587" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:52.587" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:52.223" endtime="20240106 03:51:52.587"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:52.587" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:52.587" endtime="20240106 03:51:52.588"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:52.588" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:52.588" endtime="20240106 03:51:52.588"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:52.223" endtime="20240106 03:51:52.588"/>
+</kw>
+<msg timestamp="20240106 03:51:52.588" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:52.223" endtime="20240106 03:51:52.589"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:52.222" endtime="20240106 03:51:52.589"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.808" endtime="20240106 03:51:52.589"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.808" endtime="20240106 03:51:52.589"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Setup dummy credentials for S3</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20240106 03:51:52.589" endtime="20240106 03:51:52.590"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:48.764" endtime="20240106 03:51:52.590"/>
+</kw>
+<kw name="Execute AWSS3APICli and checkrc" library="commonawslib">
+<var>${output}</var>
+<arg>get-object --bucket ${PREFIX}-bucket --key key1-shell /tmp/get-result</arg>
+<arg>0</arg>
+<kw name="Execute and checkrc" library="os">
+<var>${output}</var>
+<arg>aws s3api --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<arg>${expected_error_code}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:52.592" level="INFO">Running command 'aws s3api --endpoint-url http://s3g:9878 get-object --bucket old1-bucket --key key1-shell /tmp/get-result 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:53.163" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:53.164" level="INFO">${output} = {
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:34 GMT",
+    "ContentLength": 44,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires...</msg>
+<status status="PASS" starttime="20240106 03:51:52.591" endtime="20240106 03:51:53.164"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:53.164" level="INFO">{
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:34 GMT",
+    "ContentLength": 44,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires": "Sat, 06 Jan 2024 03:51:52 GMT",
+    "Metadata": {}
+}</msg>
+<status status="PASS" starttime="20240106 03:51:53.164" endtime="20240106 03:51:53.165"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:53.165" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:53.165" endtime="20240106 03:51:53.165"/>
+</kw>
+<msg timestamp="20240106 03:51:53.165" level="INFO">${output} = {
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:34 GMT",
+    "ContentLength": 44,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires...</msg>
+<status status="PASS" starttime="20240106 03:51:52.590" endtime="20240106 03:51:53.165"/>
+</kw>
+<msg timestamp="20240106 03:51:53.166" level="INFO">${output} = {
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:34 GMT",
+    "ContentLength": 44,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires...</msg>
+<status status="PASS" starttime="20240106 03:51:52.590" endtime="20240106 03:51:53.166"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>"ContentLength"</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:53.166" endtime="20240106 03:51:53.166"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<var>${output}</var>
+<arg>cat /tmp/get-result</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:53.168" level="INFO">Running command 'cat /tmp/get-result 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:53.169" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:53.170" level="INFO">${output} = old1: another key created using Ozone Shell</msg>
+<status status="PASS" starttime="20240106 03:51:53.167" endtime="20240106 03:51:53.170"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:53.170" level="INFO">old1: another key created using Ozone Shell</msg>
+<status status="PASS" starttime="20240106 03:51:53.170" endtime="20240106 03:51:53.170"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:53.171" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:53.170" endtime="20240106 03:51:53.171"/>
+</kw>
+<msg timestamp="20240106 03:51:53.171" level="INFO">${output} = old1: another key created using Ozone Shell</msg>
+<status status="PASS" starttime="20240106 03:51:53.166" endtime="20240106 03:51:53.171"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>${PREFIX}: another key created using Ozone Shell</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:53.171" endtime="20240106 03:51:53.172"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>rm /tmp/get-result</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:53.174" level="INFO">Running command 'rm /tmp/get-result 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:53.177" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:53.177" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:53.172" endtime="20240106 03:51:53.177"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:53.178" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:53.177" endtime="20240106 03:51:53.178"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:53.179" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:53.178" endtime="20240106 03:51:53.179"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.172" endtime="20240106 03:51:53.179"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:48.763" endtime="20240106 03:51:53.180"/>
+</test>
+<test id="s1-s3-t3" name="Read key created with S3 API using S3 API" line="45">
+<kw name="Setup v4 headers" library="commonawslib" type="SETUP">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:53.185" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:53.187" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:53.187" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:53.183" endtime="20240106 03:51:53.187"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:53.187" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:51:53.187" endtime="20240106 03:51:53.187"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:53.188" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:53.188" endtime="20240106 03:51:53.188"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.183" endtime="20240106 03:51:53.188"/>
+</kw>
+<msg timestamp="20240106 03:51:53.188" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:53.183" endtime="20240106 03:51:53.189"/>
+</kw>
+<msg timestamp="20240106 03:51:53.189" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:51:53.182" endtime="20240106 03:51:53.189"/>
+</kw>
+<msg timestamp="20240106 03:51:53.189" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:53.182" endtime="20240106 03:51:53.189"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:51:53.190" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:53.189" endtime="20240106 03:51:53.190"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:53.192" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:53.229" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:53.229" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:53.191" endtime="20240106 03:51:53.229"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:53.230" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:53.229" endtime="20240106 03:51:53.230"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:53.231" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:53.230" endtime="20240106 03:51:53.231"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.191" endtime="20240106 03:51:53.231"/>
+</kw>
+<msg timestamp="20240106 03:51:53.231" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:53.190" endtime="20240106 03:51:53.232"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.190" endtime="20240106 03:51:53.232"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.190" endtime="20240106 03:51:53.232"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.182" endtime="20240106 03:51:53.232"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.181" endtime="20240106 03:51:53.232"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Setup secure v4 headers</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Setup secure v4 headers" library="commonawslib">
+<kw name="Execute And Ignore Error" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:53.235" level="INFO">Running command 'ozone s3 getsecret --om-service-id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:55.081" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:55.081" level="INFO">${output} = awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:53.233" endtime="20240106 03:51:55.081"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:55.082" level="INFO">awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:55.081" endtime="20240106 03:51:55.082"/>
+</kw>
+<msg timestamp="20240106 03:51:55.082" level="INFO">${result} = awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:53.233" endtime="20240106 03:51:55.082"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Should Contain</arg>
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20240106 03:51:55.084" level="FAIL">'awsAccessKey=testuser/scm@EXAMPLE.COM
+awsSecret=4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe' does not contain 'S3_SECRET_ALREADY_EXISTS'</msg>
+<status status="FAIL" starttime="20240106 03:51:55.083" endtime="20240106 03:51:55.084"/>
+</kw>
+<msg timestamp="20240106 03:51:55.084" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20240106 03:51:55.083" endtime="20240106 03:51:55.084"/>
+</kw>
+<if>
+<branch type="IF" condition="${exists}">
+<kw name="Execute" library="os">
+<arg>ozone s3 revokesecret -y ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20240106 03:51:55.084" endtime="20240106 03:51:55.084"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20240106 03:51:55.084" endtime="20240106 03:51:55.084"/>
+</kw>
+<status status="NOT RUN" starttime="20240106 03:51:55.084" endtime="20240106 03:51:55.084"/>
+</branch>
+<status status="PASS" starttime="20240106 03:51:55.084" endtime="20240106 03:51:55.084"/>
+</if>
+<kw name="Get Regexp Matches" library="String">
+<var>${accessKey}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsAccessKey=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240106 03:51:55.085" level="INFO">${accessKey} = ['testuser/scm@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20240106 03:51:55.084" endtime="20240106 03:51:55.085"/>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey}</arg>
+<arg>testuser</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20240106 03:51:55.085" level="INFO">${accessKey} = ['testuser/scm@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20240106 03:51:55.085" endtime="20240106 03:51:55.085"/>
+</kw>
+<kw name="Get Regexp Matches" library="String">
+<var>${secret}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsSecret=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20240106 03:51:55.086" level="INFO">${secret} = ['4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe']</msg>
+<status status="PASS" starttime="20240106 03:51:55.085" endtime="20240106 03:51:55.086"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240106 03:51:55.087" level="INFO">${accessKey} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:51:55.086" endtime="20240106 03:51:55.087"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${secret}</var>
+<arg>${secret[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20240106 03:51:55.088" level="INFO">${secret} = 4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe</msg>
+<status status="PASS" starttime="20240106 03:51:55.087" endtime="20240106 03:51:55.088"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.signature_version s3v4</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:55.090" level="INFO">Running command 'aws configure set default.s3.signature_version s3v4 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:55.457" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:55.457" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:55.089" endtime="20240106 03:51:55.457"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:55.457" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:55.457" endtime="20240106 03:51:55.458"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:55.458" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:55.458" endtime="20240106 03:51:55.458"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:55.088" endtime="20240106 03:51:55.458"/>
+</kw>
+<msg timestamp="20240106 03:51:55.458" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:55.088" endtime="20240106 03:51:55.459"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:55.088" endtime="20240106 03:51:55.459"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_access_key_id ${accessKey}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:55.461" level="INFO">Running command 'aws configure set aws_access_key_id testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:55.829" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:55.829" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:55.460" endtime="20240106 03:51:55.829"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:55.830" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:55.829" endtime="20240106 03:51:55.830"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:55.830" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:55.830" endtime="20240106 03:51:55.830"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:55.460" endtime="20240106 03:51:55.831"/>
+</kw>
+<msg timestamp="20240106 03:51:55.831" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:55.460" endtime="20240106 03:51:55.831"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:55.459" endtime="20240106 03:51:55.831"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_secret_access_key ${secret}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:55.834" level="INFO">Running command 'aws configure set aws_secret_access_key 4059121222643630faaa8ec733793b5eb43e3a4d8a33348d283213b58a5bebfe 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:56.216" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:56.216" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:55.832" endtime="20240106 03:51:56.216"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:56.217" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:56.216" endtime="20240106 03:51:56.217"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:56.217" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:56.217" endtime="20240106 03:51:56.217"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:55.832" endtime="20240106 03:51:56.217"/>
+</kw>
+<msg timestamp="20240106 03:51:56.218" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:55.832" endtime="20240106 03:51:56.218"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:55.831" endtime="20240106 03:51:56.218"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set region us-west-1</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:56.221" level="INFO">Running command 'aws configure set region us-west-1 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:56.603" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:56.603" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:56.219" endtime="20240106 03:51:56.603"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:56.604" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:56.603" endtime="20240106 03:51:56.604"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:56.604" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:56.604" endtime="20240106 03:51:56.604"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:56.219" endtime="20240106 03:51:56.604"/>
+</kw>
+<msg timestamp="20240106 03:51:56.604" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:56.219" endtime="20240106 03:51:56.605"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:56.218" endtime="20240106 03:51:56.605"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.addressing_style ${OZONE_S3_ADDRESS_STYLE}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:56.608" level="INFO">Running command 'aws configure set default.s3.addressing_style path 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:56.991" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:56.991" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:56.606" endtime="20240106 03:51:56.991"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:56.992" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:56.991" endtime="20240106 03:51:56.992"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:56.992" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:56.992" endtime="20240106 03:51:56.992"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:56.606" endtime="20240106 03:51:56.993"/>
+</kw>
+<msg timestamp="20240106 03:51:56.993" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:51:56.606" endtime="20240106 03:51:56.993"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:56.605" endtime="20240106 03:51:56.993"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.233" endtime="20240106 03:51:56.994"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.232" endtime="20240106 03:51:56.994"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Setup dummy credentials for S3</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20240106 03:51:56.994" endtime="20240106 03:51:56.994"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:53.181" endtime="20240106 03:51:56.994"/>
+</kw>
+<kw name="Execute AWSS3APICli and checkrc" library="commonawslib">
+<var>${output}</var>
+<arg>get-object --bucket ${PREFIX}-bucket --key key2-s3api /tmp/get-result</arg>
+<arg>0</arg>
+<kw name="Execute and checkrc" library="os">
+<var>${output}</var>
+<arg>aws s3api --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<arg>${expected_error_code}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:56.997" level="INFO">Running command 'aws s3api --endpoint-url http://s3g:9878 get-object --bucket old1-bucket --key key2-s3api /tmp/get-result 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:57.456" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:57.456" level="INFO">${output} = {
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:41 GMT",
+    "ContentLength": 31,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires...</msg>
+<status status="PASS" starttime="20240106 03:51:56.996" endtime="20240106 03:51:57.456"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:57.457" level="INFO">{
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:41 GMT",
+    "ContentLength": 31,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires": "Sat, 06 Jan 2024 03:51:57 GMT",
+    "Metadata": {}
+}</msg>
+<status status="PASS" starttime="20240106 03:51:57.457" endtime="20240106 03:51:57.457"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:57.458" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:57.457" endtime="20240106 03:51:57.458"/>
+</kw>
+<msg timestamp="20240106 03:51:57.458" level="INFO">${output} = {
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:41 GMT",
+    "ContentLength": 31,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires...</msg>
+<status status="PASS" starttime="20240106 03:51:56.995" endtime="20240106 03:51:57.458"/>
+</kw>
+<msg timestamp="20240106 03:51:57.458" level="INFO">${output} = {
+    "AcceptRanges": "bytes",
+    "LastModified": "Sat, 06 Jan 2024 03:51:41 GMT",
+    "ContentLength": 31,
+    "CacheControl": "no-cache",
+    "ContentType": "application/octet-stream",
+    "Expires...</msg>
+<status status="PASS" starttime="20240106 03:51:56.994" endtime="20240106 03:51:57.458"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>"ContentLength"</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:57.458" endtime="20240106 03:51:57.459"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<var>${output}</var>
+<arg>cat /tmp/get-result</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:57.461" level="INFO">Running command 'cat /tmp/get-result 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:57.462" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:57.462" level="INFO">${output} = old1: key created using S3 API</msg>
+<status status="PASS" starttime="20240106 03:51:57.459" endtime="20240106 03:51:57.462"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:57.463" level="INFO">old1: key created using S3 API</msg>
+<status status="PASS" starttime="20240106 03:51:57.463" endtime="20240106 03:51:57.463"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:57.463" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:57.463" endtime="20240106 03:51:57.463"/>
+</kw>
+<msg timestamp="20240106 03:51:57.464" level="INFO">${output} = old1: key created using S3 API</msg>
+<status status="PASS" starttime="20240106 03:51:57.459" endtime="20240106 03:51:57.464"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>${PREFIX}: key created using S3 API</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20240106 03:51:57.464" endtime="20240106 03:51:57.464"/>
+</kw>
+<kw name="Execute and checkrc" library="os">
+<arg>rm /tmp/get-result</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:51:57.466" level="INFO">Running command 'rm /tmp/get-result 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:51:57.467" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:51:57.467" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:51:57.465" endtime="20240106 03:51:57.467"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:51:57.468" level="INFO"/>
+<status status="PASS" starttime="20240106 03:51:57.468" endtime="20240106 03:51:57.468"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:51:57.468" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:51:57.468" endtime="20240106 03:51:57.468"/>
+</kw>
+<status status="PASS" starttime="20240106 03:51:57.464" endtime="20240106 03:51:57.469"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20240106 03:51:53.180" endtime="20240106 03:51:57.469"/>
+</test>
+<doc>Smoketest ozone cluster startup</doc>
+<status status="PASS" starttime="20240106 03:51:44.888" endtime="20240106 03:51:57.470"/>
+</suite>
+<suite id="s1-s4" name="1.3.0-1.4.0-1-original-prepare" source="/opt/ozone/smoketest/upgrade/prepare.robot">
+<test id="s1-s4-t1" name="Prepare Ozone Manager" line="23">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:52:00.540" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:52:00.542" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:52:00.542" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20240106 03:52:00.537" endtime="20240106 03:52:00.543"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:52:00.543" level="INFO">scm</msg>
+<status status="PASS" starttime="20240106 03:52:00.543" endtime="20240106 03:52:00.544"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:52:00.544" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:52:00.544" endtime="20240106 03:52:00.544"/>
+</kw>
+<status status="PASS" starttime="20240106 03:52:00.537" endtime="20240106 03:52:00.544"/>
+</kw>
+<msg timestamp="20240106 03:52:00.544" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:52:00.536" endtime="20240106 03:52:00.545"/>
+</kw>
+<msg timestamp="20240106 03:52:00.546" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20240106 03:52:00.536" endtime="20240106 03:52:00.546"/>
+</kw>
+<msg timestamp="20240106 03:52:00.546" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:52:00.536" endtime="20240106 03:52:00.546"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20240106 03:52:00.547" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20240106 03:52:00.546" endtime="20240106 03:52:00.547"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:52:00.550" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:52:00.595" level="INFO">${rc} = 0</msg>
+<msg timestamp="20240106 03:52:00.595" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20240106 03:52:00.548" endtime="20240106 03:52:00.595"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240106 03:52:00.595" level="INFO"/>
+<status status="PASS" starttime="20240106 03:52:00.595" endtime="20240106 03:52:00.596"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20240106 03:52:00.596" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20240106 03:52:00.596" endtime="20240106 03:52:00.596"/>
+</kw>
+<status status="PASS" starttime="20240106 03:52:00.548" endtime="20240106 03:52:00.596"/>
+</kw>
+<msg timestamp="20240106 03:52:00.596" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20240106 03:52:00.548" endtime="20240106 03:52:00.597"/>
+</kw>
+<status status="PASS" starttime="20240106 03:52:00.547" endtime="20240106 03:52:00.597"/>
+</kw>
+<status status="PASS" starttime="20240106 03:52:00.547" endtime="20240106 03:52:00.597"/>
+</kw>
+<status status="PASS" starttime="20240106 03:52:00.535" endtime="20240106 03:52:00.597"/>
+</kw>
+<status status="PASS" starttime="20240106 03:52:00.535" endtime="20240106 03:52:00.597"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'%{OZONE_UPGRADE_FROM}' == '1.1.0'</arg>
+<arg>OM prepare is skipped for version %{OZONE_UPGRADE_FROM}</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20240106 03:52:00.597" endtime="20240106 03:52:00.598"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin om prepare -id %{OM_SERVICE_ID}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20240106 03:52:00.600" level="INFO">Running command 'ozone admin om prepare -id omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20240106 03:57:00.535" level="FAIL">Test timeout 5 minutes exceeded.</msg>
+<status status="FAIL" starttime="20240106 03:52:00.599" endtime="20240106 03:57:00.535"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" starttime="20240106 03:57:00.535" endtime="20240106 03:57:00.536"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" starttime="20240106 03:57:00.536" endtime="20240106 03:57:00.536"/>
+</kw>
+<status status="FAIL" starttime="20240106 03:52:00.598" endtime="20240106 03:57:00.536"/>
+</kw>
+<msg timestamp="20240106 03:57:00.537" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="FAIL" starttime="20240106 03:52:00.598" endtime="20240106 03:57:00.537"/>
+</kw>
+<status status="FAIL" starttime="20240106 03:52:00.598" endtime="20240106 03:57:00.538"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>3min</arg>
+<arg>10sec</arg>
+<arg>Should contain</arg>
+<arg>${result}</arg>
+<arg>OM Preparation successful!</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20240106 03:57:00.538" endtime="20240106 03:57:00.538"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="FAIL" starttime="20240106 03:52:00.534" endtime="20240106 03:57:00.539">Test timeout 5 minutes exceeded.</status>
+</test>
+<doc>Prepares OMs</doc>
+<status status="FAIL" starttime="20240106 03:52:00.495" endtime="20240106 03:57:00.540"/>
+</suite>
+<status status="FAIL" starttime="N/A" endtime="N/A" elapsedtime="339713"/>
+</suite>
+<statistics>
+<total>
+<stat pass="11" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="2" fail="0" skip="0">create-volume-and-bucket</stat>
+<stat pass="2" fail="0" skip="0">finalized</stat>
+<stat pass="1" fail="0" skip="0">om</stat>
+<stat pass="1" fail="0" skip="0">scm</stat>
+</tag>
+<suite>
+<stat pass="11" fail="1" skip="0" id="s1" name="upgrade">upgrade</stat>
+<stat pass="2" fail="0" skip="0" id="s1-s1" name="1.3.0-1.4.0-1-original-check-finalization">upgrade.1.3.0-1.4.0-1-original-check-finalization</stat>
+<stat pass="6" fail="0" skip="0" id="s1-s2" name="1.3.0-1.4.0-1-original-generate-old1">upgrade.1.3.0-1.4.0-1-original-generate-old1</stat>
+<stat pass="3" fail="0" skip="0" id="s1-s3" name="1.3.0-1.4.0-1-original-validate-old1">upgrade.1.3.0-1.4.0-1-original-validate-old1</stat>
+<stat pass="0" fail="1" skip="0" id="s1-s4" name="1.3.0-1.4.0-1-original-prepare">upgrade.1.3.0-1.4.0-1-original-prepare</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
