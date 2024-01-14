@@ -1,0 +1,44 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.hadoop.hdds.scm.storage.TestCommitWatcher
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 53.41 s <<< FAILURE! -- in org.apache.hadoop.hdds.scm.storage.TestCommitWatcher
+org.apache.hadoop.hdds.scm.storage.TestCommitWatcher.testReleaseBuffersOnException -- Time elapsed: 30.56 s <<< ERROR!
+java.util.concurrent.ExecutionException: org.apache.ratis.protocol.exceptions.AlreadyClosedException: SlidingWindow$Client:client-DAAC435EC2A3->RAFT is closed.
+	at java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:357)
+	at java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1908)
+	at org.apache.hadoop.hdds.scm.storage.TestCommitWatcher.testReleaseBuffersOnException(TestCommitWatcher.java:294)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at java.util.ArrayList.forEach(ArrayList.java:1259)
+	at java.util.ArrayList.forEach(ArrayList.java:1259)
+Caused by: org.apache.ratis.protocol.exceptions.AlreadyClosedException: SlidingWindow$Client:client-DAAC435EC2A3->RAFT is closed.
+	at org.apache.ratis.util.SlidingWindow$Client.alreadyClosed(SlidingWindow.java:406)
+	at org.apache.ratis.util.SlidingWindow$Client.fail(SlidingWindow.java:394)
+	at org.apache.ratis.client.impl.OrderedAsync.failAllAsyncRequests(OrderedAsync.java:149)
+	at org.apache.ratis.client.impl.OrderedAsync.handleAsyncRetryFailure(OrderedAsync.java:153)
+	at org.apache.ratis.client.impl.OrderedAsync.lambda$sendRequest$9(OrderedAsync.java:253)
+	at java.util.concurrent.CompletableFuture.uniExceptionally(CompletableFuture.java:884)
+	at java.util.concurrent.CompletableFuture$UniExceptionally.tryFire(CompletableFuture.java:866)
+	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)
+	at java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:1990)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers.completeReplyExceptionally(GrpcClientProtocolClient.java:394)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers.access$000(GrpcClientProtocolClient.java:300)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:314)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:305)
+	at org.apache.ratis.thirdparty.io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onMessage(ClientCalls.java:468)
+	at org.apache.ratis.thirdparty.io.grpc.ForwardingClientCallListener.onMessage(ForwardingClientCallListener.java:33)
+	at org.apache.ratis.thirdparty.io.grpc.internal.DelayedClientCall$DelayedListener.onMessage(DelayedClientCall.java:473)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInternal(ClientCallImpl.java:660)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInContext(ClientCallImpl.java:647)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+	at org.apache.ratis.thirdparty.io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:750)
+Caused by: org.apache.ratis.protocol.exceptions.RaftRetryFailureException: Failed RaftClientRequest:client-DAAC435EC2A3->5f8e001a-8213-4762-a64f-c492c0fad8a7@group-EA54333CD795, cid=26, seq=1*, Watch(0), null for 3 attempts with RequestTypeDependentRetryPolicy{WRITE->ExceptionDependentRetry(maxAttempts=2147483647; defaultPolicy=MultipleLinearRandomRetry[5x5s, 5x10s, 5x15s, 5x20s, 5x25s, 10x60s]; map={org.apache.ratis.protocol.exceptions.GroupMismatchException->NoRetry, org.apache.ratis.protocol.exceptions.NotReplicatedException->NoRetry, org.apache.ratis.protocol.exceptions.ResourceUnavailableException->org.apache.ratis.retry.ExponentialBackoffRetry@349ca5df, org.apache.ratis.protocol.exceptions.StateMachineException->NoRetry, org.apache.ratis.protocol.exceptions.TimeoutIOException->org.apache.ratis.retry.ExponentialBackoffRetry@349ca5df}), WATCH->ExceptionDependentRetry(maxAttempts=2147483647; defaultPolicy=MultipleLinearRandomRetry[5x5s, 5x10s, 5x15s, 5x20s, 5x25s, 10x60s]; map={org.apache.ratis.protocol.exceptions.GroupMismatchException->NoRetry, org.apache.ratis.protocol.exceptions.NotReplicatedException->NoRetry, org.apache.ratis.protocol.exceptions.ResourceUnavailableException->org.apache.ratis.retry.ExponentialBackoffRetry@349ca5df, org.apache.ratis.protocol.exceptions.StateMachineException->NoRetry, org.apache.ratis.protocol.exceptions.TimeoutIOException->NoRetry})}
+	at org.apache.ratis.client.impl.RaftClientImpl.noMoreRetries(RaftClientImpl.java:353)
+	... 20 more
+Caused by: org.apache.ratis.protocol.exceptions.NotLeaderException: Server 5f8e001a-8213-4762-a64f-c492c0fad8a7@group-EA54333CD795 is not the leader 023fb60a-00b7-42be-9ceb-f38531668441|10.1.0.100:15076
+	at org.apache.ratis.client.impl.ClientProtoUtils.toRaftClientReply(ClientProtoUtils.java:397)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:310)
+	... 11 more
+
