@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.21 on linux)" generated="20250227 16:29:00.088" rpa="false" schemaversion="4">
+<suite id="s1" name="ozonescripts">
+<suite id="s1-s1" name="Single Node" source="/opt/hadoop/smoketest/basic/single_node.robot">
+<test id="s1-s1-t1" name="Basic Freon smoketest for one datanode" line="25">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250227 16:28:13.887" endtime="20250227 16:28:13.887"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>10</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20250227 16:28:13.888" level="INFO">${random} = Sj1xi8Emyy</msg>
+<status status="PASS" starttime="20250227 16:28:13.887" endtime="20250227 16:28:13.888"/>
+</kw>
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=${random}</arg>
+<arg>args=--replication ONE --replication-type RATIS</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:13.894" level="INFO">Running command 'ozone freon ockg  -t 1 -n1 -p Sj1xi8Emyy --replication ONE --replication-type RATIS 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:23.782" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:23.782" level="INFO">${output} = 2025-02-27 16:28:15,099 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2025-02-27 16:28:15,236 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20250227 16:28:13.889" endtime="20250227 16:28:23.782"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:23.783" level="INFO">2025-02-27 16:28:15,099 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2025-02-27 16:28:15,236 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2025-02-27 16:28:15,236 [main] INFO impl.MetricsSystemImpl: ozone-freon metrics system started
+2025-02-27 16:28:15,375 [main] INFO freon.BaseFreonGenerator: Executing test with prefix Sj1xi8Emyy and number-of-tests 1
+2025-02-27 16:28:15,423 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:16,423 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:17,424 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:17,839 [main] INFO retry.RetryInvocationHandler: com.google.protobuf.ServiceException: org.apache.hadoop.ipc.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om1 is not the leader. Could not determine the leader node.
+	at org.apache.hadoop.ozone.om.ratis.OzoneManagerRatisServer.newOMNotLeaderException(OzoneManagerRatisServer.java:812)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.createLeaderErrorException(OzoneManagerProtocolServerSideTranslatorPB.java:233)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitReadRequestToOM(OzoneManagerProtocolServerSideTranslatorPB.java:226)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.internalProcessRequest(OzoneManagerProtocolServerSideTranslatorPB.java:161)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.processRequest(OzoneManagerProtocolServerSideTranslatorPB.java:127)
+	at org.apache.hadoop.hdds.server.OzoneProtocolMessageDispatcher.processRequest(OzoneProtocolMessageDispatcher.java:87)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitRequest(OzoneManagerProtocolServerSideTranslatorPB.java:118)
+	at org.apache.hadoop.ozone.protocol.proto.OzoneManagerProtocolProtos$OzoneManagerService$2.callBlockingMethod(OzoneManagerProtocolProtos.java)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine$Server.processCall(ProtobufRpcEngine.java:484)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:595)
+	at org.apache.hadoop.ipc.ProtobufRpcEngine2$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine2.java:573)
+	at org.apache.hadoop.ipc.RPC$Server.call(RPC.java:1227)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1246)
+	at org.apache.hadoop.ipc.Server$RpcCall.run(Server.java:1169)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714)
+	at java.base/javax.security.auth.Subject.doAs(Subject.java:525)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1953)
+	at org.apache.hadoop.ipc.Server$Handler.run(Server.java:3198)
+, while invoking $Proxy22.submitRequest over nodeId=null,nodeAddress=om:9862 after 1 failover attempts. Trying to failover after sleeping for 4000ms. Current retry count: 1.
+2025-02-27 16:28:18,424 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:19,424 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:20,425 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:21,425 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:22,310 [main] INFO rpc.RpcClient: Creating Volume: vol1, with hadoop as owner and space quota set to -1 bytes, counts quota set to -1
+2025-02-27 16:28:22,376 [main] INFO rpc.RpcClient: Creating Bucket: vol1/bucket1, with server-side default bucket layout, hadoop as owner, Versioning false, Storage Type set to DISK and Encryption set to false, Replication Type set to server-side default replication type, Namespace Quota set to -1, Space Quota set to -1 
+2025-02-27 16:28:22,425 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:22,537 [pool-2-thread-1] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2025-02-27 16:28:23,426 [Thread-3] INFO freon.ProgressBar: Progress: 100.00 % (1 out of 1)
+2025-02-27 16:28:23,443 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-create, count=1, min=867.869988, max=867.869988, mean=867.869988, stddev=0.0, median=867.869988, p75=867.869988, p95=867.869988, p98=867.869988, p99=867.869988, p999=867.869988, mean_rate=0.9550742900763992, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2025-02-27 16:28:23,444 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 8
+2025-02-27 16:28:23,444 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2025-02-27 16:28:23,444 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 1</msg>
+<status status="PASS" starttime="20250227 16:28:23.782" endtime="20250227 16:28:23.783"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:23.783" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:23.783" endtime="20250227 16:28:23.783"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:13.889" endtime="20250227 16:28:23.783"/>
+</kw>
+<msg timestamp="20250227 16:28:23.783" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:13.889" endtime="20250227 16:28:23.783"/>
+</kw>
+<msg timestamp="20250227 16:28:23.784" level="INFO">${result} = 2025-02-27 16:28:15,099 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2025-02-27 16:28:15,236 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20250227 16:28:13.888" endtime="20250227 16:28:23.784"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:23.784" endtime="20250227 16:28:23.784"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:13.888" endtime="20250227 16:28:23.784"/>
+</kw>
+<kw name="Freon OCKV" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockv ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:23.788" level="INFO">Running command 'ozone freon ockv  -t 1 -n1 -p Sj1xi8Emyy  2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:27.361" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:27.361" level="INFO">${output} = 2025-02-27 16:28:24,671 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2025-02-27 16:28:24,806 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20250227 16:28:23.786" endtime="20250227 16:28:27.361"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:27.362" level="INFO">2025-02-27 16:28:24,671 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2025-02-27 16:28:24,806 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period at 10 second(s).
+2025-02-27 16:28:24,806 [main] INFO impl.MetricsSystemImpl: ozone-freon metrics system started
+2025-02-27 16:28:24,951 [main] INFO freon.BaseFreonGenerator: Executing test with prefix Sj1xi8Emyy and number-of-tests 1
+2025-02-27 16:28:25,007 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:26,007 [Thread-3] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2025-02-27 16:28:26,030 [main] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2025-02-27 16:28:27,008 [Thread-3] INFO freon.ProgressBar: Progress: 100.00 % (1 out of 1)
+2025-02-27 16:28:27,022 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-validate, count=1, min=22.08683, max=22.08683, mean=22.08683, stddev=0.0, median=22.08683, p75=22.08683, p95=22.08683, p98=22.08683, p99=22.08683, p999=22.08683, mean_rate=1.988578946808898, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2025-02-27 16:28:27,022 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 2
+2025-02-27 16:28:27,022 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2025-02-27 16:28:27,022 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 1</msg>
+<status status="PASS" starttime="20250227 16:28:27.362" endtime="20250227 16:28:27.362"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:27.362" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:27.362" endtime="20250227 16:28:27.362"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:23.786" endtime="20250227 16:28:27.363"/>
+</kw>
+<msg timestamp="20250227 16:28:27.363" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:23.785" endtime="20250227 16:28:27.363"/>
+</kw>
+<msg timestamp="20250227 16:28:27.363" level="INFO">${result} = 2025-02-27 16:28:24,671 [main] INFO impl.MetricsConfig: Loaded properties from hadoop-metrics2.properties
+2025-02-27 16:28:24,806 [main] INFO impl.MetricsSystemImpl: Scheduled Metric snapshot period a...</msg>
+<status status="PASS" starttime="20250227 16:28:23.785" endtime="20250227 16:28:27.363"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:27.363" endtime="20250227 16:28:27.363"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:23.784" endtime="20250227 16:28:27.363"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:13.886" endtime="20250227 16:28:27.363"/>
+</test>
+<doc>Smoketest for one datanode</doc>
+<status status="PASS" starttime="20250227 16:28:13.834" endtime="20250227 16:28:27.364"/>
+</suite>
+<suite id="s1-s2" name="Pipeline" source="/opt/hadoop/smoketest/admincli/pipeline.robot">
+<kw name="Run Keyword If" library="BuiltIn" type="SETUP">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250227 16:28:27.836" endtime="20250227 16:28:27.836"/>
+</kw>
+<test id="s1-s2-t1" name="List pipelines" line="28">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:27.839" level="INFO">Running command 'ozone admin pipeline list 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:29.261" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:29.262" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:27.837" endtime="20250227 16:28:29.262"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:29.262" level="INFO">Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:5dbbd03f-7d5d-46ca-a932-7724c7f159a2, CreationTimestamp2025-02-27T16:28:00.609Z[UTC]]</msg>
+<status status="PASS" starttime="20250227 16:28:29.262" endtime="20250227 16:28:29.262"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:29.263" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:29.262" endtime="20250227 16:28:29.263"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:27.837" endtime="20250227 16:28:29.263"/>
+</kw>
+<msg timestamp="20250227 16:28:29.263" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:27.837" endtime="20250227 16:28:29.263"/>
+</kw>
+<msg timestamp="20250227 16:28:29.263" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:27.836" endtime="20250227 16:28:29.263"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>RATIS/ONE</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:29.263" endtime="20250227 16:28:29.264"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${pipeline}</var>
+<arg>ozone admin pipeline list | grep 'ReplicationConfig: RATIS/ONE' | head -n 1 | cut -d' ' -f3 | sed 's/,$//'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:29.266" level="INFO">Running command 'ozone admin pipeline list | grep 'ReplicationConfig: RATIS/ONE' | head -n 1 | cut -d' ' -f3 | sed 's/,$//' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:30.660" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:30.660" level="INFO">${output} = d6771a27-b23f-40f3-bbc4-6298f26cf6ba</msg>
+<status status="PASS" starttime="20250227 16:28:29.264" endtime="20250227 16:28:30.660"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:30.660" level="INFO">d6771a27-b23f-40f3-bbc4-6298f26cf6ba</msg>
+<status status="PASS" starttime="20250227 16:28:30.660" endtime="20250227 16:28:30.661"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:30.661" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:30.661" endtime="20250227 16:28:30.661"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:29.264" endtime="20250227 16:28:30.661"/>
+</kw>
+<msg timestamp="20250227 16:28:30.661" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:29.264" endtime="20250227 16:28:30.661"/>
+</kw>
+<msg timestamp="20250227 16:28:30.661" level="INFO">${pipeline} = d6771a27-b23f-40f3-bbc4-6298f26cf6ba</msg>
+<status status="PASS" starttime="20250227 16:28:29.264" endtime="20250227 16:28:30.661"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${PIPELINE}</arg>
+<arg>${pipeline}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20250227 16:28:30.662" level="INFO">${PIPELINE} = d6771a27-b23f-40f3-bbc4-6298f26cf6ba</msg>
+<status status="PASS" starttime="20250227 16:28:30.661" endtime="20250227 16:28:30.662"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:27.836" endtime="20250227 16:28:30.662"/>
+</test>
+<test id="s1-s2-t2" name="List pipeline with json option" line="34">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --json | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:30.665" level="INFO">Running command 'ozone admin pipeline list --json | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:32.169" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:32.169" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20250227 16:28:30.663" endtime="20250227 16:28:32.169"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:32.170" level="INFO">true</msg>
+<status status="PASS" starttime="20250227 16:28:32.169" endtime="20250227 16:28:32.170"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:32.170" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:32.170" endtime="20250227 16:28:32.170"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:30.663" endtime="20250227 16:28:32.171"/>
+</kw>
+<msg timestamp="20250227 16:28:32.171" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:30.663" endtime="20250227 16:28:32.171"/>
+</kw>
+<msg timestamp="20250227 16:28:32.171" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20250227 16:28:30.663" endtime="20250227 16:28:32.171"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>$output</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20250227 16:28:32.171" endtime="20250227 16:28:32.174"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:30.662" endtime="20250227 16:28:32.174"/>
+</test>
+<test id="s1-s2-t3" name="List pipelines with explicit host" line="38">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --scm ${SCM}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:32.178" level="INFO">Running command 'ozone admin pipeline list --scm scm 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:33.582" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:33.582" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:32.176" endtime="20250227 16:28:33.582"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:33.583" level="INFO">Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:5dbbd03f-7d5d-46ca-a932-7724c7f159a2, CreationTimestamp2025-02-27T16:28:00.609Z[UTC]]</msg>
+<status status="PASS" starttime="20250227 16:28:33.582" endtime="20250227 16:28:33.583"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:33.583" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:33.583" endtime="20250227 16:28:33.583"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:32.176" endtime="20250227 16:28:33.583"/>
+</kw>
+<msg timestamp="20250227 16:28:33.583" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:32.176" endtime="20250227 16:28:33.583"/>
+</kw>
+<msg timestamp="20250227 16:28:33.584" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:32.175" endtime="20250227 16:28:33.584"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>RATIS/ONE</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:33.584" endtime="20250227 16:28:33.584"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:32.175" endtime="20250227 16:28:33.584"/>
+</test>
+<test id="s1-s2-t4" name="List pipelines with explicit host and json option" line="42">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --scm ${SCM} --json | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:33.588" level="INFO">Running command 'ozone admin pipeline list --scm scm --json | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:35.102" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:35.102" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20250227 16:28:33.586" endtime="20250227 16:28:35.102"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:35.103" level="INFO">true</msg>
+<status status="PASS" starttime="20250227 16:28:35.103" endtime="20250227 16:28:35.103"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:35.103" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:35.103" endtime="20250227 16:28:35.104"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:33.585" endtime="20250227 16:28:35.104"/>
+</kw>
+<msg timestamp="20250227 16:28:35.104" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:33.585" endtime="20250227 16:28:35.104"/>
+</kw>
+<msg timestamp="20250227 16:28:35.104" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20250227 16:28:33.585" endtime="20250227 16:28:35.104"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:33.584" endtime="20250227 16:28:35.104"/>
+</test>
+<test id="s1-s2-t5" name="Deactivate pipeline" line="45">
+<kw name="Execute" library="os">
+<arg>ozone admin pipeline deactivate "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:35.107" level="INFO">Running command 'ozone admin pipeline deactivate "d6771a27-b23f-40f3-bbc4-6298f26cf6ba" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:36.546" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:36.546" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250227 16:28:35.106" endtime="20250227 16:28:36.546"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:36.547" level="INFO"/>
+<status status="PASS" starttime="20250227 16:28:36.547" endtime="20250227 16:28:36.547"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:36.548" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:36.547" endtime="20250227 16:28:36.548"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:35.105" endtime="20250227 16:28:36.548"/>
+</kw>
+<msg timestamp="20250227 16:28:36.548" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:35.105" endtime="20250227 16:28:36.548"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:35.105" endtime="20250227 16:28:36.548"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list | grep "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:36.552" level="INFO">Running command 'ozone admin pipeline list | grep "d6771a27-b23f-40f3-bbc4-6298f26cf6ba" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:37.956" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:37.956" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:36.550" endtime="20250227 16:28:37.956"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:37.957" level="INFO">Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, State:DORMANT, leaderId:5dbbd03f-7d5d-46ca-a932-7724c7f159a2, CreationTimestamp2025-02-27T16:28:00.609Z[UTC]]</msg>
+<status status="PASS" starttime="20250227 16:28:37.957" endtime="20250227 16:28:37.957"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:37.958" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:37.957" endtime="20250227 16:28:37.958"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:36.549" endtime="20250227 16:28:37.958"/>
+</kw>
+<msg timestamp="20250227 16:28:37.958" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:36.549" endtime="20250227 16:28:37.958"/>
+</kw>
+<msg timestamp="20250227 16:28:37.958" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:36.549" endtime="20250227 16:28:37.958"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>DORMANT</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:37.958" endtime="20250227 16:28:37.958"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:35.104" endtime="20250227 16:28:37.959"/>
+</test>
+<test id="s1-s2-t6" name="Activate pipeline" line="50">
+<kw name="Execute" library="os">
+<arg>ozone admin pipeline activate "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:37.962" level="INFO">Running command 'ozone admin pipeline activate "d6771a27-b23f-40f3-bbc4-6298f26cf6ba" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:39.371" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:39.371" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250227 16:28:37.960" endtime="20250227 16:28:39.371"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:39.372" level="INFO"/>
+<status status="PASS" starttime="20250227 16:28:39.371" endtime="20250227 16:28:39.372"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:39.372" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:39.372" endtime="20250227 16:28:39.372"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:37.960" endtime="20250227 16:28:39.372"/>
+</kw>
+<msg timestamp="20250227 16:28:39.372" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:37.960" endtime="20250227 16:28:39.372"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:37.959" endtime="20250227 16:28:39.372"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list | grep "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:39.375" level="INFO">Running command 'ozone admin pipeline list | grep "d6771a27-b23f-40f3-bbc4-6298f26cf6ba" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:40.752" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:40.752" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:39.373" endtime="20250227 16:28:40.752"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:40.753" level="INFO">Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:5dbbd03f-7d5d-46ca-a932-7724c7f159a2, CreationTimestamp2025-02-27T16:28:00.609Z[UTC]]</msg>
+<status status="PASS" starttime="20250227 16:28:40.753" endtime="20250227 16:28:40.753"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:40.753" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:40.753" endtime="20250227 16:28:40.753"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:39.373" endtime="20250227 16:28:40.754"/>
+</kw>
+<msg timestamp="20250227 16:28:40.754" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:39.373" endtime="20250227 16:28:40.754"/>
+</kw>
+<msg timestamp="20250227 16:28:40.754" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:39.373" endtime="20250227 16:28:40.754"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>OPEN</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:40.754" endtime="20250227 16:28:40.754"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:37.959" endtime="20250227 16:28:40.754"/>
+</test>
+<test id="s1-s2-t7" name="Close pipeline" line="55">
+<kw name="Execute" library="os">
+<arg>ozone admin pipeline close "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:40.758" level="INFO">Running command 'ozone admin pipeline close "d6771a27-b23f-40f3-bbc4-6298f26cf6ba" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:42.137" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:42.137" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250227 16:28:40.756" endtime="20250227 16:28:42.138"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:42.138" level="INFO"/>
+<status status="PASS" starttime="20250227 16:28:42.138" endtime="20250227 16:28:42.138"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:42.139" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:42.138" endtime="20250227 16:28:42.139"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:40.756" endtime="20250227 16:28:42.139"/>
+</kw>
+<msg timestamp="20250227 16:28:42.139" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:40.756" endtime="20250227 16:28:42.139"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:40.755" endtime="20250227 16:28:42.139"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:42.142" level="INFO">Running command 'ozone admin pipeline list 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:43.515" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:43.515" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:42.140" endtime="20250227 16:28:43.515"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:43.516" level="INFO">Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, State:CLOSED, leaderId:5dbbd03f-7d5d-46ca-a932-7724c7f159a2, CreationTimestamp2025-02-27T16:28:00.609Z[UTC]]</msg>
+<status status="PASS" starttime="20250227 16:28:43.516" endtime="20250227 16:28:43.516"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250227 16:28:43.516" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250227 16:28:43.516" endtime="20250227 16:28:43.517"/>
+</kw>
+<status status="PASS" starttime="20250227 16:28:42.140" endtime="20250227 16:28:43.517"/>
+</kw>
+<msg timestamp="20250227 16:28:43.517" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250227 16:28:42.140" endtime="20250227 16:28:43.517"/>
+</kw>
+<msg timestamp="20250227 16:28:43.517" level="INFO">${output} = Pipeline[ Id: d6771a27-b23f-40f3-bbc4-6298f26cf6ba, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, ...</msg>
+<status status="PASS" starttime="20250227 16:28:42.139" endtime="20250227 16:28:43.517"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'${PIPELINE}' not in '''${output}'''</arg>
+<arg>Pipeline already scrubbed</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20250227 16:28:43.517" endtime="20250227 16:28:43.517"/>
+</kw>
+<kw name="Should Match Regexp" library="BuiltIn">
+<arg>${output}</arg>
+<arg>${PIPELINE}.*CLOSED</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="PASS" starttime="20250227 16:28:43.517" endtime="20250227 16:28:43.518"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:40.755" endtime="20250227 16:28:43.518"/>
+</test>
+<test id="s1-s2-t8" name="Incomplete command" line="61">
+<kw name="Execute And Ignore Error" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:43.521" level="INFO">Running command 'ozone admin pipeline 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:44.655" level="INFO">${rc} = 2</msg>
+<msg timestamp="20250227 16:28:44.655" level="INFO">${output} = Missing required subcommand
+Usage: ozone admin pipeline [-hV] [COMMAND]
+Pipeline specific operations
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and ...</msg>
+<status status="PASS" starttime="20250227 16:28:43.519" endtime="20250227 16:28:44.655"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:44.656" level="INFO">Missing required subcommand
+Usage: ozone admin pipeline [-hV] [COMMAND]
+Pipeline specific operations
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+Commands:
+  list        List all active pipelines
+  activate    Activates the given Pipeline
+  deactivate  Deactivates the given Pipeline
+  create      create pipeline
+  close       Close pipeline</msg>
+<status status="PASS" starttime="20250227 16:28:44.655" endtime="20250227 16:28:44.656"/>
+</kw>
+<msg timestamp="20250227 16:28:44.656" level="INFO">${output} = Missing required subcommand
+Usage: ozone admin pipeline [-hV] [COMMAND]
+Pipeline specific operations
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and ...</msg>
+<status status="PASS" starttime="20250227 16:28:43.519" endtime="20250227 16:28:44.656"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Missing required subcommand</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:44.656" endtime="20250227 16:28:44.656"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>close</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:44.656" endtime="20250227 16:28:44.657"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>create</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:44.657" endtime="20250227 16:28:44.657"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>deactivate</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:44.657" endtime="20250227 16:28:44.657"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>list</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250227 16:28:44.657" endtime="20250227 16:28:44.657"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:43.518" endtime="20250227 16:28:44.658"/>
+</test>
+<test id="s1-s2-t9" name="Create pipeline" line="69">
+<kw name="Execute And Ignore Error" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline create -t RATIS -f ONE</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250227 16:28:44.661" level="INFO">Running command 'ozone admin pipeline create -t RATIS -f ONE 2&gt;&amp;1'.</msg>
+<msg timestamp="20250227 16:28:46.056" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250227 16:28:46.056" level="INFO">${output} = PipelineID=b13cea45-f8b2-46f6-b4cd-f6143440bdf2 is created. Pipeline[ Id: b13cea45-f8b2-46f6-b4cd-f6143440bdf2, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default...</msg>
+<status status="PASS" starttime="20250227 16:28:44.659" endtime="20250227 16:28:46.056"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250227 16:28:46.057" level="INFO">PipelineID=b13cea45-f8b2-46f6-b4cd-f6143440bdf2 is created. Pipeline[ Id: b13cea45-f8b2-46f6-b4cd-f6143440bdf2, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default/172.20.0.3) ReplicaIndex: 0, ReplicationConfig: RATIS/ONE, State:ALLOCATED, leaderId:, CreationTimestamp2025-02-27T16:28:45.975Z[UTC]]</msg>
+<status status="PASS" starttime="20250227 16:28:46.056" endtime="20250227 16:28:46.057"/>
+</kw>
+<msg timestamp="20250227 16:28:46.057" level="INFO">${output} = PipelineID=b13cea45-f8b2-46f6-b4cd-f6143440bdf2 is created. Pipeline[ Id: b13cea45-f8b2-46f6-b4cd-f6143440bdf2, Nodes: 5dbbd03f-7d5d-46ca-a932-7724c7f159a2(ozonescripts-datanode-1.ozonescripts_default...</msg>
+<status status="PASS" starttime="20250227 16:28:44.658" endtime="20250227 16:28:46.057"/>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<arg>${output}</arg>
+<arg>is created.</arg>
+<arg>RATIS/ONE</arg>
+<arg>Cannot create pipeline</arg>
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<status status="PASS" starttime="20250227 16:28:46.057" endtime="20250227 16:28:46.057"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20250227 16:28:44.658" endtime="20250227 16:28:46.057"/>
+</test>
+<doc>Test ozone admin pipeline command</doc>
+<status status="PASS" starttime="20250227 16:28:27.805" endtime="20250227 16:28:46.059"/>
+</suite>
+<status status="PASS" starttime="N/A" endtime="N/A" elapsedtime="31784"/>
+</suite>
+<statistics>
+<total>
+<stat pass="10" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="10" fail="0" skip="0" id="s1" name="ozonescripts">ozonescripts</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s1" name="Single Node">ozonescripts.Single Node</stat>
+<stat pass="9" fail="0" skip="0" id="s1-s2" name="Pipeline">ozonescripts.Pipeline</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
