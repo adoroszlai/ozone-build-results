@@ -1,0 +1,66 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.hadoop.hdds.scm.storage.TestCommitWatcher
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 57.78 s <<< FAILURE! -- in org.apache.hadoop.hdds.scm.storage.TestCommitWatcher
+org.apache.hadoop.hdds.scm.storage.TestCommitWatcher.testReleaseBuffersOnException -- Time elapsed: 32.53 s <<< ERROR!
+java.util.concurrent.ExecutionException: org.apache.ratis.protocol.exceptions.AlreadyClosedException: SlidingWindow$Client:client-A1E92E705581->RAFT is closed.
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:396)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2073)
+	at org.apache.hadoop.hdds.scm.storage.TestCommitWatcher.testReleaseBuffersOnException(TestCommitWatcher.java:282)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: org.apache.ratis.protocol.exceptions.AlreadyClosedException: SlidingWindow$Client:client-A1E92E705581->RAFT is closed.
+	at org.apache.ratis.util.SlidingWindow$Client.alreadyClosed(SlidingWindow.java:409)
+	at org.apache.ratis.util.SlidingWindow$Client.fail(SlidingWindow.java:397)
+	at org.apache.ratis.client.impl.OrderedAsync.failAllAsyncRequests(OrderedAsync.java:155)
+	at org.apache.ratis.client.impl.OrderedAsync.handleException(OrderedAsync.java:239)
+	at org.apache.ratis.client.impl.OrderedAsync.lambda$sendRequestWithRetry$7(OrderedAsync.java:217)
+	at java.base/java.util.concurrent.CompletableFuture.uniExceptionally(CompletableFuture.java:990)
+	at java.base/java.util.concurrent.CompletableFuture$UniExceptionally.tryFire(CompletableFuture.java:974)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2194)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers.completeReplyExceptionally(GrpcClientProtocolClient.java:397)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers.access$000(GrpcClientProtocolClient.java:303)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:317)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:308)
+	at org.apache.ratis.thirdparty.io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onMessage(ClientCalls.java:468)
+	at org.apache.ratis.thirdparty.io.grpc.ForwardingClientCallListener.onMessage(ForwardingClientCallListener.java:33)
+	at org.apache.ratis.thirdparty.io.grpc.internal.DelayedClientCall$DelayedListener.onMessage(DelayedClientCall.java:473)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInternal(ClientCallImpl.java:660)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInContext(ClientCallImpl.java:647)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+	at org.apache.ratis.thirdparty.io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: org.apache.ratis.protocol.exceptions.RaftRetryFailureException: Failed RaftClientRequest:client-A1E92E705581->e9245aea-8e0c-4030-95ca-bdaa3697545a@group-20D494F0B985, cid=21, seq=4*, RW, cmdType: WriteChunk
+traceID: ""
+containerID: 1
+datanodeUuid: "c07ec5ba-b41e-4c0e-8836-6cda67ac2d40"
+writeChunk {
+  blockID {
+    containerID: 1
+    localID: 114481198565294083
+    blockCommitSequenceId: 0
+  }
+  chunkData {
+    chunkName: "114481198565294083.data.0"
+    offset: 0
+    len: 1048576
+    checksumData {
+      type: CRC32
+      bytesPerChecksum: 1048576
+      checksums: "Kq\221\355"
+    }
+  }
+}
+version: 3
+, data.size=1048576 for 2 attempts with RequestTypeDependentRetryPolicy{WRITE->ExceptionDependentRetry(maxAttempts=2147483647; defaultPolicy=MultipleLinearRandomRetry[5x5s, 5x10s, 5x15s, 5x20s, 5x25s, 10x60s]; map={org.apache.ratis.protocol.exceptions.GroupMismatchException->NoRetry, org.apache.ratis.protocol.exceptions.NotReplicatedException->NoRetry, org.apache.ratis.protocol.exceptions.ResourceUnavailableException->org.apache.ratis.retry.ExponentialBackoffRetry@76843bee, org.apache.ratis.protocol.exceptions.StateMachineException->NoRetry, org.apache.ratis.protocol.exceptions.TimeoutIOException->org.apache.ratis.retry.ExponentialBackoffRetry@76843bee}), WATCH->ExceptionDependentRetry(maxAttempts=2147483647; defaultPolicy=MultipleLinearRandomRetry[5x5s, 5x10s, 5x15s, 5x20s, 5x25s, 10x60s]; map={org.apache.ratis.protocol.exceptions.GroupMismatchException->NoRetry, org.apache.ratis.protocol.exceptions.NotReplicatedException->NoRetry, org.apache.ratis.protocol.exceptions.ResourceUnavailableException->org.apache.ratis.retry.ExponentialBackoffRetry@76843bee, org.apache.ratis.protocol.exceptions.StateMachineException->NoRetry, org.apache.ratis.protocol.exceptions.TimeoutIOException->NoRetry})}
+	at org.apache.ratis.client.impl.RaftClientImpl.noMoreRetries(RaftClientImpl.java:352)
+	... 20 more
+Caused by: org.apache.ratis.protocol.exceptions.NotLeaderException: Server e9245aea-8e0c-4030-95ca-bdaa3697545a@group-20D494F0B985 is not the leader, suggested leader is: c07ec5ba-b41e-4c0e-8836-6cda67ac2d40|127.0.0.1:15073
+	at org.apache.ratis.client.impl.ClientProtoUtils.toRaftClientReply(ClientProtoUtils.java:402)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:313)
+	... 11 more
+
