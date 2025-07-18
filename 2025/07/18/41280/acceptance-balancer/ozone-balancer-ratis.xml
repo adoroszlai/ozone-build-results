@@ -1,0 +1,4048 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.21 on linux)" generated="20250718 07:58:52.452" rpa="false" schemaversion="4">
+<suite id="s1" name="ozone-balancer-ratis" source="/opt/hadoop/smoketest/balancer/testBalancer.robot">
+<kw name="Get Security Enabled From Config" library="commonlib" type="SETUP">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250718 07:50:03.088" endtime="20250718 07:50:03.089"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:03.092" level="INFO">Running command 'ozone getconf confKey ozone.security.enabled 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:03.862" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:03.862" level="INFO">${output} = false</msg>
+<status status="PASS" starttime="20250718 07:50:03.089" endtime="20250718 07:50:03.862"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:03.863" level="INFO">false</msg>
+<status status="PASS" starttime="20250718 07:50:03.862" endtime="20250718 07:50:03.863"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:03.863" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:03.863" endtime="20250718 07:50:03.863"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:03.089" endtime="20250718 07:50:03.863"/>
+</kw>
+<msg timestamp="20250718 07:50:03.863" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:03.089" endtime="20250718 07:50:03.864"/>
+</kw>
+<msg timestamp="20250718 07:50:03.864" level="INFO">${value} = false</msg>
+<status status="PASS" starttime="20250718 07:50:03.089" endtime="20250718 07:50:03.864"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20250718 07:50:03.864" endtime="20250718 07:50:03.864"/>
+</kw>
+<status status="NOT RUN" starttime="20250718 07:50:03.864" endtime="20250718 07:50:03.864"/>
+</branch>
+<status status="PASS" starttime="20250718 07:50:03.864" endtime="20250718 07:50:03.864"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20250718 07:50:03.865" level="INFO">${SECURITY_ENABLED} = false</msg>
+<status status="PASS" starttime="20250718 07:50:03.864" endtime="20250718 07:50:03.865"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:03.088" endtime="20250718 07:50:03.865"/>
+</kw>
+<test id="s1-t1" name="Verify Container Balancer for RATIS/EC containers" line="158">
+<kw name="Prepare For Tests">
+<kw name="Execute" library="os">
+<arg>dd if=/dev/urandom of=/tmp/100mb bs=1048576 count=100</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:03.869" level="INFO">Running command 'dd if=/dev/urandom of=/tmp/100mb bs=1048576 count=100 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:04.254" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:04.254" level="INFO">${output} = 100+0 records in
+100+0 records out
+104857600 bytes (105 MB, 100 MiB) copied, 0.381273 s, 275 MB/s</msg>
+<status status="PASS" starttime="20250718 07:50:03.867" endtime="20250718 07:50:04.254"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:04.255" level="INFO">100+0 records in
+100+0 records out
+104857600 bytes (105 MB, 100 MiB) copied, 0.381273 s, 275 MB/s</msg>
+<status status="PASS" starttime="20250718 07:50:04.255" endtime="20250718 07:50:04.255"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:04.256" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:04.255" endtime="20250718 07:50:04.256"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:03.866" endtime="20250718 07:50:04.256"/>
+</kw>
+<msg timestamp="20250718 07:50:04.256" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:03.866" endtime="20250718 07:50:04.256"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:03.866" endtime="20250718 07:50:04.256"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20250718 07:50:04.256" endtime="20250718 07:50:04.256"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh volume create /${VOLUME}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:04.260" level="INFO">Running command 'ozone sh volume create /volume1 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:06.239" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:06.239" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:50:04.257" endtime="20250718 07:50:06.239"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:06.240" level="INFO"/>
+<status status="PASS" starttime="20250718 07:50:06.239" endtime="20250718 07:50:06.240"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:06.240" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:06.240" endtime="20250718 07:50:06.240"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:04.257" endtime="20250718 07:50:06.241"/>
+</kw>
+<msg timestamp="20250718 07:50:06.241" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:04.257" endtime="20250718 07:50:06.241"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:04.257" endtime="20250718 07:50:06.241"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh bucket create --replication ${REPLICATION} --type ${TYPE} /${VOLUME}/${BUCKET}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:06.244" level="INFO">Running command 'ozone sh bucket create --replication THREE --type RATIS /volume1/bucket1 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:08.178" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:08.178" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:50:06.242" endtime="20250718 07:50:08.178"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:08.179" level="INFO"/>
+<status status="PASS" starttime="20250718 07:50:08.179" endtime="20250718 07:50:08.179"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:08.180" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:08.179" endtime="20250718 07:50:08.180"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:06.242" endtime="20250718 07:50:08.180"/>
+</kw>
+<msg timestamp="20250718 07:50:08.180" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:06.241" endtime="20250718 07:50:08.180"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:06.241" endtime="20250718 07:50:08.180"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:03.866" endtime="20250718 07:50:08.180"/>
+</kw>
+<kw name="Datanode In Maintenance Mode">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode maintenance ${HOST}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:08.184" level="INFO">Running command 'ozone admin datanode maintenance datanode1 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:09.676" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:09.676" level="INFO">${output} = Entering maintenance mode on datanode(s):
+datanode1</msg>
+<status status="PASS" starttime="20250718 07:50:08.182" endtime="20250718 07:50:09.676"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:09.677" level="INFO">Entering maintenance mode on datanode(s):
+datanode1</msg>
+<status status="PASS" starttime="20250718 07:50:09.676" endtime="20250718 07:50:09.677"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:09.677" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:09.677" endtime="20250718 07:50:09.678"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:08.181" endtime="20250718 07:50:09.678"/>
+</kw>
+<msg timestamp="20250718 07:50:09.678" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:08.181" endtime="20250718 07:50:09.678"/>
+</kw>
+<msg timestamp="20250718 07:50:09.678" level="INFO">${result} = Entering maintenance mode on datanode(s):
+datanode1</msg>
+<status status="PASS" starttime="20250718 07:50:08.181" endtime="20250718 07:50:09.678"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Entering maintenance mode on datanode</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:50:09.678" endtime="20250718 07:50:09.678"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | grep "Operational State:*"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:09.682" level="INFO">Running command 'ozone admin datanode list | grep "Operational State:*" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:11.198" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:11.198" level="INFO">${output} = Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:50:09.679" endtime="20250718 07:50:11.198"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:11.199" level="INFO">Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:50:11.199" endtime="20250718 07:50:11.199"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:11.200" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:11.200" endtime="20250718 07:50:11.200"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:09.679" endtime="20250718 07:50:11.200"/>
+</kw>
+<msg timestamp="20250718 07:50:11.200" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:09.679" endtime="20250718 07:50:11.200"/>
+</kw>
+<msg timestamp="20250718 07:50:11.200" level="INFO">${result} = Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:50:09.679" endtime="20250718 07:50:11.200"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>30sec</arg>
+<arg>5sec</arg>
+<arg>Should contain</arg>
+<arg>${result}</arg>
+<arg>ENTERING_MAINTENANCE</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ENTERING_MAINTENANCE</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:50:11.201" endtime="20250718 07:50:11.201"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:11.200" endtime="20250718 07:50:11.201"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>3min</arg>
+<arg>10sec</arg>
+<arg>Related pipelines are closed</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Related pipelines are closed">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | awk -v RS= '{$1=$1}1'|grep MAINT | sed -e 's/^.*pipelines: \\(.*\\)$/\\1/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:11.205" level="INFO">Running command 'ozone admin datanode list | awk -v RS= '{$1=$1}1'|grep MAINT | sed -e 's/^.*pipelines: \(.*\)$/\1/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:12.714" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:12.714" level="INFO">${output} = 4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/OPEN/Follower</msg>
+<status status="PASS" starttime="20250718 07:50:11.203" endtime="20250718 07:50:12.714"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:12.715" level="INFO">4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/OPEN/Follower</msg>
+<status status="PASS" starttime="20250718 07:50:12.714" endtime="20250718 07:50:12.715"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:12.715" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:12.715" endtime="20250718 07:50:12.715"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:11.202" endtime="20250718 07:50:12.716"/>
+</kw>
+<msg timestamp="20250718 07:50:12.716" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:11.202" endtime="20250718 07:50:12.716"/>
+</kw>
+<msg timestamp="20250718 07:50:12.716" level="INFO">${result} = 4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/OPEN/Follower</msg>
+<status status="PASS" starttime="20250718 07:50:11.202" endtime="20250718 07:50:12.716"/>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<arg>${result}</arg>
+<arg>CLOSED</arg>
+<arg>No related pipelines or the node is not in Healthy state.</arg>
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<msg timestamp="20250718 07:50:12.716" level="FAIL">'4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/OPEN/Follower' does not contain any of 'CLOSED' or 'No related pipelines or the node is not in Healthy state.'</msg>
+<status status="FAIL" starttime="20250718 07:50:12.716" endtime="20250718 07:50:12.716"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:50:11.201" endtime="20250718 07:50:12.717"/>
+</kw>
+<kw name="Related pipelines are closed">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | awk -v RS= '{$1=$1}1'|grep MAINT | sed -e 's/^.*pipelines: \\(.*\\)$/\\1/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:50:22.721" level="INFO">Running command 'ozone admin datanode list | awk -v RS= '{$1=$1}1'|grep MAINT | sed -e 's/^.*pipelines: \(.*\)$/\1/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:50:24.329" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:50:24.329" level="INFO">${output} = 4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/CLOSED/Follower</msg>
+<status status="PASS" starttime="20250718 07:50:22.718" endtime="20250718 07:50:24.329"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:50:24.330" level="INFO">4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/CLOSED/Follower</msg>
+<status status="PASS" starttime="20250718 07:50:24.329" endtime="20250718 07:50:24.330"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:50:24.330" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:50:24.330" endtime="20250718 07:50:24.330"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:22.718" endtime="20250718 07:50:24.330"/>
+</kw>
+<msg timestamp="20250718 07:50:24.330" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:50:22.718" endtime="20250718 07:50:24.330"/>
+</kw>
+<msg timestamp="20250718 07:50:24.330" level="INFO">${result} = 4bf1c2c5-3f71-4fb8-95f0-a4ee34ac22d5/RATIS/THREE/RATIS/CLOSED/Follower</msg>
+<status status="PASS" starttime="20250718 07:50:22.717" endtime="20250718 07:50:24.330"/>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<arg>${result}</arg>
+<arg>CLOSED</arg>
+<arg>No related pipelines or the node is not in Healthy state.</arg>
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<status status="PASS" starttime="20250718 07:50:24.331" endtime="20250718 07:50:24.331"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:22.717" endtime="20250718 07:50:24.331"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:11.201" endtime="20250718 07:50:24.331"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>60000ms</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250718 07:51:24.331" level="INFO">Slept 1 minute</msg>
+<status status="PASS" starttime="20250718 07:50:24.331" endtime="20250718 07:51:24.332"/>
+</kw>
+<status status="PASS" starttime="20250718 07:50:08.180" endtime="20250718 07:51:24.332"/>
+</kw>
+<kw name="Get Uuid">
+<var>${uuid}</var>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | awk -v RS= '{$1=$1}1'| grep ${HOST} | sed -e 's/Datanode: //'|sed -e 's/ .*$//'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:51:24.336" level="INFO">Running command 'ozone admin datanode list | awk -v RS= '{$1=$1}1'| grep datanode1 | sed -e 's/Datanode: //'|sed -e 's/ .*$//' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:51:25.840" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:51:25.840" level="INFO">${output} = 92684bf9-ab1c-4544-9873-6df0f9307df5</msg>
+<status status="PASS" starttime="20250718 07:51:24.333" endtime="20250718 07:51:25.840"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:25.841" level="INFO">92684bf9-ab1c-4544-9873-6df0f9307df5</msg>
+<status status="PASS" starttime="20250718 07:51:25.840" endtime="20250718 07:51:25.841"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:51:25.841" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:51:25.841" endtime="20250718 07:51:25.841"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:24.333" endtime="20250718 07:51:25.842"/>
+</kw>
+<msg timestamp="20250718 07:51:25.842" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:51:24.333" endtime="20250718 07:51:25.842"/>
+</kw>
+<msg timestamp="20250718 07:51:25.842" level="INFO">${result} = 92684bf9-ab1c-4544-9873-6df0f9307df5</msg>
+<status status="PASS" starttime="20250718 07:51:24.332" endtime="20250718 07:51:25.842"/>
+</kw>
+<msg timestamp="20250718 07:51:25.842" level="INFO">${uuid} = 92684bf9-ab1c-4544-9873-6df0f9307df5</msg>
+<status status="PASS" starttime="20250718 07:51:24.332" endtime="20250718 07:51:25.842"/>
+</kw>
+<kw name="Datanode Usageinfo">
+<arg>${uuid}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode usageinfo --uuid=${uuid}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:51:25.846" level="INFO">Running command 'ozone admin datanode usageinfo --uuid=92684bf9-ab1c-4544-9873-6df0f9307df5 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:51:27.397" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:51:27.397" level="INFO">${output} = Usage Information (1 Datanodes)
+
+UUID         : 92684bf9-ab1c-4544-9873-6df0f9307df5 
+IP Address   : 172.18.0.12 
+Hostname     : ozone-balancer-datanode1-1.ozone-balancer_default 
+Capacity     : 21472...</msg>
+<status status="PASS" starttime="20250718 07:51:25.844" endtime="20250718 07:51:27.397"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:27.398" level="INFO">Usage Information (1 Datanodes)
+
+UUID         : 92684bf9-ab1c-4544-9873-6df0f9307df5 
+IP Address   : 172.18.0.12 
+Hostname     : ozone-balancer-datanode1-1.ozone-balancer_default 
+Capacity     : 2147268899 B (2.00 GB) 
+Total Used   : 12622115 B (12.04 MB) 
+Total Used % : 0.59% 
+Ozone Used   : 4096 B (4 KB) 
+Ozone Used % : 0.00% 
+Remaining    : 2134646784 B (1.99 GB) 
+Remaining %  : 99.41% 
+Pipeline(s)  : 1 
+Container(s) : 0 
+Container Pre-allocated : 0 B (0 B) 
+Remaining Allocatable   : 2134646784 B (1.99 GB) 
+Free Space To Spare     : 104857600 B (100 MB) 
+</msg>
+<status status="PASS" starttime="20250718 07:51:27.397" endtime="20250718 07:51:27.398"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:51:27.398" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:51:27.398" endtime="20250718 07:51:27.398"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:25.843" endtime="20250718 07:51:27.398"/>
+</kw>
+<msg timestamp="20250718 07:51:27.398" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:51:25.843" endtime="20250718 07:51:27.399"/>
+</kw>
+<msg timestamp="20250718 07:51:27.399" level="INFO">${result} = Usage Information (1 Datanodes)
+
+UUID         : 92684bf9-ab1c-4544-9873-6df0f9307df5 
+IP Address   : 172.18.0.12 
+Hostname     : ozone-balancer-datanode1-1.ozone-balancer_default 
+Capacity     : 21472...</msg>
+<status status="PASS" starttime="20250718 07:51:25.843" endtime="20250718 07:51:27.399"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Ozone Used</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:51:27.399" endtime="20250718 07:51:27.399"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:25.842" endtime="20250718 07:51:27.399"/>
+</kw>
+<kw name="Create Multiple Keys">
+<arg>3</arg>
+<kw name="Set Variable" library="BuiltIn">
+<var>${file}</var>
+<arg>/tmp/100mb</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:51:27.400" level="INFO">${file} = /tmp/100mb</msg>
+<status status="PASS" starttime="20250718 07:51:27.400" endtime="20250718 07:51:27.400"/>
+</kw>
+<for flavor="IN RANGE">
+<var>${INDEX}</var>
+<value>${NUM_KEYS}</value>
+<iter>
+<var name="${INDEX}">0</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${fileName}</var>
+<arg>file-${INDEX}.txt</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:51:27.401" level="INFO">${fileName} = file-0.txt</msg>
+<status status="PASS" starttime="20250718 07:51:27.400" endtime="20250718 07:51:27.401"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${key}</var>
+<arg>/${VOLUME}/${BUCKET}/${fileName}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:51:27.401" level="INFO">${key} = /volume1/bucket1/file-0.txt</msg>
+<status status="PASS" starttime="20250718 07:51:27.401" endtime="20250718 07:51:27.401"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${fileName}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:27.401" level="INFO">file-0.txt</msg>
+<status status="PASS" starttime="20250718 07:51:27.401" endtime="20250718 07:51:27.401"/>
+</kw>
+<kw name="Create Key" library="shell">
+<arg>${key}</arg>
+<arg>${file}</arg>
+<arg>--replication=${REPLICATION} --type=${TYPE}</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh key put ${args} ${key} ${file}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:51:27.405" level="INFO">Running command 'ozone sh key put --replication=THREE --type=RATIS /volume1/bucket1/file-0.txt /tmp/100mb 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:51:54.327" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:51:54.327" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:51:27.403" endtime="20250718 07:51:54.327"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:54.328" level="INFO"/>
+<status status="PASS" starttime="20250718 07:51:54.328" endtime="20250718 07:51:54.328"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:51:54.329" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:51:54.328" endtime="20250718 07:51:54.329"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:27.402" endtime="20250718 07:51:54.329"/>
+</kw>
+<msg timestamp="20250718 07:51:54.329" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:51:27.402" endtime="20250718 07:51:54.329"/>
+</kw>
+<msg timestamp="20250718 07:51:54.329" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:51:27.402" endtime="20250718 07:51:54.329"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:51:54.329" endtime="20250718 07:51:54.330"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Uploaded ${file} to ${key}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:54.330" level="INFO">Uploaded /tmp/100mb to /volume1/bucket1/file-0.txt</msg>
+<status status="PASS" starttime="20250718 07:51:54.330" endtime="20250718 07:51:54.330"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:27.401" endtime="20250718 07:51:54.330"/>
+</kw>
+<kw name="Key Should Match Local File" library="shell">
+<arg>${key}</arg>
+<arg>${file}</arg>
+<kw name="Compare Key With Local File" library="shell">
+<var>${matches}</var>
+<arg>${key}</arg>
+<arg>${file}</arg>
+<kw name="Generate Random String" library="String">
+<var>${postfix}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20250718 07:51:54.331" level="INFO">${postfix} = 07811</msg>
+<status status="PASS" starttime="20250718 07:51:54.331" endtime="20250718 07:51:54.331"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${tmpfile}</var>
+<arg>/tmp/tempkey-${postfix}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:51:54.332" level="INFO">${tmpfile} = /tmp/tempkey-07811</msg>
+<status status="PASS" starttime="20250718 07:51:54.331" endtime="20250718 07:51:54.332"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone ${cmd} ${key} ${tmpfile}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:51:54.335" level="INFO">Running command 'ozone sh key get /volume1/bucket1/file-0.txt /tmp/tempkey-07811 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:51:58.614" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:51:58.614" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:51:54.333" endtime="20250718 07:51:58.614"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:58.615" level="INFO"/>
+<status status="PASS" starttime="20250718 07:51:58.614" endtime="20250718 07:51:58.615"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:51:58.615" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:51:58.615" endtime="20250718 07:51:58.615"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:54.332" endtime="20250718 07:51:58.615"/>
+</kw>
+<msg timestamp="20250718 07:51:58.616" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:51:54.332" endtime="20250718 07:51:58.616"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:54.332" endtime="20250718 07:51:58.616"/>
+</kw>
+<kw name="Run And Return Rc" library="OperatingSystem">
+<var>${rc}</var>
+<arg>diff -q ${file} ${tmpfile}</arg>
+<doc>Runs the given command in the system and returns the return code.</doc>
+<msg timestamp="20250718 07:51:58.618" level="INFO">Running command 'diff -q /tmp/100mb /tmp/tempkey-07811 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:51:58.682" level="INFO">${rc} = 0</msg>
+<status status="PASS" starttime="20250718 07:51:58.616" endtime="20250718 07:51:58.682"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>rm -f ${tmpfile}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:51:58.686" level="INFO">Running command 'rm -f /tmp/tempkey-07811 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:51:58.712" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:51:58.712" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:51:58.684" endtime="20250718 07:51:58.712"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:58.712" level="INFO"/>
+<status status="PASS" starttime="20250718 07:51:58.712" endtime="20250718 07:51:58.712"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:51:58.713" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:51:58.712" endtime="20250718 07:51:58.713"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:58.684" endtime="20250718 07:51:58.713"/>
+</kw>
+<msg timestamp="20250718 07:51:58.713" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:51:58.683" endtime="20250718 07:51:58.713"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:58.683" endtime="20250718 07:51:58.713"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${result}</var>
+<arg>${rc} == 0</arg>
+<arg>${TRUE}</arg>
+<arg>${FALSE}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20250718 07:51:58.714" level="INFO">${result} = True</msg>
+<status status="PASS" starttime="20250718 07:51:58.713" endtime="20250718 07:51:58.714"/>
+</kw>
+<msg timestamp="20250718 07:51:58.714" level="INFO">${matches} = True</msg>
+<status status="PASS" starttime="20250718 07:51:54.331" endtime="20250718 07:51:58.714"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${matches}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20250718 07:51:58.714" endtime="20250718 07:51:58.714"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:54.330" endtime="20250718 07:51:58.714"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:27.400" endtime="20250718 07:51:58.714"/>
+</iter>
+<iter>
+<var name="${INDEX}">1</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${fileName}</var>
+<arg>file-${INDEX}.txt</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:51:58.715" level="INFO">${fileName} = file-1.txt</msg>
+<status status="PASS" starttime="20250718 07:51:58.714" endtime="20250718 07:51:58.715"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${key}</var>
+<arg>/${VOLUME}/${BUCKET}/${fileName}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:51:58.715" level="INFO">${key} = /volume1/bucket1/file-1.txt</msg>
+<status status="PASS" starttime="20250718 07:51:58.715" endtime="20250718 07:51:58.715"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${fileName}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:51:58.715" level="INFO">file-1.txt</msg>
+<status status="PASS" starttime="20250718 07:51:58.715" endtime="20250718 07:51:58.715"/>
+</kw>
+<kw name="Create Key" library="shell">
+<arg>${key}</arg>
+<arg>${file}</arg>
+<arg>--replication=${REPLICATION} --type=${TYPE}</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh key put ${args} ${key} ${file}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:51:58.719" level="INFO">Running command 'ozone sh key put --replication=THREE --type=RATIS /volume1/bucket1/file-1.txt /tmp/100mb 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:03.786" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:03.786" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:51:58.717" endtime="20250718 07:52:03.786"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:03.787" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:03.787" endtime="20250718 07:52:03.787"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:03.788" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:03.787" endtime="20250718 07:52:03.788"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:58.717" endtime="20250718 07:52:03.788"/>
+</kw>
+<msg timestamp="20250718 07:52:03.788" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:51:58.716" endtime="20250718 07:52:03.788"/>
+</kw>
+<msg timestamp="20250718 07:52:03.788" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:51:58.716" endtime="20250718 07:52:03.788"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:52:03.788" endtime="20250718 07:52:03.788"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Uploaded ${file} to ${key}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:03.789" level="INFO">Uploaded /tmp/100mb to /volume1/bucket1/file-1.txt</msg>
+<status status="PASS" starttime="20250718 07:52:03.789" endtime="20250718 07:52:03.789"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:58.716" endtime="20250718 07:52:03.789"/>
+</kw>
+<kw name="Key Should Match Local File" library="shell">
+<arg>${key}</arg>
+<arg>${file}</arg>
+<kw name="Compare Key With Local File" library="shell">
+<var>${matches}</var>
+<arg>${key}</arg>
+<arg>${file}</arg>
+<kw name="Generate Random String" library="String">
+<var>${postfix}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20250718 07:52:03.790" level="INFO">${postfix} = 99487</msg>
+<status status="PASS" starttime="20250718 07:52:03.790" endtime="20250718 07:52:03.790"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${tmpfile}</var>
+<arg>/tmp/tempkey-${postfix}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:52:03.790" level="INFO">${tmpfile} = /tmp/tempkey-99487</msg>
+<status status="PASS" starttime="20250718 07:52:03.790" endtime="20250718 07:52:03.790"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone ${cmd} ${key} ${tmpfile}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:03.794" level="INFO">Running command 'ozone sh key get /volume1/bucket1/file-1.txt /tmp/tempkey-99487 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:07.862" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:07.862" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:03.792" endtime="20250718 07:52:07.862"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:07.863" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:07.862" endtime="20250718 07:52:07.863"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:07.863" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:07.863" endtime="20250718 07:52:07.863"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:03.791" endtime="20250718 07:52:07.864"/>
+</kw>
+<msg timestamp="20250718 07:52:07.864" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:03.791" endtime="20250718 07:52:07.864"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:03.791" endtime="20250718 07:52:07.864"/>
+</kw>
+<kw name="Run And Return Rc" library="OperatingSystem">
+<var>${rc}</var>
+<arg>diff -q ${file} ${tmpfile}</arg>
+<doc>Runs the given command in the system and returns the return code.</doc>
+<msg timestamp="20250718 07:52:07.867" level="INFO">Running command 'diff -q /tmp/100mb /tmp/tempkey-99487 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:07.932" level="INFO">${rc} = 0</msg>
+<status status="PASS" starttime="20250718 07:52:07.864" endtime="20250718 07:52:07.932"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>rm -f ${tmpfile}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:07.936" level="INFO">Running command 'rm -f /tmp/tempkey-99487 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:07.960" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:07.960" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:07.933" endtime="20250718 07:52:07.960"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:07.961" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:07.960" endtime="20250718 07:52:07.961"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:07.961" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:07.961" endtime="20250718 07:52:07.961"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:07.933" endtime="20250718 07:52:07.962"/>
+</kw>
+<msg timestamp="20250718 07:52:07.962" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:07.933" endtime="20250718 07:52:07.962"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:07.932" endtime="20250718 07:52:07.962"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${result}</var>
+<arg>${rc} == 0</arg>
+<arg>${TRUE}</arg>
+<arg>${FALSE}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20250718 07:52:07.962" level="INFO">${result} = True</msg>
+<status status="PASS" starttime="20250718 07:52:07.962" endtime="20250718 07:52:07.962"/>
+</kw>
+<msg timestamp="20250718 07:52:07.963" level="INFO">${matches} = True</msg>
+<status status="PASS" starttime="20250718 07:52:03.789" endtime="20250718 07:52:07.963"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${matches}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20250718 07:52:07.963" endtime="20250718 07:52:07.963"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:03.789" endtime="20250718 07:52:07.963"/>
+</kw>
+<status status="PASS" starttime="20250718 07:51:58.714" endtime="20250718 07:52:07.963"/>
+</iter>
+<iter>
+<var name="${INDEX}">2</var>
+<kw name="Set Variable" library="BuiltIn">
+<var>${fileName}</var>
+<arg>file-${INDEX}.txt</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:52:07.963" level="INFO">${fileName} = file-2.txt</msg>
+<status status="PASS" starttime="20250718 07:52:07.963" endtime="20250718 07:52:07.963"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${key}</var>
+<arg>/${VOLUME}/${BUCKET}/${fileName}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:52:07.964" level="INFO">${key} = /volume1/bucket1/file-2.txt</msg>
+<status status="PASS" starttime="20250718 07:52:07.964" endtime="20250718 07:52:07.964"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${fileName}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:07.964" level="INFO">file-2.txt</msg>
+<status status="PASS" starttime="20250718 07:52:07.964" endtime="20250718 07:52:07.964"/>
+</kw>
+<kw name="Create Key" library="shell">
+<arg>${key}</arg>
+<arg>${file}</arg>
+<arg>--replication=${REPLICATION} --type=${TYPE}</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone sh key put ${args} ${key} ${file}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:07.968" level="INFO">Running command 'ozone sh key put --replication=THREE --type=RATIS /volume1/bucket1/file-2.txt /tmp/100mb 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:12.783" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:12.783" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:07.966" endtime="20250718 07:52:12.783"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:12.784" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:12.784" endtime="20250718 07:52:12.784"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:12.785" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:12.784" endtime="20250718 07:52:12.785"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:07.965" endtime="20250718 07:52:12.785"/>
+</kw>
+<msg timestamp="20250718 07:52:12.785" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:07.965" endtime="20250718 07:52:12.785"/>
+</kw>
+<msg timestamp="20250718 07:52:12.785" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:07.965" endtime="20250718 07:52:12.785"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:52:12.785" endtime="20250718 07:52:12.785"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Uploaded ${file} to ${key}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:12.786" level="INFO">Uploaded /tmp/100mb to /volume1/bucket1/file-2.txt</msg>
+<status status="PASS" starttime="20250718 07:52:12.786" endtime="20250718 07:52:12.786"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:07.964" endtime="20250718 07:52:12.786"/>
+</kw>
+<kw name="Key Should Match Local File" library="shell">
+<arg>${key}</arg>
+<arg>${file}</arg>
+<kw name="Compare Key With Local File" library="shell">
+<var>${matches}</var>
+<arg>${key}</arg>
+<arg>${file}</arg>
+<kw name="Generate Random String" library="String">
+<var>${postfix}</var>
+<arg>5</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20250718 07:52:12.787" level="INFO">${postfix} = 51396</msg>
+<status status="PASS" starttime="20250718 07:52:12.787" endtime="20250718 07:52:12.787"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${tmpfile}</var>
+<arg>/tmp/tempkey-${postfix}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20250718 07:52:12.788" level="INFO">${tmpfile} = /tmp/tempkey-51396</msg>
+<status status="PASS" starttime="20250718 07:52:12.788" endtime="20250718 07:52:12.788"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone ${cmd} ${key} ${tmpfile}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:12.793" level="INFO">Running command 'ozone sh key get /volume1/bucket1/file-2.txt /tmp/tempkey-51396 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:16.774" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:16.774" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:12.790" endtime="20250718 07:52:16.774"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:16.775" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:16.775" endtime="20250718 07:52:16.775"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:16.776" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:16.775" endtime="20250718 07:52:16.776"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:12.790" endtime="20250718 07:52:16.776"/>
+</kw>
+<msg timestamp="20250718 07:52:16.776" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:12.789" endtime="20250718 07:52:16.776"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:12.788" endtime="20250718 07:52:16.776"/>
+</kw>
+<kw name="Run And Return Rc" library="OperatingSystem">
+<var>${rc}</var>
+<arg>diff -q ${file} ${tmpfile}</arg>
+<doc>Runs the given command in the system and returns the return code.</doc>
+<msg timestamp="20250718 07:52:16.779" level="INFO">Running command 'diff -q /tmp/100mb /tmp/tempkey-51396 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:16.844" level="INFO">${rc} = 0</msg>
+<status status="PASS" starttime="20250718 07:52:16.776" endtime="20250718 07:52:16.844"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>rm -f ${tmpfile}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:16.848" level="INFO">Running command 'rm -f /tmp/tempkey-51396 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:16.872" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:16.872" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:16.846" endtime="20250718 07:52:16.872"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:16.873" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:16.873" endtime="20250718 07:52:16.873"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:16.873" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:16.873" endtime="20250718 07:52:16.873"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:16.845" endtime="20250718 07:52:16.874"/>
+</kw>
+<msg timestamp="20250718 07:52:16.874" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:16.845" endtime="20250718 07:52:16.874"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:16.844" endtime="20250718 07:52:16.874"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${result}</var>
+<arg>${rc} == 0</arg>
+<arg>${TRUE}</arg>
+<arg>${FALSE}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20250718 07:52:16.874" level="INFO">${result} = True</msg>
+<status status="PASS" starttime="20250718 07:52:16.874" endtime="20250718 07:52:16.874"/>
+</kw>
+<msg timestamp="20250718 07:52:16.874" level="INFO">${matches} = True</msg>
+<status status="PASS" starttime="20250718 07:52:12.786" endtime="20250718 07:52:16.874"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${matches}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20250718 07:52:16.875" endtime="20250718 07:52:16.875"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:12.786" endtime="20250718 07:52:16.875"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:07.963" endtime="20250718 07:52:16.875"/>
+</iter>
+<status status="PASS" starttime="20250718 07:51:27.400" endtime="20250718 07:52:16.875"/>
+</for>
+<status status="PASS" starttime="20250718 07:51:27.399" endtime="20250718 07:52:16.875"/>
+</kw>
+<kw name="Close All Containers">
+<for flavor="IN RANGE">
+<var>${INDEX}</var>
+<value>15</value>
+<iter>
+<var name="${INDEX}">0</var>
+<kw name="Execute" library="os">
+<var>${container}</var>
+<arg>ozone admin container list --state OPEN | jq -r '.[] | select(.replicationConfig.data == 3) | .containerID' | head -1</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:16.878" level="INFO">Running command 'ozone admin container list --state OPEN | jq -r '.[] | select(.replicationConfig.data == 3) | .containerID' | head -1 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:18.398" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:18.398" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20250718 07:52:16.876" endtime="20250718 07:52:18.399"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:18.399" level="INFO"/>
+<status status="PASS" starttime="20250718 07:52:18.399" endtime="20250718 07:52:18.400"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:18.400" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:18.400" endtime="20250718 07:52:18.400"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:16.876" endtime="20250718 07:52:18.400"/>
+</kw>
+<msg timestamp="20250718 07:52:18.400" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:16.876" endtime="20250718 07:52:18.400"/>
+</kw>
+<msg timestamp="20250718 07:52:18.400" level="INFO">${container} = </msg>
+<status status="PASS" starttime="20250718 07:52:16.876" endtime="20250718 07:52:18.400"/>
+</kw>
+<kw name="Exit For Loop If" library="BuiltIn">
+<arg>"${container}" == "${EMPTY}"</arg>
+<doc>Stops executing the enclosing FOR loop if the ``condition`` is true.</doc>
+<msg timestamp="20250718 07:52:18.401" level="INFO">Exiting for loop altogether.</msg>
+<status status="PASS" starttime="20250718 07:52:18.401" endtime="20250718 07:52:18.401"/>
+</kw>
+<kw name="Execute And Ignore Error" library="os">
+<var>${message}</var>
+<arg>ozone admin container close "${container}"</arg>
+<status status="NOT RUN" starttime="20250718 07:52:18.402" endtime="20250718 07:52:18.402"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${message}' != '${EMPTY}'</arg>
+<arg>Should Contain</arg>
+<arg>${message}</arg>
+<arg>is in closing state</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" starttime="20250718 07:52:18.402" endtime="20250718 07:52:18.402"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin container info "${container}"</arg>
+<status status="NOT RUN" starttime="20250718 07:52:18.402" endtime="20250718 07:52:18.402"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>CLOS</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" starttime="20250718 07:52:18.402" endtime="20250718 07:52:18.402"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:16.875" endtime="20250718 07:52:18.402"/>
+</iter>
+<status status="PASS" starttime="20250718 07:52:16.875" endtime="20250718 07:52:18.402"/>
+</for>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>4min</arg>
+<arg>10sec</arg>
+<arg>All container is closed</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="All container is closed">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin container list --state OPEN</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:18.406" level="INFO">Running command 'ozone admin container list --state OPEN 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:19.856" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:19.856" level="INFO">${output} = [ ]</msg>
+<status status="PASS" starttime="20250718 07:52:18.404" endtime="20250718 07:52:19.856"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:19.857" level="INFO">[ ]</msg>
+<status status="PASS" starttime="20250718 07:52:19.856" endtime="20250718 07:52:19.857"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:19.857" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:19.857" endtime="20250718 07:52:19.857"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:18.403" endtime="20250718 07:52:19.858"/>
+</kw>
+<msg timestamp="20250718 07:52:19.858" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:18.403" endtime="20250718 07:52:19.858"/>
+</kw>
+<msg timestamp="20250718 07:52:19.858" level="INFO">${output} = [ ]</msg>
+<status status="PASS" starttime="20250718 07:52:18.403" endtime="20250718 07:52:19.858"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${output}</arg>
+<arg>[ ]</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20250718 07:52:19.858" endtime="20250718 07:52:19.858"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:18.402" endtime="20250718 07:52:19.859"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:18.402" endtime="20250718 07:52:19.859"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:16.875" endtime="20250718 07:52:19.859"/>
+</kw>
+<kw name="Get Datanode Ozone Used Bytes Info">
+<var>${datanodeOzoneUsedBytesInfo}</var>
+<arg>${uuid}</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>export DATANODES=$(ozone admin datanode list --json) &amp;&amp; for datanode in $(echo "$\{DATANODES\}" | jq -r '.[].datanodeDetails.uuid'); do ozone admin datanode usageinfo --uuid=$\{datanode\} --json | jq '{(.[0].datanodeDetails.uuid) : .[0].ozoneUsed}'; done | jq -s add</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:19.863" level="INFO">Running command 'export DATANODES=$(ozone admin datanode list --json) &amp;&amp; for datanode in $(echo "${DATANODES}" | jq -r '.[].datanodeDetails.uuid'); do ozone admin datanode usageinfo --uuid=${datanode} --json | jq '{(.[0].datanodeDetails.uuid) : .[0].ozoneUsed}'; done | jq -s add 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:27.679" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:27.679" level="INFO">${output} = {
+  "92684bf9-ab1c-4544-9873-6df0f9307df5": 4096,
+  "9d6810d9-be8e-4e76-99e9-29a9fa4c2193": 209719296,
+  "738ad40f-cfcd-4cc0-ab3c-bdd0090b875d": 209719296,
+  "74b35523-443b-433c-bfb1-375a76ba7bb1": 20...</msg>
+<status status="PASS" starttime="20250718 07:52:19.860" endtime="20250718 07:52:27.679"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:27.681" level="INFO">{
+  "92684bf9-ab1c-4544-9873-6df0f9307df5": 4096,
+  "9d6810d9-be8e-4e76-99e9-29a9fa4c2193": 209719296,
+  "738ad40f-cfcd-4cc0-ab3c-bdd0090b875d": 209719296,
+  "74b35523-443b-433c-bfb1-375a76ba7bb1": 209719296
+}</msg>
+<status status="PASS" starttime="20250718 07:52:27.680" endtime="20250718 07:52:27.681"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:27.681" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:27.681" endtime="20250718 07:52:27.682"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:19.860" endtime="20250718 07:52:27.682"/>
+</kw>
+<msg timestamp="20250718 07:52:27.682" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:19.860" endtime="20250718 07:52:27.682"/>
+</kw>
+<msg timestamp="20250718 07:52:27.682" level="INFO">${output} = {
+  "92684bf9-ab1c-4544-9873-6df0f9307df5": 4096,
+  "9d6810d9-be8e-4e76-99e9-29a9fa4c2193": 209719296,
+  "738ad40f-cfcd-4cc0-ab3c-bdd0090b875d": 209719296,
+  "74b35523-443b-433c-bfb1-375a76ba7bb1": 20...</msg>
+<status status="PASS" starttime="20250718 07:52:19.859" endtime="20250718 07:52:27.682"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>echo '${output}' | jq '. | to_entries | .[] | select(.key == "${uuid}") | .value'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:27.687" level="INFO">Running command 'echo '{
+  "92684bf9-ab1c-4544-9873-6df0f9307df5": 4096,
+  "9d6810d9-be8e-4e76-99e9-29a9fa4c2193": 209719296,
+  "738ad40f-cfcd-4cc0-ab3c-bdd0090b875d": 209719296,
+  "74b35523-443b-433c-bfb1-375a76ba7bb1": 209719296
+}' | jq '. | to_entries | .[] | select(.key == "92684bf9-ab1c-4544-9873-6df0f9307df5") | .value' 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:27.693" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:27.693" level="INFO">${output} = 4096</msg>
+<status status="PASS" starttime="20250718 07:52:27.684" endtime="20250718 07:52:27.693"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:27.694" level="INFO">4096</msg>
+<status status="PASS" starttime="20250718 07:52:27.694" endtime="20250718 07:52:27.694"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:27.695" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:27.694" endtime="20250718 07:52:27.695"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:27.684" endtime="20250718 07:52:27.695"/>
+</kw>
+<msg timestamp="20250718 07:52:27.695" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:27.683" endtime="20250718 07:52:27.695"/>
+</kw>
+<msg timestamp="20250718 07:52:27.695" level="INFO">${result} = 4096</msg>
+<status status="PASS" starttime="20250718 07:52:27.683" endtime="20250718 07:52:27.695"/>
+</kw>
+<msg timestamp="20250718 07:52:27.695" level="INFO">${datanodeOzoneUsedBytesInfo} = 4096</msg>
+<status status="PASS" starttime="20250718 07:52:19.859" endtime="20250718 07:52:27.695"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${datanodeOzoneUsedBytesInfo} &lt; ${SIZE}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" starttime="20250718 07:52:27.695" endtime="20250718 07:52:27.696"/>
+</kw>
+<kw name="Datanode Recommission">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode recommission ${HOST}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:27.699" level="INFO">Running command 'ozone admin datanode recommission datanode1 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:29.173" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:29.173" level="INFO">${output} = Started recommissioning datanode(s):
+datanode1</msg>
+<status status="PASS" starttime="20250718 07:52:27.697" endtime="20250718 07:52:29.173"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:29.174" level="INFO">Started recommissioning datanode(s):
+datanode1</msg>
+<status status="PASS" starttime="20250718 07:52:29.173" endtime="20250718 07:52:29.174"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:29.174" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:29.174" endtime="20250718 07:52:29.175"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:27.697" endtime="20250718 07:52:29.175"/>
+</kw>
+<msg timestamp="20250718 07:52:29.175" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:27.697" endtime="20250718 07:52:29.175"/>
+</kw>
+<msg timestamp="20250718 07:52:29.175" level="INFO">${result} = Started recommissioning datanode(s):
+datanode1</msg>
+<status status="PASS" starttime="20250718 07:52:27.696" endtime="20250718 07:52:29.175"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Started recommissioning datanode</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:52:29.175" endtime="20250718 07:52:29.175"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>1min</arg>
+<arg>10sec</arg>
+<arg>Datanode Recommission is Finished</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Datanode Recommission is Finished">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | grep "Operational State:*"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:29.179" level="INFO">Running command 'ozone admin datanode list | grep "Operational State:*" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:30.666" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:30.666" level="INFO">${output} = Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:29.177" endtime="20250718 07:52:30.666"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:30.667" level="INFO">Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:30.666" endtime="20250718 07:52:30.667"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:30.667" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:30.667" endtime="20250718 07:52:30.667"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:29.177" endtime="20250718 07:52:30.668"/>
+</kw>
+<msg timestamp="20250718 07:52:30.668" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:29.176" endtime="20250718 07:52:30.668"/>
+</kw>
+<msg timestamp="20250718 07:52:30.668" level="INFO">${result} = Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:29.176" endtime="20250718 07:52:30.668"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ENTERING_MAINTENANCE</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:52:30.668" level="FAIL">'Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE' contains 'ENTERING_MAINTENANCE'</msg>
+<status status="FAIL" starttime="20250718 07:52:30.668" endtime="20250718 07:52:30.668"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:52:29.176" endtime="20250718 07:52:30.669"/>
+</kw>
+<kw name="Datanode Recommission is Finished">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | grep "Operational State:*"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:40.673" level="INFO">Running command 'ozone admin datanode list | grep "Operational State:*" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:42.131" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:42.131" level="INFO">${output} = Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:40.670" endtime="20250718 07:52:42.131"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:42.132" level="INFO">Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:42.131" endtime="20250718 07:52:42.132"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:42.132" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:42.132" endtime="20250718 07:52:42.132"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:40.670" endtime="20250718 07:52:42.133"/>
+</kw>
+<msg timestamp="20250718 07:52:42.133" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:40.670" endtime="20250718 07:52:42.133"/>
+</kw>
+<msg timestamp="20250718 07:52:42.133" level="INFO">${result} = Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:40.669" endtime="20250718 07:52:42.133"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ENTERING_MAINTENANCE</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:52:42.133" level="FAIL">'Operational State: ENTERING_MAINTENANCE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE' contains 'ENTERING_MAINTENANCE'</msg>
+<status status="FAIL" starttime="20250718 07:52:42.133" endtime="20250718 07:52:42.133"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:52:40.669" endtime="20250718 07:52:42.134"/>
+</kw>
+<kw name="Datanode Recommission is Finished">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin datanode list | grep "Operational State:*"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:52:52.138" level="INFO">Running command 'ozone admin datanode list | grep "Operational State:*" 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:52:53.637" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:52:53.637" level="INFO">${output} = Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:52.135" endtime="20250718 07:52:53.637"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:52:53.638" level="INFO">Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:53.638" endtime="20250718 07:52:53.638"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:52:53.639" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:52:53.638" endtime="20250718 07:52:53.639"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:52.135" endtime="20250718 07:52:53.639"/>
+</kw>
+<msg timestamp="20250718 07:52:53.639" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:52:52.135" endtime="20250718 07:52:53.639"/>
+</kw>
+<msg timestamp="20250718 07:52:53.639" level="INFO">${result} = Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE
+Operational State: IN_SERVICE</msg>
+<status status="PASS" starttime="20250718 07:52:52.134" endtime="20250718 07:52:53.639"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ENTERING_MAINTENANCE</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:52:53.639" endtime="20250718 07:52:53.640"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:52.134" endtime="20250718 07:52:53.640"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:29.175" endtime="20250718 07:52:53.640"/>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<arg>300000ms</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<msg timestamp="20250718 07:57:53.640" level="INFO">Slept 5 minutes</msg>
+<status status="PASS" starttime="20250718 07:52:53.640" endtime="20250718 07:57:53.640"/>
+</kw>
+<status status="PASS" starttime="20250718 07:52:27.696" endtime="20250718 07:57:53.641"/>
+</kw>
+<kw name="Run Container Balancer">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer start -t 0.1 -d 100 -i 3</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:57:53.645" level="INFO">Running command 'ozone admin containerbalancer start -t 0.1 -d 100 -i 3 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:57:55.118" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:57:55.118" level="INFO">${output} = Container Balancer started successfully.</msg>
+<status status="PASS" starttime="20250718 07:57:53.642" endtime="20250718 07:57:55.119"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:57:55.119" level="INFO">Container Balancer started successfully.</msg>
+<status status="PASS" starttime="20250718 07:57:55.119" endtime="20250718 07:57:55.120"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:57:55.120" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:57:55.120" endtime="20250718 07:57:55.120"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:53.642" endtime="20250718 07:57:55.120"/>
+</kw>
+<msg timestamp="20250718 07:57:55.120" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:57:53.642" endtime="20250718 07:57:55.120"/>
+</kw>
+<msg timestamp="20250718 07:57:55.120" level="INFO">${result} = Container Balancer started successfully.</msg>
+<status status="PASS" starttime="20250718 07:57:53.641" endtime="20250718 07:57:55.120"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Container Balancer started successfully.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:55.121" endtime="20250718 07:57:55.121"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:53.641" endtime="20250718 07:57:55.121"/>
+</kw>
+<kw name="Run Balancer Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:57:55.124" level="INFO">Running command 'ozone admin containerbalancer status 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:57:56.569" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:57:56.569" level="INFO">${output} = ContainerBalancer is Running.</msg>
+<status status="PASS" starttime="20250718 07:57:55.122" endtime="20250718 07:57:56.569"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:57:56.570" level="INFO">ContainerBalancer is Running.</msg>
+<status status="PASS" starttime="20250718 07:57:56.569" endtime="20250718 07:57:56.570"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:57:56.570" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:57:56.570" endtime="20250718 07:57:56.570"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:55.122" endtime="20250718 07:57:56.570"/>
+</kw>
+<msg timestamp="20250718 07:57:56.570" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:57:55.122" endtime="20250718 07:57:56.570"/>
+</kw>
+<msg timestamp="20250718 07:57:56.571" level="INFO">${result} = ContainerBalancer is Running.</msg>
+<status status="PASS" starttime="20250718 07:57:55.121" endtime="20250718 07:57:56.571"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:56.571" endtime="20250718 07:57:56.571"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:55.121" endtime="20250718 07:57:56.571"/>
+</kw>
+<kw name="Run Balancer Verbose Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:57:56.574" level="INFO">Running command 'ozone admin containerbalancer status --verbose 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:57:58.069" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:57:58.069" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 3s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold       ...</msg>
+<status status="PASS" starttime="20250718 07:57:56.572" endtime="20250718 07:57:58.070"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:57:58.070" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 3s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 2s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+</msg>
+<status status="PASS" starttime="20250718 07:57:58.070" endtime="20250718 07:57:58.071"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:57:58.071" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:57:58.071" endtime="20250718 07:57:58.071"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:56.572" endtime="20250718 07:57:58.071"/>
+</kw>
+<msg timestamp="20250718 07:57:58.071" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:57:56.572" endtime="20250718 07:57:58.071"/>
+</kw>
+<msg timestamp="20250718 07:57:58.071" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 3s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold       ...</msg>
+<status status="PASS" starttime="20250718 07:57:56.571" endtime="20250718 07:57:58.072"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.072" endtime="20250718 07:57:58.072"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.072" endtime="20250718 07:57:58.073"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.073" endtime="20250718 07:57:58.073"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.073" endtime="20250718 07:57:58.074"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.074" endtime="20250718 07:57:58.074"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.074" endtime="20250718 07:57:58.074"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.075" endtime="20250718 07:57:58.075"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.075" endtime="20250718 07:57:58.075"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:58.072" endtime="20250718 07:57:58.075"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Iteration result -</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:58.075" endtime="20250718 07:57:58.076"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:56.571" endtime="20250718 07:57:58.076"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>40sec</arg>
+<arg>5sec</arg>
+<arg>Run Balancer Verbose History Status</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:57:58.079" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:57:59.553" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:57:59.553" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 4s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold       ...</msg>
+<status status="PASS" starttime="20250718 07:57:58.077" endtime="20250718 07:57:59.553"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:57:59.554" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 4s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 4s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:57:59.554" endtime="20250718 07:57:59.554"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:57:59.555" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:57:59.554" endtime="20250718 07:57:59.555"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:58.077" endtime="20250718 07:57:59.555"/>
+</kw>
+<msg timestamp="20250718 07:57:59.555" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:57:58.076" endtime="20250718 07:57:59.555"/>
+</kw>
+<msg timestamp="20250718 07:57:59.555" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 4s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold       ...</msg>
+<status status="PASS" starttime="20250718 07:57:58.076" endtime="20250718 07:57:59.555"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.556" endtime="20250718 07:57:59.556"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.556" endtime="20250718 07:57:59.556"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.557" endtime="20250718 07:57:59.557"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.557" endtime="20250718 07:57:59.557"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.557" endtime="20250718 07:57:59.558"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.558" endtime="20250718 07:57:59.558"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.558" endtime="20250718 07:57:59.558"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.558" endtime="20250718 07:57:59.559"/>
+</kw>
+<status status="PASS" starttime="20250718 07:57:59.555" endtime="20250718 07:57:59.559"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:57:59.559" endtime="20250718 07:57:59.559"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:57:59.560" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:57:59.559" endtime="20250718 07:57:59.560"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:57:59.560" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:57:59.560" endtime="20250718 07:57:59.560"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:57:59.561" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:57:59.560" endtime="20250718 07:57:59.561"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:57:59.561" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:57:59.561" endtime="20250718 07:57:59.561"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:57:59.561" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:57:59.561" endtime="20250718 07:57:59.562"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:57:59.562" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:57:59.562" endtime="20250718 07:57:59.562"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:57:59.563" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 4s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 4s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:57:59.562" endtime="20250718 07:57:59.563"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:57:59.559" endtime="20250718 07:57:59.563"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:57:58.076" endtime="20250718 07:57:59.563"/>
+</kw>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:58:04.567" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:58:06.057" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:58:06.058" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 11s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:04.565" endtime="20250718 07:58:06.058"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:58:06.058" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 11s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 10s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:58:06.058" endtime="20250718 07:58:06.059"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:58:06.059" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:58:06.059" endtime="20250718 07:58:06.059"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:04.565" endtime="20250718 07:58:06.059"/>
+</kw>
+<msg timestamp="20250718 07:58:06.059" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:58:04.564" endtime="20250718 07:58:06.059"/>
+</kw>
+<msg timestamp="20250718 07:58:06.059" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 11s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:04.564" endtime="20250718 07:58:06.060"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.060" endtime="20250718 07:58:06.060"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.060" endtime="20250718 07:58:06.061"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.061" endtime="20250718 07:58:06.061"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.061" endtime="20250718 07:58:06.061"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.062" endtime="20250718 07:58:06.062"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.062" endtime="20250718 07:58:06.062"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.062" endtime="20250718 07:58:06.063"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.063" endtime="20250718 07:58:06.063"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:06.060" endtime="20250718 07:58:06.063"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:06.063" endtime="20250718 07:58:06.063"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:06.064" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:06.063" endtime="20250718 07:58:06.064"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:06.064" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:06.064" endtime="20250718 07:58:06.064"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:06.065" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:06.064" endtime="20250718 07:58:06.065"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:06.065" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:06.065" endtime="20250718 07:58:06.065"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:06.066" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:06.065" endtime="20250718 07:58:06.066"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:06.066" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:06.066" endtime="20250718 07:58:06.066"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:58:06.067" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 11s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 10s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:58:06.066" endtime="20250718 07:58:06.067"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:06.063" endtime="20250718 07:58:06.067"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:04.563" endtime="20250718 07:58:06.067"/>
+</kw>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:58:11.071" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:58:12.536" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:58:12.536" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 17s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:11.069" endtime="20250718 07:58:12.536"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:58:12.537" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 17s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 17s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:58:12.536" endtime="20250718 07:58:12.537"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:58:12.537" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:58:12.537" endtime="20250718 07:58:12.537"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:11.069" endtime="20250718 07:58:12.537"/>
+</kw>
+<msg timestamp="20250718 07:58:12.537" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:58:11.068" endtime="20250718 07:58:12.538"/>
+</kw>
+<msg timestamp="20250718 07:58:12.538" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 17s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:11.068" endtime="20250718 07:58:12.538"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.538" endtime="20250718 07:58:12.539"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.539" endtime="20250718 07:58:12.539"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.539" endtime="20250718 07:58:12.539"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.539" endtime="20250718 07:58:12.540"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.540" endtime="20250718 07:58:12.540"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.540" endtime="20250718 07:58:12.540"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.540" endtime="20250718 07:58:12.541"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.541" endtime="20250718 07:58:12.541"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:12.538" endtime="20250718 07:58:12.541"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:12.541" endtime="20250718 07:58:12.542"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:12.542" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:12.542" endtime="20250718 07:58:12.542"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:12.543" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:12.542" endtime="20250718 07:58:12.543"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:12.543" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:12.543" endtime="20250718 07:58:12.543"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:12.544" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:12.543" endtime="20250718 07:58:12.544"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:12.544" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:12.544" endtime="20250718 07:58:12.544"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:12.545" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:12.544" endtime="20250718 07:58:12.545"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:58:12.545" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 17s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 17s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:58:12.545" endtime="20250718 07:58:12.545"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:12.541" endtime="20250718 07:58:12.545"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:11.068" endtime="20250718 07:58:12.546"/>
+</kw>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:58:17.550" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:58:19.033" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:58:19.033" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 24s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:17.547" endtime="20250718 07:58:19.033"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:58:19.034" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 24s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 23s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:58:19.033" endtime="20250718 07:58:19.034"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:58:19.034" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:58:19.034" endtime="20250718 07:58:19.035"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:17.547" endtime="20250718 07:58:19.035"/>
+</kw>
+<msg timestamp="20250718 07:58:19.035" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:58:17.547" endtime="20250718 07:58:19.035"/>
+</kw>
+<msg timestamp="20250718 07:58:19.035" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 24s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:17.546" endtime="20250718 07:58:19.035"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.036" endtime="20250718 07:58:19.036"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.036" endtime="20250718 07:58:19.037"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.037" endtime="20250718 07:58:19.037"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.037" endtime="20250718 07:58:19.037"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.037" endtime="20250718 07:58:19.038"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.038" endtime="20250718 07:58:19.038"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.038" endtime="20250718 07:58:19.038"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.038" endtime="20250718 07:58:19.039"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:19.035" endtime="20250718 07:58:19.039"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:19.039" endtime="20250718 07:58:19.039"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:19.040" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:19.039" endtime="20250718 07:58:19.040"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:19.040" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:19.040" endtime="20250718 07:58:19.040"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:19.040" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:19.040" endtime="20250718 07:58:19.041"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:19.041" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:19.041" endtime="20250718 07:58:19.041"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:19.041" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:19.041" endtime="20250718 07:58:19.041"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:19.042" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:19.042" endtime="20250718 07:58:19.042"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:58:19.042" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 24s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 23s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:58:19.042" endtime="20250718 07:58:19.043"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:19.039" endtime="20250718 07:58:19.043"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:17.546" endtime="20250718 07:58:19.043"/>
+</kw>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:58:24.047" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:58:25.518" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:58:25.518" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 30s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:24.045" endtime="20250718 07:58:25.518"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:58:25.519" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 30s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 30s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:58:25.518" endtime="20250718 07:58:25.519"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:58:25.519" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:58:25.519" endtime="20250718 07:58:25.519"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:24.044" endtime="20250718 07:58:25.519"/>
+</kw>
+<msg timestamp="20250718 07:58:25.519" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:58:24.044" endtime="20250718 07:58:25.519"/>
+</kw>
+<msg timestamp="20250718 07:58:25.519" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 30s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:24.044" endtime="20250718 07:58:25.520"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.520" endtime="20250718 07:58:25.520"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.520" endtime="20250718 07:58:25.521"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.521" endtime="20250718 07:58:25.521"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.521" endtime="20250718 07:58:25.521"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.521" endtime="20250718 07:58:25.522"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.522" endtime="20250718 07:58:25.522"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.522" endtime="20250718 07:58:25.523"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.523" endtime="20250718 07:58:25.523"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:25.520" endtime="20250718 07:58:25.523"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:25.523" endtime="20250718 07:58:25.524"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:25.524" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:25.524" endtime="20250718 07:58:25.524"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:25.525" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:25.524" endtime="20250718 07:58:25.525"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:25.525" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:25.525" endtime="20250718 07:58:25.525"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:25.526" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:25.525" endtime="20250718 07:58:25.526"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:25.526" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:25.526" endtime="20250718 07:58:25.526"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:25.526" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:25.526" endtime="20250718 07:58:25.527"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:58:25.527" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 30s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 30s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:58:25.527" endtime="20250718 07:58:25.527"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:25.523" endtime="20250718 07:58:25.527"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:24.043" endtime="20250718 07:58:25.527"/>
+</kw>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:58:30.532" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:58:32.010" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:58:32.010" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 36s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:30.529" endtime="20250718 07:58:32.010"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:58:32.011" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 36s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 36s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:58:32.010" endtime="20250718 07:58:32.011"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:58:32.011" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:58:32.011" endtime="20250718 07:58:32.011"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:30.529" endtime="20250718 07:58:32.011"/>
+</kw>
+<msg timestamp="20250718 07:58:32.011" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:58:30.529" endtime="20250718 07:58:32.011"/>
+</kw>
+<msg timestamp="20250718 07:58:32.012" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 36s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:30.528" endtime="20250718 07:58:32.012"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.012" endtime="20250718 07:58:32.012"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.012" endtime="20250718 07:58:32.013"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.013" endtime="20250718 07:58:32.013"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.013" endtime="20250718 07:58:32.013"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.014" endtime="20250718 07:58:32.014"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.014" endtime="20250718 07:58:32.014"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.014" endtime="20250718 07:58:32.014"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.014" endtime="20250718 07:58:32.015"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:32.012" endtime="20250718 07:58:32.015"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:32.015" endtime="20250718 07:58:32.015"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:32.016" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:32.016" endtime="20250718 07:58:32.016"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:32.016" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:32.016" endtime="20250718 07:58:32.016"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:32.017" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:32.016" endtime="20250718 07:58:32.017"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:32.017" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:32.017" endtime="20250718 07:58:32.017"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:32.018" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:32.017" endtime="20250718 07:58:32.018"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:32.018" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:32.018" endtime="20250718 07:58:32.018"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:58:32.019" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 36s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 36s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    0 B
+Scheduled to move containers                       3
+Already moved containers                           0
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:58:32.018" endtime="20250718 07:58:32.019"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:32.015" endtime="20250718 07:58:32.019"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:30.528" endtime="20250718 07:58:32.019"/>
+</kw>
+<kw name="Run Balancer Verbose History Status">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone admin containerbalancer status --verbose --history</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20250718 07:58:37.024" level="INFO">Running command 'ozone admin containerbalancer status --verbose --history 2&gt;&amp;1'.</msg>
+<msg timestamp="20250718 07:58:38.507" level="INFO">${rc} = 0</msg>
+<msg timestamp="20250718 07:58:38.507" level="INFO">${output} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 43s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:37.021" endtime="20250718 07:58:38.507"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20250718 07:58:38.508" level="INFO">ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 43s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 43s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    200 MB
+Scheduled to move containers                       3
+Already moved containers                           2
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+</msg>
+<status status="PASS" starttime="20250718 07:58:38.508" endtime="20250718 07:58:38.508"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20250718 07:58:38.509" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20250718 07:58:38.508" endtime="20250718 07:58:38.509"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:37.021" endtime="20250718 07:58:38.509"/>
+</kw>
+<msg timestamp="20250718 07:58:38.509" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20250718 07:58:37.020" endtime="20250718 07:58:38.509"/>
+</kw>
+<msg timestamp="20250718 07:58:38.509" level="INFO">${result} = ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 43s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold      ...</msg>
+<status status="PASS" starttime="20250718 07:58:37.020" endtime="20250718 07:58:38.509"/>
+</kw>
+<kw name="Verify Balancer Iteration">
+<arg>${result}</arg>
+<arg>1</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>ContainerBalancer is Running.</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.510" endtime="20250718 07:58:38.510"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Started at:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.510" endtime="20250718 07:58:38.510"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Container Balancer Configuration values:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.510" endtime="20250718 07:58:38.511"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration number ${number}</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.511" endtime="20250718 07:58:38.511"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.511" endtime="20250718 07:58:38.511"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Balancing duration:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.512" endtime="20250718 07:58:38.512"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration duration</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.512" endtime="20250718 07:58:38.512"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Current iteration info:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.512" endtime="20250718 07:58:38.512"/>
+</kw>
+<status status="PASS" starttime="20250718 07:58:38.509" endtime="20250718 07:58:38.512"/>
+</kw>
+<kw name="Verify Balancer Iteration History">
+<arg>${result}</arg>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration history list:</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20250718 07:58:38.513" endtime="20250718 07:58:38.513"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Size scheduled to move</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:38.513" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:38.513" endtime="20250718 07:58:38.513"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Moved data size</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:38.514" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:38.514" endtime="20250718 07:58:38.514"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Scheduled to move containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:38.514" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:38.514" endtime="20250718 07:58:38.515"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Already moved containers</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:38.515" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:38.515" endtime="20250718 07:58:38.515"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:38.516" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:38.515" endtime="20250718 07:58:38.516"/>
+</kw>
+<kw name="Should Contain X Times" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Failed to move containers by timeout 0</arg>
+<arg>1</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` ``count`` times.</doc>
+<msg timestamp="20250718 07:58:38.516" level="INFO">Item found from container 1 time.</msg>
+<status status="PASS" starttime="20250718 07:58:38.516" endtime="20250718 07:58:38.516"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Iteration result ITERATION_COMPLETED</arg>
+<arg>collapse_spaces=True</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20250718 07:58:38.517" level="FAIL">'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 43s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 43s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    200 MB
+Scheduled to move containers                       3
+Already moved containers                           2
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:58:38.516" endtime="20250718 07:58:38.517"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:38.512" endtime="20250718 07:58:38.517"/>
+</kw>
+<status status="FAIL" starttime="20250718 07:58:37.019" endtime="20250718 07:58:38.517"/>
+</kw>
+<msg timestamp="20250718 07:58:38.517" level="FAIL">Keyword 'Run Balancer Verbose History Status' failed after retrying for 40 seconds. The last error was: 'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 43s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+Datanodes Excluded from Balancing                  None
+    [ Message content over the limit has been removed. ]
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 43s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    200 MB
+Scheduled to move containers                       3
+Already moved containers                           2
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</msg>
+<status status="FAIL" starttime="20250718 07:57:58.076" endtime="20250718 07:58:38.517"/>
+</kw>
+<kw name="Wait Finish Of Balancing">
+<status status="NOT RUN" starttime="20250718 07:58:38.517" endtime="20250718 07:58:38.517"/>
+</kw>
+<kw name="Get Datanode Ozone Used Bytes Info">
+<var>${datanodeOzoneUsedBytesInfoAfterContainerBalancing}</var>
+<arg>${uuid}</arg>
+<status status="NOT RUN" starttime="20250718 07:58:38.518" endtime="20250718 07:58:38.518"/>
+</kw>
+<kw name="Should Not Be Equal As Integers" library="BuiltIn">
+<arg>${datanodeOzoneUsedBytesInfo}</arg>
+<arg>${datanodeOzoneUsedBytesInfoAfterContainerBalancing}</arg>
+<doc>Fails if objects are equal after converting them to integers.</doc>
+<status status="NOT RUN" starttime="20250718 07:58:38.518" endtime="20250718 07:58:38.518"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${datanodeOzoneUsedBytesInfoAfterContainerBalancing} &lt; ${SIZE} * ${UPPER_LIMIT}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" starttime="20250718 07:58:38.518" endtime="20250718 07:58:38.518"/>
+</kw>
+<kw name="Should Be True" library="BuiltIn">
+<arg>${datanodeOzoneUsedBytesInfoAfterContainerBalancing} &gt; ${SIZE} * ${LOWER_LIMIT}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" starttime="20250718 07:58:38.518" endtime="20250718 07:58:38.518"/>
+</kw>
+<timeout value="20 minutes"/>
+<status status="FAIL" starttime="20250718 07:50:03.865" endtime="20250718 07:58:38.518">Keyword 'Run Balancer Verbose History Status' failed after retrying for 40 seconds. The last error was: 'ContainerBalancer is Running.
+Started at: 2025-07-18 07:57:55
+Balancing duration: 43s
+
+Container Balancer Configuration values:
+Key                                                Value
+Threshold                                          0.1
+Max Datanodes to Involve per Iteration(percent)    100
+Max Size to Move per Iteration                     0GB
+Max Size Entering Target per Iteration             26GB
+Max Size Leaving Source per Iteration              26GB
+Number of Iterations                               3
+Time Limit for Single Container's Movement         65min
+Time Limit for Single Container's Replication      50min
+Interval between each Iteration                    0min
+Whether to Enable Network Topology                 false
+Whether to Trigger Refresh Datanode Usage Info     false
+Container IDs to Exclude from Balancing            None
+Datanodes Specified to be Balanced                 None
+    [ Message content over the limit has been removed. ]
+Current iteration info:
+Key                                                Value
+Iteration number                                   1
+Iteration duration                                 43s
+Iteration result                                   -
+Size scheduled to move                             300 MB
+Moved data size                                    200 MB
+Scheduled to move containers                       3
+Already moved containers                           2
+Failed to move containers                          0
+Failed to move containers by timeout               0
+Entered data to nodes                              
+92684bf9-ab1c-4544-9873-6df0f9307df5 &lt;- 300 MB
+Exited data from nodes                             
+738ad40f-cfcd-4cc0-ab3c-bdd0090b875d -&gt; 100 MB
+9d6810d9-be8e-4e76-99e9-29a9fa4c2193 -&gt; 100 MB
+74b35523-443b-433c-bfb1-375a76ba7bb1 -&gt; 100 MB
+
+Iteration history list:
+' does not contain 'Iteration result ITERATION_COMPLETED'</status>
+</test>
+<doc>Smoketest ozone cluster startup</doc>
+<status status="FAIL" starttime="20250718 07:50:03.038" endtime="20250718 07:58:38.519"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="ozone-balancer-ratis">ozone-balancer-ratis</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
