@@ -1,0 +1,1766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.25 on linux)" generated="20260211 18:28:58.323" rpa="false" schemaversion="4">
+<suite id="s1" name="ozonesecure-ha-s3g-virtual-host" source="/opt/hadoop/smoketest/s3/awss3virtualhost.robot">
+<kw name="Setup s3 tests" library="commonawslib" type="SETUP">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>${OZONE_S3_TESTS_SET_UP}</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:34.228" endtime="20260211 18:28:34.228"/>
+</kw>
+<kw name="Run Keyword" library="BuiltIn">
+<arg>Generate random prefix</arg>
+<doc>Executes the given keyword with the given arguments.</doc>
+<kw name="Generate random prefix" library="commonawslib">
+<kw name="Generate Ozone String" library="commonawslib">
+<var>${random}</var>
+<kw name="Generate Random String" library="String">
+<var>${randStr}</var>
+<arg>10</arg>
+<arg>[NUMBERS]</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20260211 18:28:34.229" level="INFO">${randStr} = 2200245060</msg>
+<status status="PASS" starttime="20260211 18:28:34.228" endtime="20260211 18:28:34.229"/>
+</kw>
+<msg timestamp="20260211 18:28:34.229" level="INFO">${random} = ozone-test-2200245060</msg>
+<status status="PASS" starttime="20260211 18:28:34.228" endtime="20260211 18:28:34.229"/>
+</kw>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${PREFIX}</arg>
+<arg>${random}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260211 18:28:34.230" level="INFO">${PREFIX} = ozone-test-2200245060</msg>
+<status status="PASS" starttime="20260211 18:28:34.229" endtime="20260211 18:28:34.230"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.228" endtime="20260211 18:28:34.230"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.228" endtime="20260211 18:28:34.230"/>
+</kw>
+<kw name="Run Keyword" library="BuiltIn">
+<arg>Install aws cli</arg>
+<doc>Executes the given keyword with the given arguments.</doc>
+<kw name="Install aws cli" library="commonawslib">
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>which aws</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:34.232" level="INFO">Running command 'which aws 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:34.236" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:34.236" level="INFO">${output} = /usr/local/bin/aws</msg>
+<status status="PASS" starttime="20260211 18:28:34.230" endtime="20260211 18:28:34.236"/>
+</kw>
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${rc}' == '0'</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260211 18:28:34.237" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:34.236" endtime="20260211 18:28:34.237"/>
+</kw>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>which apt-get</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.237" endtime="20260211 18:28:34.237"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${rc}' == '0'</arg>
+<arg>Install aws cli s3 debian</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.237" endtime="20260211 18:28:34.237"/>
+</kw>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>yum --help</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.237" endtime="20260211 18:28:34.237"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${rc}' == '0'</arg>
+<arg>Install aws cli s3 centos</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.237" endtime="20260211 18:28:34.237"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.230" endtime="20260211 18:28:34.237"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.230" endtime="20260211 18:28:34.237"/>
+</kw>
+<kw name="Run Keyword" library="BuiltIn">
+<arg>Get Security Enabled From Config</arg>
+<doc>Executes the given keyword with the given arguments.</doc>
+<kw name="Get Security Enabled From Config" library="commonlib">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:34.238" endtime="20260211 18:28:34.238"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:34.241" level="INFO">Running command 'ozone getconf confKey ozone.security.enabled 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:34.920" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:34.920" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20260211 18:28:34.239" endtime="20260211 18:28:34.920"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:34.921" level="INFO">true</msg>
+<status status="PASS" starttime="20260211 18:28:34.921" endtime="20260211 18:28:34.921"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:34.922" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:34.921" endtime="20260211 18:28:34.922"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.239" endtime="20260211 18:28:34.922"/>
+</kw>
+<msg timestamp="20260211 18:28:34.922" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:34.239" endtime="20260211 18:28:34.922"/>
+</kw>
+<msg timestamp="20260211 18:28:34.922" level="INFO">${value} = true</msg>
+<status status="PASS" starttime="20260211 18:28:34.238" endtime="20260211 18:28:34.922"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.923" endtime="20260211 18:28:34.923"/>
+</kw>
+<status status="NOT RUN" starttime="20260211 18:28:34.922" endtime="20260211 18:28:34.923"/>
+</branch>
+<status status="PASS" starttime="20260211 18:28:34.922" endtime="20260211 18:28:34.923"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260211 18:28:34.923" level="INFO">${SECURITY_ENABLED} = true</msg>
+<status status="PASS" starttime="20260211 18:28:34.923" endtime="20260211 18:28:34.924"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.238" endtime="20260211 18:28:34.924"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.238" endtime="20260211 18:28:34.924"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${OZONE_S3_SET_CREDENTIALS}' == 'true'</arg>
+<arg>Setup v4 headers</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Setup v4 headers" library="commonawslib">
+<kw name="Get Security Enabled From Config" library="commonlib">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260211 18:28:34.925" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:34.924" endtime="20260211 18:28:34.925"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<status status="NOT RUN" starttime="20260211 18:28:34.925" endtime="20260211 18:28:34.925"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.925" endtime="20260211 18:28:34.925"/>
+</kw>
+<status status="NOT RUN" starttime="20260211 18:28:34.925" endtime="20260211 18:28:34.925"/>
+</branch>
+<status status="NOT RUN" starttime="20260211 18:28:34.925" endtime="20260211 18:28:34.925"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.925" endtime="20260211 18:28:34.925"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.924" endtime="20260211 18:28:34.925"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Kinit test user" library="commonlib">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get Security Enabled From Config" library="commonlib">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260211 18:28:34.926" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:34.926" endtime="20260211 18:28:34.926"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<status status="NOT RUN" starttime="20260211 18:28:34.926" endtime="20260211 18:28:34.926"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.927" endtime="20260211 18:28:34.927"/>
+</kw>
+<status status="NOT RUN" starttime="20260211 18:28:34.926" endtime="20260211 18:28:34.927"/>
+</branch>
+<status status="NOT RUN" starttime="20260211 18:28:34.926" endtime="20260211 18:28:34.927"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" starttime="20260211 18:28:34.927" endtime="20260211 18:28:34.927"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.926" endtime="20260211 18:28:34.927"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Skip in unsecure cluster</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20260211 18:28:34.927" endtime="20260211 18:28:34.927"/>
+</kw>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:34.930" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:34.934" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:34.934" level="INFO">${output} = s3g</msg>
+<status status="PASS" starttime="20260211 18:28:34.928" endtime="20260211 18:28:34.934"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:34.935" level="INFO">s3g</msg>
+<status status="PASS" starttime="20260211 18:28:34.934" endtime="20260211 18:28:34.935"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:34.935" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:34.935" endtime="20260211 18:28:34.935"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.928" endtime="20260211 18:28:34.935"/>
+</kw>
+<msg timestamp="20260211 18:28:34.935" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:34.928" endtime="20260211 18:28:34.935"/>
+</kw>
+<msg timestamp="20260211 18:28:34.935" level="INFO">${instance} = s3g</msg>
+<status status="PASS" starttime="20260211 18:28:34.927" endtime="20260211 18:28:34.935"/>
+</kw>
+<msg timestamp="20260211 18:28:34.936" level="INFO">${TEST_USER} = testuser/s3g@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260211 18:28:34.927" endtime="20260211 18:28:34.936"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20260211 18:28:34.936" level="INFO">${TEST_USER} = testuser/s3g@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260211 18:28:34.936" endtime="20260211 18:28:34.936"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:34.939" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/s3g@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:34.954" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:34.954" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:34.937" endtime="20260211 18:28:34.954"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:34.955" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:34.954" endtime="20260211 18:28:34.955"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:34.955" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:34.955" endtime="20260211 18:28:34.955"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.937" endtime="20260211 18:28:34.955"/>
+</kw>
+<msg timestamp="20260211 18:28:34.956" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:34.937" endtime="20260211 18:28:34.956"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.936" endtime="20260211 18:28:34.956"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.936" endtime="20260211 18:28:34.956"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.926" endtime="20260211 18:28:34.956"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.925" endtime="20260211 18:28:34.956"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Setup secure v4 headers</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Setup secure v4 headers" library="commonawslib">
+<kw name="Execute And Ignore Error" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:34.959" level="INFO">Running command 'ozone s3 getsecret --om-service-id=omservice 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:37.137" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:37.137" level="INFO">${output} = awsAccessKey=testuser/s3g@EXAMPLE.COM
+awsSecret=07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196</msg>
+<status status="PASS" starttime="20260211 18:28:34.957" endtime="20260211 18:28:37.137"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:37.138" level="INFO">awsAccessKey=testuser/s3g@EXAMPLE.COM
+awsSecret=07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196</msg>
+<status status="PASS" starttime="20260211 18:28:37.137" endtime="20260211 18:28:37.138"/>
+</kw>
+<msg timestamp="20260211 18:28:37.138" level="INFO">${result} = awsAccessKey=testuser/s3g@EXAMPLE.COM
+awsSecret=07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196</msg>
+<status status="PASS" starttime="20260211 18:28:34.956" endtime="20260211 18:28:37.138"/>
+</kw>
+<kw name="Run Keyword And Return Status" library="BuiltIn">
+<var>${exists}</var>
+<arg>Should Contain</arg>
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>S3_SECRET_ALREADY_EXISTS</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<msg timestamp="20260211 18:28:37.139" level="FAIL">'awsAccessKey=testuser/s3g@EXAMPLE.COM
+awsSecret=07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196' does not contain 'S3_SECRET_ALREADY_EXISTS'</msg>
+<status status="FAIL" starttime="20260211 18:28:37.138" endtime="20260211 18:28:37.139"/>
+</kw>
+<msg timestamp="20260211 18:28:37.139" level="INFO">${exists} = False</msg>
+<status status="PASS" starttime="20260211 18:28:37.138" endtime="20260211 18:28:37.139"/>
+</kw>
+<if>
+<branch type="IF" condition="${exists}">
+<kw name="Execute" library="os">
+<arg>ozone s3 revokesecret -y ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20260211 18:28:37.140" endtime="20260211 18:28:37.140"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone s3 getsecret ${OM_HA_PARAM}</arg>
+<status status="NOT RUN" starttime="20260211 18:28:37.140" endtime="20260211 18:28:37.140"/>
+</kw>
+<status status="NOT RUN" starttime="20260211 18:28:37.139" endtime="20260211 18:28:37.140"/>
+</branch>
+<status status="PASS" starttime="20260211 18:28:37.139" endtime="20260211 18:28:37.140"/>
+</if>
+<kw name="Get Regexp Matches" library="String">
+<var>${accessKey}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsAccessKey=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20260211 18:28:37.140" level="INFO">${accessKey} = ['testuser/s3g@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20260211 18:28:37.140" endtime="20260211 18:28:37.140"/>
+</kw>
+<kw name="Get Variable Value" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey}</arg>
+<arg>testuser</arg>
+<doc>Returns variable value or ``default`` if the variable does not exist.</doc>
+<msg timestamp="20260211 18:28:37.141" level="INFO">${accessKey} = ['testuser/s3g@EXAMPLE.COM']</msg>
+<status status="PASS" starttime="20260211 18:28:37.141" endtime="20260211 18:28:37.141"/>
+</kw>
+<kw name="Get Regexp Matches" library="String">
+<var>${secret}</var>
+<arg>${result}</arg>
+<arg>(?&lt;=awsSecret=).*</arg>
+<doc>Returns a list of all non-overlapping matches in the given string.</doc>
+<msg timestamp="20260211 18:28:37.141" level="INFO">${secret} = ['07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196']</msg>
+<status status="PASS" starttime="20260211 18:28:37.141" endtime="20260211 18:28:37.141"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${accessKey}</var>
+<arg>${accessKey[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260211 18:28:37.142" level="INFO">${accessKey} = testuser/s3g@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260211 18:28:37.141" endtime="20260211 18:28:37.142"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${secret}</var>
+<arg>${secret[0]}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20260211 18:28:37.143" level="INFO">${secret} = 07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196</msg>
+<status status="PASS" starttime="20260211 18:28:37.142" endtime="20260211 18:28:37.143"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.signature_version s3v4</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:37.146" level="INFO">Running command 'aws configure set default.s3.signature_version s3v4 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:37.525" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:37.525" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:37.144" endtime="20260211 18:28:37.525"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:37.526" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:37.526" endtime="20260211 18:28:37.526"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:37.527" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:37.526" endtime="20260211 18:28:37.527"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:37.143" endtime="20260211 18:28:37.527"/>
+</kw>
+<msg timestamp="20260211 18:28:37.527" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:37.143" endtime="20260211 18:28:37.527"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:37.143" endtime="20260211 18:28:37.527"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_access_key_id ${accessKey}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:37.530" level="INFO">Running command 'aws configure set aws_access_key_id testuser/s3g@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:37.898" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:37.898" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:37.528" endtime="20260211 18:28:37.898"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:37.899" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:37.899" endtime="20260211 18:28:37.899"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:37.899" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:37.899" endtime="20260211 18:28:37.899"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:37.528" endtime="20260211 18:28:37.900"/>
+</kw>
+<msg timestamp="20260211 18:28:37.900" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:37.528" endtime="20260211 18:28:37.900"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:37.527" endtime="20260211 18:28:37.900"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set aws_secret_access_key ${secret}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:37.903" level="INFO">Running command 'aws configure set aws_secret_access_key 07bd72749e38217b74d9128341af59b8156f7e4f34a16dc663043bc6d6aa8196 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:38.287" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:38.287" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:37.901" endtime="20260211 18:28:38.287"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:38.288" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:38.288" endtime="20260211 18:28:38.288"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:38.288" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:38.288" endtime="20260211 18:28:38.289"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:37.901" endtime="20260211 18:28:38.289"/>
+</kw>
+<msg timestamp="20260211 18:28:38.289" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:37.900" endtime="20260211 18:28:38.289"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:37.900" endtime="20260211 18:28:38.289"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set region us-west-1</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:38.292" level="INFO">Running command 'aws configure set region us-west-1 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:38.656" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:38.656" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:38.290" endtime="20260211 18:28:38.656"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:38.657" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:38.657" endtime="20260211 18:28:38.657"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:38.657" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:38.657" endtime="20260211 18:28:38.657"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:38.290" endtime="20260211 18:28:38.658"/>
+</kw>
+<msg timestamp="20260211 18:28:38.658" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:38.289" endtime="20260211 18:28:38.658"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:38.289" endtime="20260211 18:28:38.658"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>aws configure set default.s3.addressing_style ${OZONE_S3_ADDRESS_STYLE}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:38.661" level="INFO">Running command 'aws configure set default.s3.addressing_style virtual 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:39.024" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:39.024" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:38.659" endtime="20260211 18:28:39.024"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:39.025" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:39.024" endtime="20260211 18:28:39.025"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:39.025" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:39.025" endtime="20260211 18:28:39.025"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:38.659" endtime="20260211 18:28:39.025"/>
+</kw>
+<msg timestamp="20260211 18:28:39.025" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:38.658" endtime="20260211 18:28:39.025"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:38.658" endtime="20260211 18:28:39.025"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.956" endtime="20260211 18:28:39.026"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.956" endtime="20260211 18:28:39.026"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Setup dummy credentials for S3</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:39.026" endtime="20260211 18:28:39.026"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.924" endtime="20260211 18:28:39.026"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.924" endtime="20260211 18:28:39.026"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${BUCKET}' == 'generated'</arg>
+<arg>Create generated bucket</arg>
+<arg>${BUCKET_LAYOUT}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:39.026" endtime="20260211 18:28:39.026"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${BUCKET}' == 'link'</arg>
+<arg>Setup links for S3 tests</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:39.026" endtime="20260211 18:28:39.027"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${BUCKET}' == 'encrypted'</arg>
+<arg>Create encrypted bucket</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:39.027" endtime="20260211 18:28:39.027"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${BUCKET}' == 'erasure'</arg>
+<arg>Create EC bucket</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260211 18:28:39.027" endtime="20260211 18:28:39.027"/>
+</kw>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${OZONE_S3_TESTS_SET_UP}</arg>
+<arg>${TRUE}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260211 18:28:39.027" level="INFO">${OZONE_S3_TESTS_SET_UP} = True</msg>
+<status status="PASS" starttime="20260211 18:28:39.027" endtime="20260211 18:28:39.028"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:34.227" endtime="20260211 18:28:39.028"/>
+</kw>
+<test id="s1-t1" name="File upload and directory list with virtual style addressing" line="33">
+<kw name="Create bucket with name" library="commonawslib">
+<arg>${BUCKET}</arg>
+<kw name="Execute AWSS3APICli" library="commonawslib">
+<var>${result}</var>
+<arg>create-bucket --bucket ${bucket}</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3api --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:39.032" level="INFO">Running command 'aws s3api --endpoint-url http://s3g.internal:9878 create-bucket --bucket bucket1 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:40.371" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:40.371" level="INFO">${output} = {
+    "Location": "http://bucket1.s3g.internal:9878/bucket1"
+}</msg>
+<status status="PASS" starttime="20260211 18:28:39.030" endtime="20260211 18:28:40.371"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:40.372" level="INFO">{
+    "Location": "http://bucket1.s3g.internal:9878/bucket1"
+}</msg>
+<status status="PASS" starttime="20260211 18:28:40.371" endtime="20260211 18:28:40.372"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:40.372" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:40.372" endtime="20260211 18:28:40.372"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:39.030" endtime="20260211 18:28:40.372"/>
+</kw>
+<msg timestamp="20260211 18:28:40.373" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:39.029" endtime="20260211 18:28:40.373"/>
+</kw>
+<msg timestamp="20260211 18:28:40.373" level="INFO">${output} = {
+    "Location": "http://bucket1.s3g.internal:9878/bucket1"
+}</msg>
+<status status="PASS" starttime="20260211 18:28:39.029" endtime="20260211 18:28:40.373"/>
+</kw>
+<msg timestamp="20260211 18:28:40.373" level="INFO">${result} = {
+    "Location": "http://bucket1.s3g.internal:9878/bucket1"
+}</msg>
+<status status="PASS" starttime="20260211 18:28:39.029" endtime="20260211 18:28:40.373"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Location</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:40.373" endtime="20260211 18:28:40.373"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>${bucket}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:40.373" endtime="20260211 18:28:40.374"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:39.028" endtime="20260211 18:28:40.374"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>date &gt; /tmp/testfile</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:40.377" level="INFO">Running command 'date &gt; /tmp/testfile'.</msg>
+<msg timestamp="20260211 18:28:40.382" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:40.382" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260211 18:28:40.375" endtime="20260211 18:28:40.382"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:40.383" level="INFO"/>
+<status status="PASS" starttime="20260211 18:28:40.382" endtime="20260211 18:28:40.383"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:40.383" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:40.383" endtime="20260211 18:28:40.383"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:40.374" endtime="20260211 18:28:40.384"/>
+</kw>
+<msg timestamp="20260211 18:28:40.384" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:40.374" endtime="20260211 18:28:40.384"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:40.374" endtime="20260211 18:28:40.384"/>
+</kw>
+<kw name="Execute AWSS3Cli" library="commonawslib">
+<var>${result}</var>
+<arg>cp /tmp/testfile s3://${BUCKET} --debug</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3 --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:40.388" level="INFO">Running command 'aws s3 --endpoint-url http://s3g.internal:9878 cp /tmp/testfile s3://bucket1 --debug 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:42.835" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:42.835" level="INFO">${output} = 2026-02-11 18:28:40,709 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:40,709 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:40.386" endtime="20260211 18:28:42.835"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:42.838" level="INFO">2026-02-11 18:28:40,709 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:40,709 - MainThread - awscli.clidriver - DEBUG - Arguments entered to CLI: ['s3', '--endpoint-url', 'http://s3g.internal:9878', 'cp', '/tmp/testfile', 's3://bucket1', '--debug']
+2026-02-11 18:28:40,709 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function add_scalar_parsers at 0x7f7dbc47a9d0&gt;
+2026-02-11 18:28:40,709 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function register_uri_param_handler at 0x7f7dbcdc7a60&gt;
+2026-02-11 18:28:40,709 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function inject_assume_role_provider_cache at 0x7f7dbca4dca0&gt;
+2026-02-11 18:28:40,711 - MainThread - botocore.utils - DEBUG - IMDS ENDPOINT: http://169.254.169.254/
+2026-02-11 18:28:40,713 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function attach_history_handler at 0x7f7dbc4e5550&gt;
+2026-02-11 18:28:40,713 - MainThread - botocore.hooks - DEBUG - Event building-command-table.s3: calling handler &lt;function add_waiters at 0x7f7dbc41d0d0&gt;
+2026-02-11 18:28:40,713 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3: calling handler &lt;function update_endpoint_url at 0x7f7dbc4fc3a0&gt;
+2026-02-11 18:28:40,713 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.s3.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,713 - MainThread - botocore.hooks - DEBUG - Event building-command-table.cp: calling handler &lt;function add_waiters at 0x7f7dbc41d0d0&gt;
+2026-02-11 18:28:40,714 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3.cp: calling handler &lt;function update_endpoint_url at 0x7f7dbc4fc3a0&gt;
+2026-02-11 18:28:40,715 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.paths: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,715 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.dryrun: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,715 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f7dbca9e730&gt;
+2026-02-11 18:28:40,715 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.quiet: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f7dbca9e730&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.acl: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.follow-symlinks: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f7dbca9e730&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c-key: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,716 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-kms-key-id: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c-copy-source: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c-copy-source-key: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.storage-class: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.grants: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.website-redirect: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-type: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.cache-control: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-disposition: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-encoding: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-language: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,717 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.expires: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.source-region: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.only-show-errors: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f7dbca9e730&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.page-size: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.ignore-glacier-warnings: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f7dbca9e730&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.force-glacier-transfer: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f7dbca9e730&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.request-payer: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.checksum-mode: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,718 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.checksum-algorithm: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,719 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.metadata: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,719 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.metadata-directive: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,719 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.expected-size: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,719 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f7dbc369c40&gt;
+2026-02-11 18:28:40,719 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: env
+2026-02-11 18:28:40,719 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role
+2026-02-11 18:28:40,719 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role-with-web-identity
+2026-02-11 18:28:40,719 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: sso
+2026-02-11 18:28:40,719 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: shared-credentials-file
+2026-02-11 18:28:40,720 - MainThread - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2026-02-11 18:28:40,721 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/endpoints.json
+2026-02-11 18:28:40,747 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/sdk-default-configuration.json
+2026-02-11 18:28:40,747 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7f7dbe0b7b80&gt;
+2026-02-11 18:28:40,754 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.json.gz
+2026-02-11 18:28:40,762 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.sdk-extras.json
+2026-02-11 18:28:40,783 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/endpoint-rule-set-1.json.gz
+2026-02-11 18:28:40,787 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/partitions.json
+2026-02-11 18:28:40,789 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7f7dbd0c6f70&gt;
+2026-02-11 18:28:40,789 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7f7dbd0c6d30&gt;
+2026-02-11 18:28:40,789 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:40,792 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:40,794 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/_retry.json
+2026-02-11 18:28:40,794 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:40,794 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:40,795 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:40,795 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:40,795 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7f7dbe0b7b80&gt;
+2026-02-11 18:28:40,796 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7f7dbd0c6f70&gt;
+2026-02-11 18:28:40,796 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7f7dbd0c6d30&gt;
+2026-02-11 18:28:40,796 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:40,799 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:40,800 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:40,801 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:40,801 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:40,801 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:40,801 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7f7dbe0b7b80&gt;
+2026-02-11 18:28:40,802 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7f7dbd0c6f70&gt;
+2026-02-11 18:28:40,802 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7f7dbd0c6d30&gt;
+2026-02-11 18:28:40,802 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:40,804 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:40,806 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:40,806 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:40,806 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:40,806 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:40,807 - MainThread - awscli.customizations.s3.s3handler - DEBUG - Using a multipart threshold of 8388608 and a part size of 8388608
+2026-02-11 18:28:40,807 - MainThread - s3transfer.utils - DEBUG - Acquiring 0
+2026-02-11 18:28:40,808 - ThreadPoolExecutor-1_0 - s3transfer.tasks - DEBUG - UploadSubmissionTask(transfer_id=0, {'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7f7dbb695100&gt;}) about to wait for the following futures []
+2026-02-11 18:28:40,808 - ThreadPoolExecutor-1_0 - s3transfer.tasks - DEBUG - UploadSubmissionTask(transfer_id=0, {'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7f7dbb695100&gt;}) done waiting for dependent futures
+2026-02-11 18:28:40,808 - ThreadPoolExecutor-1_0 - s3transfer.tasks - DEBUG - Executing task UploadSubmissionTask(transfer_id=0, {'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7f7dbb695100&gt;}) with kwargs {'client': &lt;botocore.client.S3 object at 0x7f7dbb870190&gt;, 'config': &lt;s3transfer.manager.TransferConfig object at 0x7f7dbb6866a0&gt;, 'osutil': &lt;s3transfer.utils.OSUtils object at 0x7f7dbb686730&gt;, 'request_executor': &lt;s3transfer.futures.BoundedExecutor object at 0x7f7dbb686970&gt;, 'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7f7dbb695100&gt;}
+2026-02-11 18:28:40,809 - ThreadPoolExecutor-1_0 - s3transfer.futures - DEBUG - Submitting task PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'testfile', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) to executor &lt;s3transfer.futures.BoundedExecutor object at 0x7f7dbb686970&gt; for transfer request: 0.
+2026-02-11 18:28:40,809 - ThreadPoolExecutor-1_0 - s3transfer.utils - DEBUG - Acquiring 0
+2026-02-11 18:28:40,809 - ThreadPoolExecutor-0_0 - s3transfer.tasks - DEBUG - PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'testfile', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) about to wait for the following futures []
+2026-02-11 18:28:40,809 - ThreadPoolExecutor-0_0 - s3transfer.tasks - DEBUG - PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'testfile', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) done waiting for dependent futures
+2026-02-11 18:28:40,809 - ThreadPoolExecutor-0_0 - s3transfer.tasks - DEBUG - Executing task PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'testfile', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) with kwargs {'client': &lt;botocore.client.S3 object at 0x7f7dbb870190&gt;, 'fileobj': &lt;s3transfer.utils.ReadFileChunk object at 0x7f7dbb695a30&gt;, 'bucket': 'bucket1', 'key': 'testfile', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function validate_ascii_metadata at 0x7f7dbcff00d0&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function sse_md5 at 0x7f7dbcfef4c0&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function convert_body_to_file_like_object at 0x7f7dbcff09d0&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-1_0 - s3transfer.utils - DEBUG - Releasing acquire 0/None
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function validate_bucket_name at 0x7f7dbcfef430&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function remove_bucket_from_url_paths_from_model at 0x7f7dbcff1310&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;bound method S3RegionRedirectorv2.annotate_request_context of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f7dbb715130&gt;&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;bound method ClientCreator._inject_s3_input_parameters of &lt;botocore.client.ClientCreator object at 0x7f7dbb8befa0&gt;&gt;
+2026-02-11 18:28:40,810 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function generate_idempotent_uuid at 0x7f7dbcfef280&gt;
+2026-02-11 18:28:40,811 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function _handle_request_validation_mode_member at 0x7f7dbcff19d0&gt;
+2026-02-11 18:28:40,811 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;function customize_endpoint_resolver_builtins at 0x7f7dbcff14c0&gt;
+2026-02-11 18:28:40,811 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_cache of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f7dbb715130&gt;&gt;
+2026-02-11 18:28:40,811 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Calling endpoint provider with parameters: {'Bucket': 'bucket1', 'Region': 'us-west-1', 'UseFIPS': False, 'UseDualStack': False, 'Endpoint': 'http://s3g.internal:9878', 'ForcePathStyle': False, 'Accelerate': False, 'UseGlobalEndpoint': False, 'Key': 'testfile', 'DisableMultiRegionAccessPoints': False, 'UseArnRegion': True}
+2026-02-11 18:28:40,812 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Endpoint provider result: http://bucket1.s3g.internal:9878
+2026-02-11 18:28:40,812 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Selecting from endpoint provider's list of auth schemes: "sigv4". User selected auth scheme is: "None"
+2026-02-11 18:28:40,812 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Selected auth type "v4" as "v4" with signing context params: {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}
+2026-02-11 18:28:40,812 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function add_expect_header at 0x7f7dbcfef790&gt;
+2026-02-11 18:28:40,812 - ThreadPoolExecutor-0_0 - botocore.handlers - DEBUG - Adding expect 100 continue header to request.
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;bound method S3ExpressIdentityResolver.apply_signing_cache_key of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7f7dbb715100&gt;&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function add_recursion_detection_header at 0x7f7dbcfe7e50&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function add_query_compatibility_header at 0x7f7dbcff1940&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function inject_api_version_header_if_needed at 0x7f7dbcff0af0&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.endpoint - DEBUG - Making request for OperationModel(name=PutObject) with params: {'url_path': '/testfile', 'query_string': {}, 'method': 'PUT', 'headers': {'x-amz-sdk-checksum-algorithm': 'CRC32', 'User-Agent': 'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/N cfg/retry-mode#legacy botocore/1.37.15', 'Expect': '100-continue', 'x-amz-checksum-crc32': '1IXuUQ=='}, 'body': &lt;s3transfer.utils.ReadFileChunk object at 0x7f7dbb695a30&gt;, 'auth_path': '/bucket1/testfile', 'url': 'http://bucket1.s3g.internal:9878/testfile', 'context': {'client_region': 'us-west-1', 'client_config': &lt;botocore.config.Config object at 0x7f7dbb870310&gt;, 'has_streaming_input': True, 'auth_type': 'v4', 'unsigned_payload': None, 's3_redirect': {'redirected': False, 'bucket': 'bucket1', 'params': {'Bucket': 'bucket1', 'Key': 'testfile', 'Body': &lt;s3transfer.utils.ReadFileChunk object at 0x7f7dbb695a30&gt;, 'ChecksumAlgorithm': 'CRC32'}}, 'input_params': {'Bucket': 'bucket1', 'Key': 'testfile'}, 'signing': {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}, 'endpoint_properties': {'authSchemes': [{'disableDoubleEncoding': True, 'name': 'sigv4', 'signingName': 's3', 'signingRegion': 'us-west-1'}]}, 'checksum': {'request_algorithm': {'algorithm': 'crc32', 'in': 'header', 'name': 'x-amz-checksum-crc32'}}}}
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;function signal_not_transferring at 0x7f7dbc71e670&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;bound method RequestSigner.handler of &lt;botocore.signers.RequestSigner object at 0x7f7dbb870280&gt;&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event choose-signer.s3.PutObject: calling handler &lt;function set_operation_specific_signer at 0x7f7dbcfef0d0&gt;
+2026-02-11 18:28:40,813 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-sign.s3.PutObject: calling handler &lt;function remove_arn_from_signing_path at 0x7f7dbcff1430&gt;
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-sign.s3.PutObject: calling handler &lt;function _set_extra_headers_for_unsigned_request at 0x7f7dbcff1a60&gt;
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-sign.s3.PutObject: calling handler &lt;bound method S3ExpressIdentityResolver.resolve_s3express_identity of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7f7dbb715100&gt;&gt;
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - Calculating signature using v4 auth.
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - CanonicalRequest:
+PUT
+/testfile
+
+host:bucket1.s3g.internal:9878
+x-amz-checksum-crc32:1IXuUQ==
+x-amz-content-sha256:44bb2d27a6e00da8dd1c65e0a6dc455c47bc779e5db2ceefe857c0192f598ebc
+x-amz-date:20260211T182840Z
+x-amz-sdk-checksum-algorithm:CRC32
+
+host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm
+44bb2d27a6e00da8dd1c65e0a6dc455c47bc779e5db2ceefe857c0192f598ebc
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - StringToSign:
+AWS4-HMAC-SHA256
+20260211T182840Z
+20260211/us-west-1/s3/aws4_request
+261eb136d835137e6777713d42415b8ad33dd7748b93e63a24b041e786191866
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - Signature:
+5d3b4afabd0095de64f60814b0f031d00cfaa82e313af969e6ee394505f0776d
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;bound method UserAgentString.rebuild_and_replace_user_agent_handler of &lt;botocore.useragent.UserAgentString object at 0x7f7dbb70ca90&gt;&gt;
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;function signal_transferring at 0x7f7dbc71e700&gt;
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;function add_retry_headers at 0x7f7dbcff1280&gt;
+2026-02-11 18:28:40,814 - ThreadPoolExecutor-0_0 - botocore.endpoint - DEBUG - Sending http request: &lt;AWSPreparedRequest stream_output=False, method=PUT, url=http://bucket1.s3g.internal:9878/testfile, headers={'x-amz-sdk-checksum-algorithm': b'CRC32', 'User-Agent': b'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/N cfg/retry-mode#legacy botocore/1.37.15', 'Expect': b'100-continue', 'x-amz-checksum-crc32': b'1IXuUQ==', 'X-Amz-Date': b'20260211T182840Z', 'X-Amz-Content-SHA256': b'44bb2d27a6e00da8dd1c65e0a6dc455c47bc779e5db2ceefe857c0192f598ebc', 'Authorization': b'AWS4-HMAC-SHA256 Credential=testuser/s3g@EXAMPLE.COM/20260211/us-west-1/s3/aws4_request, SignedHeaders=host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm, Signature=5d3b4afabd0095de64f60814b0f031d00cfaa82e313af969e6ee394505f0776d', 'amz-sdk-invocation-id': b'f1c01b45-0d28-4ab5-9453-be32c1563a11', 'amz-sdk-request': b'attempt=1', 'Content-Length': '29'}&gt;
+2026-02-11 18:28:40,815 - ThreadPoolExecutor-0_0 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): bucket1.s3g.internal:9878
+2026-02-11 18:28:40,816 - ThreadPoolExecutor-0_0 - botocore.awsrequest - DEBUG - Waiting for 100 Continue response.
+2026-02-11 18:28:41,148 - ThreadPoolExecutor-0_0 - botocore.awsrequest - DEBUG - 100 Continue response seen, now sending request body.
+2026-02-11 18:28:42,756 - ThreadPoolExecutor-0_0 - urllib3.connectionpool - DEBUG - http://bucket1.s3g.internal:9878 "PUT /testfile HTTP/1.1" 200 0
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parse.s3.PutObject: calling handler &lt;function _handle_200_error at 0x7f7dbcff1790&gt;
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parse.s3.PutObject: calling handler &lt;function handle_expires_header at 0x7f7dbcff15e0&gt;
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.parsers - DEBUG - Response headers: {'Date': 'Wed, 11 Feb 2026 18:28:40 GMT', 'Cache-Control': 'no-cache', 'Expires': 'Wed, 11 Feb 2026 18:28:40 GMT', 'Pragma': 'no-cache', 'Content-Type': 'text/plain;charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'X-XSS-Protection': '1; mode=block', 'X-FRAME-OPTIONS': 'SAMEORIGIN', 'ETag': '"468c03a22b8be862868f1c401ee52673"', 'Server': 'Ozone', 'x-amz-id-2': 'wZBguSZA', 'x-amz-request-id': 'aad01763-e38c-4ef6-a1c5-01bd0e4b5a84', 'Content-Length': '0'}
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.parsers - DEBUG - Response body:
+b''
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event needs-retry.s3.PutObject: calling handler &lt;function _update_status_code at 0x7f7dbcff18b0&gt;
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event needs-retry.s3.PutObject: calling handler &lt;botocore.retryhandler.RetryHandler object at 0x7f7dbb715070&gt;
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.retryhandler - DEBUG - No retry needed.
+2026-02-11 18:28:42,757 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event needs-retry.s3.PutObject: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_error of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f7dbb715130&gt;&gt;
+2026-02-11 18:28:42,758 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event after-call.s3.PutObject: calling handler &lt;function enhance_error_msg at 0x7f7dbc477ee0&gt;
+2026-02-11 18:28:42,758 - ThreadPoolExecutor-0_0 - s3transfer.utils - DEBUG - Releasing acquire 0/None
+Completed 29 Bytes/29 Bytes (14 Bytes/s) with 1 file(s) remaining
+upload: ../../tmp/testfile to s3://bucket1/testfile              
+2026-02-11 18:28:42,759 - Thread-1 - awscli.customizations.s3.results - DEBUG - Shutdown request received in result processing thread, shutting down result thread.</msg>
+<status status="PASS" starttime="20260211 18:28:42.836" endtime="20260211 18:28:42.839"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:42.840" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:42.839" endtime="20260211 18:28:42.840"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:40.385" endtime="20260211 18:28:42.841"/>
+</kw>
+<msg timestamp="20260211 18:28:42.842" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:40.385" endtime="20260211 18:28:42.842"/>
+</kw>
+<msg timestamp="20260211 18:28:42.843" level="INFO">${output} = 2026-02-11 18:28:40,709 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:40,709 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:40.384" endtime="20260211 18:28:42.843"/>
+</kw>
+<msg timestamp="20260211 18:28:42.844" level="INFO">${result} = 2026-02-11 18:28:40,709 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:40,709 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:40.384" endtime="20260211 18:28:42.844"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>url=http://bucket1.s3g.internal:9878/</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:42.845" endtime="20260211 18:28:42.845"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>upload</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:42.845" endtime="20260211 18:28:42.846"/>
+</kw>
+<kw name="Execute AWSS3Cli" library="commonawslib">
+<var>${result}</var>
+<arg>cp /tmp/testfile s3://${BUCKET}/dir1/dir2/file --debug</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3 --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:42.855" level="INFO">Running command 'aws s3 --endpoint-url http://s3g.internal:9878 cp /tmp/testfile s3://bucket1/dir1/dir2/file --debug 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:43.703" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:43.703" level="INFO">${output} = 2026-02-11 18:28:43,247 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:43,247 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:42.850" endtime="20260211 18:28:43.703"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:43.704" level="INFO">2026-02-11 18:28:43,247 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:43,247 - MainThread - awscli.clidriver - DEBUG - Arguments entered to CLI: ['s3', '--endpoint-url', 'http://s3g.internal:9878', 'cp', '/tmp/testfile', 's3://bucket1/dir1/dir2/file', '--debug']
+2026-02-11 18:28:43,247 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function add_scalar_parsers at 0x7fad0368e9d0&gt;
+2026-02-11 18:28:43,247 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function register_uri_param_handler at 0x7fad03fdaa60&gt;
+2026-02-11 18:28:43,247 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function inject_assume_role_provider_cache at 0x7fad03c63ca0&gt;
+2026-02-11 18:28:43,249 - MainThread - botocore.utils - DEBUG - IMDS ENDPOINT: http://169.254.169.254/
+2026-02-11 18:28:43,251 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function attach_history_handler at 0x7fad036f9550&gt;
+2026-02-11 18:28:43,251 - MainThread - botocore.hooks - DEBUG - Event building-command-table.s3: calling handler &lt;function add_waiters at 0x7fad0362d0d0&gt;
+2026-02-11 18:28:43,251 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3: calling handler &lt;function update_endpoint_url at 0x7fad0370f3a0&gt;
+2026-02-11 18:28:43,252 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.s3.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,252 - MainThread - botocore.hooks - DEBUG - Event building-command-table.cp: calling handler &lt;function add_waiters at 0x7fad0362d0d0&gt;
+2026-02-11 18:28:43,252 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3.cp: calling handler &lt;function update_endpoint_url at 0x7fad0370f3a0&gt;
+2026-02-11 18:28:43,253 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.paths: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.dryrun: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7fad03cb2730&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.quiet: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7fad03cb2730&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.acl: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.follow-symlinks: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7fad03cb2730&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,254 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c-key: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-kms-key-id: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c-copy-source: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.sse-c-copy-source-key: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.storage-class: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.grants: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.website-redirect: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-type: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.cache-control: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-disposition: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,255 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-encoding: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.content-language: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.expires: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.source-region: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.only-show-errors: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7fad03cb2730&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.page-size: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.ignore-glacier-warnings: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7fad03cb2730&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.force-glacier-transfer: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.cp: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7fad03cb2730&gt;
+2026-02-11 18:28:43,256 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.request-payer: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.checksum-mode: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.checksum-algorithm: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.metadata: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.metadata-directive: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.expected-size: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.cp.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7fad0357dc40&gt;
+2026-02-11 18:28:43,257 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: env
+2026-02-11 18:28:43,257 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role
+2026-02-11 18:28:43,257 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role-with-web-identity
+2026-02-11 18:28:43,257 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: sso
+2026-02-11 18:28:43,257 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: shared-credentials-file
+2026-02-11 18:28:43,258 - MainThread - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2026-02-11 18:28:43,259 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/endpoints.json
+2026-02-11 18:28:43,284 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/sdk-default-configuration.json
+2026-02-11 18:28:43,284 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7fad052cbb80&gt;
+2026-02-11 18:28:43,291 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.json.gz
+2026-02-11 18:28:43,299 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.sdk-extras.json
+2026-02-11 18:28:43,322 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/endpoint-rule-set-1.json.gz
+2026-02-11 18:28:43,326 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/partitions.json
+2026-02-11 18:28:43,328 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7fad042daf70&gt;
+2026-02-11 18:28:43,328 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7fad042dad30&gt;
+2026-02-11 18:28:43,328 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:43,331 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:43,333 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/_retry.json
+2026-02-11 18:28:43,333 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:43,333 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:43,333 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:43,333 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:43,334 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7fad052cbb80&gt;
+2026-02-11 18:28:43,335 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7fad042daf70&gt;
+2026-02-11 18:28:43,335 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7fad042dad30&gt;
+2026-02-11 18:28:43,335 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:43,338 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:43,339 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:43,339 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:43,340 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:43,340 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:43,340 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7fad052cbb80&gt;
+2026-02-11 18:28:43,341 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7fad042daf70&gt;
+2026-02-11 18:28:43,341 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7fad042dad30&gt;
+2026-02-11 18:28:43,341 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:43,343 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:43,344 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:43,345 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:43,345 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:43,345 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:43,345 - MainThread - awscli.customizations.s3.s3handler - DEBUG - Using a multipart threshold of 8388608 and a part size of 8388608
+2026-02-11 18:28:43,347 - MainThread - s3transfer.utils - DEBUG - Acquiring 0
+2026-02-11 18:28:43,347 - ThreadPoolExecutor-1_0 - s3transfer.tasks - DEBUG - UploadSubmissionTask(transfer_id=0, {'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7fad028aa100&gt;}) about to wait for the following futures []
+2026-02-11 18:28:43,347 - ThreadPoolExecutor-1_0 - s3transfer.tasks - DEBUG - UploadSubmissionTask(transfer_id=0, {'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7fad028aa100&gt;}) done waiting for dependent futures
+2026-02-11 18:28:43,347 - ThreadPoolExecutor-1_0 - s3transfer.tasks - DEBUG - Executing task UploadSubmissionTask(transfer_id=0, {'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7fad028aa100&gt;}) with kwargs {'client': &lt;botocore.client.S3 object at 0x7fad02a84190&gt;, 'config': &lt;s3transfer.manager.TransferConfig object at 0x7fad0289b6a0&gt;, 'osutil': &lt;s3transfer.utils.OSUtils object at 0x7fad0289b730&gt;, 'request_executor': &lt;s3transfer.futures.BoundedExecutor object at 0x7fad0289b970&gt;, 'transfer_future': &lt;s3transfer.futures.TransferFuture object at 0x7fad028aa100&gt;}
+2026-02-11 18:28:43,348 - ThreadPoolExecutor-1_0 - s3transfer.futures - DEBUG - Submitting task PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'dir1/dir2/file', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) to executor &lt;s3transfer.futures.BoundedExecutor object at 0x7fad0289b970&gt; for transfer request: 0.
+2026-02-11 18:28:43,348 - ThreadPoolExecutor-1_0 - s3transfer.utils - DEBUG - Acquiring 0
+2026-02-11 18:28:43,348 - ThreadPoolExecutor-0_0 - s3transfer.tasks - DEBUG - PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'dir1/dir2/file', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) about to wait for the following futures []
+2026-02-11 18:28:43,348 - ThreadPoolExecutor-0_0 - s3transfer.tasks - DEBUG - PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'dir1/dir2/file', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) done waiting for dependent futures
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - s3transfer.tasks - DEBUG - Executing task PutObjectTask(transfer_id=0, {'bucket': 'bucket1', 'key': 'dir1/dir2/file', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}) with kwargs {'client': &lt;botocore.client.S3 object at 0x7fad02a84190&gt;, 'fileobj': &lt;s3transfer.utils.ReadFileChunk object at 0x7fad028aaa30&gt;, 'bucket': 'bucket1', 'key': 'dir1/dir2/file', 'extra_args': {'ChecksumAlgorithm': 'CRC32'}}
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function validate_ascii_metadata at 0x7fad042040d0&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function sse_md5 at 0x7fad042034c0&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function convert_body_to_file_like_object at 0x7fad042049d0&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function validate_bucket_name at 0x7fad04203430&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function remove_bucket_from_url_paths_from_model at 0x7fad04205310&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;bound method S3RegionRedirectorv2.annotate_request_context of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7fad02929130&gt;&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;bound method ClientCreator._inject_s3_input_parameters of &lt;botocore.client.ClientCreator object at 0x7fad02ad2fa0&gt;&gt;
+2026-02-11 18:28:43,349 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function generate_idempotent_uuid at 0x7fad04203280&gt;
+2026-02-11 18:28:43,350 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parameter-build.s3.PutObject: calling handler &lt;function _handle_request_validation_mode_member at 0x7fad042059d0&gt;
+2026-02-11 18:28:43,350 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;function customize_endpoint_resolver_builtins at 0x7fad042054c0&gt;
+2026-02-11 18:28:43,350 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_cache of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7fad02929130&gt;&gt;
+2026-02-11 18:28:43,350 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Calling endpoint provider with parameters: {'Bucket': 'bucket1', 'Region': 'us-west-1', 'UseFIPS': False, 'UseDualStack': False, 'Endpoint': 'http://s3g.internal:9878', 'ForcePathStyle': False, 'Accelerate': False, 'UseGlobalEndpoint': False, 'Key': 'dir1/dir2/file', 'DisableMultiRegionAccessPoints': False, 'UseArnRegion': True}
+2026-02-11 18:28:43,351 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Endpoint provider result: http://bucket1.s3g.internal:9878
+2026-02-11 18:28:43,351 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Selecting from endpoint provider's list of auth schemes: "sigv4". User selected auth scheme is: "None"
+2026-02-11 18:28:43,351 - ThreadPoolExecutor-0_0 - botocore.regions - DEBUG - Selected auth type "v4" as "v4" with signing context params: {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}
+2026-02-11 18:28:43,351 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function add_expect_header at 0x7fad04203790&gt;
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.handlers - DEBUG - Adding expect 100 continue header to request.
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;bound method S3ExpressIdentityResolver.apply_signing_cache_key of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7fad02929100&gt;&gt;
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function add_recursion_detection_header at 0x7fad041fbe50&gt;
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function add_query_compatibility_header at 0x7fad04205940&gt;
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-call.s3.PutObject: calling handler &lt;function inject_api_version_header_if_needed at 0x7fad04204af0&gt;
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-1_0 - s3transfer.utils - DEBUG - Releasing acquire 0/None
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.endpoint - DEBUG - Making request for OperationModel(name=PutObject) with params: {'url_path': '/dir1/dir2/file', 'query_string': {}, 'method': 'PUT', 'headers': {'x-amz-sdk-checksum-algorithm': 'CRC32', 'User-Agent': 'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/N cfg/retry-mode#legacy botocore/1.37.15', 'Expect': '100-continue', 'x-amz-checksum-crc32': '1IXuUQ=='}, 'body': &lt;s3transfer.utils.ReadFileChunk object at 0x7fad028aaa30&gt;, 'auth_path': '/bucket1/dir1/dir2/file', 'url': 'http://bucket1.s3g.internal:9878/dir1/dir2/file', 'context': {'client_region': 'us-west-1', 'client_config': &lt;botocore.config.Config object at 0x7fad02a84310&gt;, 'has_streaming_input': True, 'auth_type': 'v4', 'unsigned_payload': None, 's3_redirect': {'redirected': False, 'bucket': 'bucket1', 'params': {'Bucket': 'bucket1', 'Key': 'dir1/dir2/file', 'Body': &lt;s3transfer.utils.ReadFileChunk object at 0x7fad028aaa30&gt;, 'ChecksumAlgorithm': 'CRC32'}}, 'input_params': {'Bucket': 'bucket1', 'Key': 'dir1/dir2/file'}, 'signing': {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}, 'endpoint_properties': {'authSchemes': [{'disableDoubleEncoding': True, 'name': 'sigv4', 'signingName': 's3', 'signingRegion': 'us-west-1'}]}, 'checksum': {'request_algorithm': {'algorithm': 'crc32', 'in': 'header', 'name': 'x-amz-checksum-crc32'}}}}
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;function signal_not_transferring at 0x7fad03932670&gt;
+2026-02-11 18:28:43,352 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;bound method RequestSigner.handler of &lt;botocore.signers.RequestSigner object at 0x7fad02a84280&gt;&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event choose-signer.s3.PutObject: calling handler &lt;function set_operation_specific_signer at 0x7fad042030d0&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-sign.s3.PutObject: calling handler &lt;function remove_arn_from_signing_path at 0x7fad04205430&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-sign.s3.PutObject: calling handler &lt;function _set_extra_headers_for_unsigned_request at 0x7fad04205a60&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-sign.s3.PutObject: calling handler &lt;bound method S3ExpressIdentityResolver.resolve_s3express_identity of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7fad02929100&gt;&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - Calculating signature using v4 auth.
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - CanonicalRequest:
+PUT
+/dir1/dir2/file
+
+host:bucket1.s3g.internal:9878
+x-amz-checksum-crc32:1IXuUQ==
+x-amz-content-sha256:44bb2d27a6e00da8dd1c65e0a6dc455c47bc779e5db2ceefe857c0192f598ebc
+x-amz-date:20260211T182843Z
+x-amz-sdk-checksum-algorithm:CRC32
+
+host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm
+44bb2d27a6e00da8dd1c65e0a6dc455c47bc779e5db2ceefe857c0192f598ebc
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - StringToSign:
+AWS4-HMAC-SHA256
+20260211T182843Z
+20260211/us-west-1/s3/aws4_request
+ce15194f57269158b2072a183da29ec1195ca1fabe83af5806a8a936475574b8
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.auth - DEBUG - Signature:
+86d84f3cb569f0b8401cbda76a93649832b23a388adc6eaf891291b49a78c763
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;bound method UserAgentString.rebuild_and_replace_user_agent_handler of &lt;botocore.useragent.UserAgentString object at 0x7fad0291fa90&gt;&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;function signal_transferring at 0x7fad03932700&gt;
+2026-02-11 18:28:43,353 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event request-created.s3.PutObject: calling handler &lt;function add_retry_headers at 0x7fad04205280&gt;
+2026-02-11 18:28:43,354 - ThreadPoolExecutor-0_0 - botocore.endpoint - DEBUG - Sending http request: &lt;AWSPreparedRequest stream_output=False, method=PUT, url=http://bucket1.s3g.internal:9878/dir1/dir2/file, headers={'x-amz-sdk-checksum-algorithm': b'CRC32', 'User-Agent': b'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/N cfg/retry-mode#legacy botocore/1.37.15', 'Expect': b'100-continue', 'x-amz-checksum-crc32': b'1IXuUQ==', 'X-Amz-Date': b'20260211T182843Z', 'X-Amz-Content-SHA256': b'44bb2d27a6e00da8dd1c65e0a6dc455c47bc779e5db2ceefe857c0192f598ebc', 'Authorization': b'AWS4-HMAC-SHA256 Credential=testuser/s3g@EXAMPLE.COM/20260211/us-west-1/s3/aws4_request, SignedHeaders=host;x-amz-checksum-crc32;x-amz-content-sha256;x-amz-date;x-amz-sdk-checksum-algorithm, Signature=86d84f3cb569f0b8401cbda76a93649832b23a388adc6eaf891291b49a78c763', 'amz-sdk-invocation-id': b'5be04ab4-c132-4d9d-b3a6-9758273b126b', 'amz-sdk-request': b'attempt=1', 'Content-Length': '29'}&gt;
+2026-02-11 18:28:43,354 - ThreadPoolExecutor-0_0 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): bucket1.s3g.internal:9878
+2026-02-11 18:28:43,355 - ThreadPoolExecutor-0_0 - botocore.awsrequest - DEBUG - Waiting for 100 Continue response.
+2026-02-11 18:28:43,400 - ThreadPoolExecutor-0_0 - botocore.awsrequest - DEBUG - 100 Continue response seen, now sending request body.
+2026-02-11 18:28:43,640 - ThreadPoolExecutor-0_0 - urllib3.connectionpool - DEBUG - http://bucket1.s3g.internal:9878 "PUT /dir1/dir2/file HTTP/1.1" 200 0
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parse.s3.PutObject: calling handler &lt;function _handle_200_error at 0x7fad04205790&gt;
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event before-parse.s3.PutObject: calling handler &lt;function handle_expires_header at 0x7fad042055e0&gt;
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.parsers - DEBUG - Response headers: {'Date': 'Wed, 11 Feb 2026 18:28:43 GMT', 'Cache-Control': 'no-cache', 'Expires': 'Wed, 11 Feb 2026 18:28:43 GMT', 'Pragma': 'no-cache', 'Content-Type': 'text/plain;charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'X-XSS-Protection': '1; mode=block', 'X-FRAME-OPTIONS': 'SAMEORIGIN', 'ETag': '"468c03a22b8be862868f1c401ee52673"', 'Server': 'Ozone', 'x-amz-id-2': 'wf258rnsWrNj', 'x-amz-request-id': '786d50d9-43ff-46d7-bf2f-44a8a2f847ae', 'Content-Length': '0'}
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.parsers - DEBUG - Response body:
+b''
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event needs-retry.s3.PutObject: calling handler &lt;function _update_status_code at 0x7fad042058b0&gt;
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event needs-retry.s3.PutObject: calling handler &lt;botocore.retryhandler.RetryHandler object at 0x7fad02929070&gt;
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.retryhandler - DEBUG - No retry needed.
+2026-02-11 18:28:43,641 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event needs-retry.s3.PutObject: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_error of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7fad02929130&gt;&gt;
+2026-02-11 18:28:43,642 - ThreadPoolExecutor-0_0 - botocore.hooks - DEBUG - Event after-call.s3.PutObject: calling handler &lt;function enhance_error_msg at 0x7fad0368bee0&gt;
+2026-02-11 18:28:43,642 - ThreadPoolExecutor-0_0 - s3transfer.utils - DEBUG - Releasing acquire 0/None
+Completed 29 Bytes/29 Bytes (99 Bytes/s) with 1 file(s) remaining
+upload: ../../tmp/testfile to s3://bucket1/dir1/dir2/file        
+2026-02-11 18:28:43,642 - Thread-1 - awscli.customizations.s3.results - DEBUG - Shutdown request received in result processing thread, shutting down result thread.</msg>
+<status status="PASS" starttime="20260211 18:28:43.704" endtime="20260211 18:28:43.705"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:43.705" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:43.705" endtime="20260211 18:28:43.705"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:42.848" endtime="20260211 18:28:43.705"/>
+</kw>
+<msg timestamp="20260211 18:28:43.706" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:42.848" endtime="20260211 18:28:43.706"/>
+</kw>
+<msg timestamp="20260211 18:28:43.706" level="INFO">${output} = 2026-02-11 18:28:43,247 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:43,247 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:42.847" endtime="20260211 18:28:43.706"/>
+</kw>
+<msg timestamp="20260211 18:28:43.706" level="INFO">${result} = 2026-02-11 18:28:43,247 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:43,247 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:42.846" endtime="20260211 18:28:43.707"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>url=http://bucket1.s3g.internal:9878/dir1/dir2/file</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:43.707" endtime="20260211 18:28:43.707"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>upload</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:43.707" endtime="20260211 18:28:43.707"/>
+</kw>
+<kw name="Execute AWSS3Cli" library="commonawslib">
+<var>${result}</var>
+<arg>ls s3://${BUCKET} --debug</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3 --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:43.711" level="INFO">Running command 'aws s3 --endpoint-url http://s3g.internal:9878 ls s3://bucket1 --debug 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:44.457" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:44.457" level="INFO">${output} = 2026-02-11 18:28:44,065 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,066 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:43.709" endtime="20260211 18:28:44.457"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:44.459" level="INFO">2026-02-11 18:28:44,065 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,066 - MainThread - awscli.clidriver - DEBUG - Arguments entered to CLI: ['s3', '--endpoint-url', 'http://s3g.internal:9878', 'ls', 's3://bucket1', '--debug']
+2026-02-11 18:28:44,066 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function add_scalar_parsers at 0x7f5a3e0099d0&gt;
+2026-02-11 18:28:44,066 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function register_uri_param_handler at 0x7f5a3e955a60&gt;
+2026-02-11 18:28:44,066 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function inject_assume_role_provider_cache at 0x7f5a3e5dcca0&gt;
+2026-02-11 18:28:44,068 - MainThread - botocore.utils - DEBUG - IMDS ENDPOINT: http://169.254.169.254/
+2026-02-11 18:28:44,069 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function attach_history_handler at 0x7f5a3e073550&gt;
+2026-02-11 18:28:44,070 - MainThread - botocore.hooks - DEBUG - Event building-command-table.s3: calling handler &lt;function add_waiters at 0x7f5a3dfac0d0&gt;
+2026-02-11 18:28:44,070 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3: calling handler &lt;function update_endpoint_url at 0x7f5a3e08a3a0&gt;
+2026-02-11 18:28:44,070 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.s3.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,070 - MainThread - botocore.hooks - DEBUG - Event building-command-table.ls: calling handler &lt;function add_waiters at 0x7f5a3dfac0d0&gt;
+2026-02-11 18:28:44,070 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3.ls: calling handler &lt;function update_endpoint_url at 0x7f5a3e08a3a0&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.paths: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.page-size: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.human-readable: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.ls: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f5a3e62d730&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.summarize: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,071 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.ls: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f5a3e62d730&gt;
+2026-02-11 18:28:44,072 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.request-payer: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,072 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.bucket-name-prefix: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,072 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.bucket-region: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f5a3def8c70&gt;
+2026-02-11 18:28:44,072 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: env
+2026-02-11 18:28:44,072 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role
+2026-02-11 18:28:44,072 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role-with-web-identity
+2026-02-11 18:28:44,072 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: sso
+2026-02-11 18:28:44,072 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: shared-credentials-file
+2026-02-11 18:28:44,072 - MainThread - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2026-02-11 18:28:44,074 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/endpoints.json
+2026-02-11 18:28:44,099 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/sdk-default-configuration.json
+2026-02-11 18:28:44,099 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7f5a3fc46b80&gt;
+2026-02-11 18:28:44,106 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.json.gz
+2026-02-11 18:28:44,114 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.sdk-extras.json
+2026-02-11 18:28:44,135 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/endpoint-rule-set-1.json.gz
+2026-02-11 18:28:44,139 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/partitions.json
+2026-02-11 18:28:44,141 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7f5a3ec55f70&gt;
+2026-02-11 18:28:44,141 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7f5a3ec55d30&gt;
+2026-02-11 18:28:44,142 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:44,144 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:44,146 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/_retry.json
+2026-02-11 18:28:44,146 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:44,147 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:44,147 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:44,147 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:44,162 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/paginators-1.json
+2026-02-11 18:28:44,163 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/paginators-1.sdk-extras.json
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function set_list_objects_encoding_type_url at 0x7f5a3eb7f700&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function validate_bucket_name at 0x7f5a3eb7e430&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function remove_bucket_from_url_paths_from_model at 0x7f5a3eb80310&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;bound method S3RegionRedirectorv2.annotate_request_context of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f5a3d48f5e0&gt;&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;bound method ClientCreator._inject_s3_input_parameters of &lt;botocore.client.ClientCreator object at 0x7f5a3e5bb280&gt;&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function generate_idempotent_uuid at 0x7f5a3eb7e280&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function _handle_request_validation_mode_member at 0x7f5a3eb809d0&gt;
+2026-02-11 18:28:44,163 - MainThread - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;function customize_endpoint_resolver_builtins at 0x7f5a3eb804c0&gt;
+2026-02-11 18:28:44,164 - MainThread - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_cache of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f5a3d48f5e0&gt;&gt;
+2026-02-11 18:28:44,164 - MainThread - botocore.regions - DEBUG - Calling endpoint provider with parameters: {'Bucket': 'bucket1', 'Region': 'us-west-1', 'UseFIPS': False, 'UseDualStack': False, 'Endpoint': 'http://s3g.internal:9878', 'ForcePathStyle': False, 'Accelerate': False, 'UseGlobalEndpoint': False, 'Prefix': '', 'DisableMultiRegionAccessPoints': False, 'UseArnRegion': True}
+2026-02-11 18:28:44,165 - MainThread - botocore.regions - DEBUG - Endpoint provider result: http://bucket1.s3g.internal:9878
+2026-02-11 18:28:44,165 - MainThread - botocore.regions - DEBUG - Selecting from endpoint provider's list of auth schemes: "sigv4". User selected auth scheme is: "None"
+2026-02-11 18:28:44,165 - MainThread - botocore.regions - DEBUG - Selected auth type "v4" as "v4" with signing context params: {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}
+2026-02-11 18:28:44,165 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function add_expect_header at 0x7f5a3eb7e790&gt;
+2026-02-11 18:28:44,165 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;bound method S3ExpressIdentityResolver.apply_signing_cache_key of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7f5a3d48f5b0&gt;&gt;
+2026-02-11 18:28:44,165 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function add_recursion_detection_header at 0x7f5a3eb76e50&gt;
+2026-02-11 18:28:44,165 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function add_query_compatibility_header at 0x7f5a3eb80940&gt;
+2026-02-11 18:28:44,165 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function inject_api_version_header_if_needed at 0x7f5a3eb7faf0&gt;
+2026-02-11 18:28:44,165 - MainThread - botocore.endpoint - DEBUG - Making request for OperationModel(name=ListObjectsV2) with params: {'url_path': '?list-type=2', 'query_string': {'prefix': '', 'delimiter': '/', 'encoding-type': 'url'}, 'method': 'GET', 'headers': {'User-Agent': 'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/C,N cfg/retry-mode#legacy botocore/1.37.15'}, 'body': b'', 'auth_path': '/bucket1/', 'url': 'http://bucket1.s3g.internal:9878/?list-type=2&amp;prefix=&amp;delimiter=%2F&amp;encoding-type=url', 'context': {'client_region': 'us-west-1', 'client_config': &lt;botocore.config.Config object at 0x7f5a3d5157f0&gt;, 'has_streaming_input': False, 'auth_type': 'v4', 'unsigned_payload': None, 'encoding_type_auto_set': True, 's3_redirect': {'redirected': False, 'bucket': 'bucket1', 'params': {'Bucket': 'bucket1', 'Prefix': '', 'Delimiter': '/', 'EncodingType': 'url'}}, 'input_params': {'Bucket': 'bucket1', 'Prefix': ''}, 'signing': {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}, 'endpoint_properties': {'authSchemes': [{'disableDoubleEncoding': True, 'name': 'sigv4', 'signingName': 's3', 'signingRegion': 'us-west-1'}]}}}
+2026-02-11 18:28:44,166 - MainThread - botocore.hooks - DEBUG - Event request-created.s3.ListObjectsV2: calling handler &lt;bound method RequestSigner.handler of &lt;botocore.signers.RequestSigner object at 0x7f5a3d515640&gt;&gt;
+2026-02-11 18:28:44,166 - MainThread - botocore.hooks - DEBUG - Event choose-signer.s3.ListObjectsV2: calling handler &lt;function set_operation_specific_signer at 0x7f5a3eb7e0d0&gt;
+2026-02-11 18:28:44,166 - MainThread - botocore.hooks - DEBUG - Event before-sign.s3.ListObjectsV2: calling handler &lt;function remove_arn_from_signing_path at 0x7f5a3eb80430&gt;
+2026-02-11 18:28:44,166 - MainThread - botocore.hooks - DEBUG - Event before-sign.s3.ListObjectsV2: calling handler &lt;function _set_extra_headers_for_unsigned_request at 0x7f5a3eb80a60&gt;
+2026-02-11 18:28:44,166 - MainThread - botocore.hooks - DEBUG - Event before-sign.s3.ListObjectsV2: calling handler &lt;bound method S3ExpressIdentityResolver.resolve_s3express_identity of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7f5a3d48f5b0&gt;&gt;
+2026-02-11 18:28:44,166 - MainThread - botocore.auth - DEBUG - Calculating signature using v4 auth.
+2026-02-11 18:28:44,167 - MainThread - botocore.auth - DEBUG - CanonicalRequest:
+GET
+/
+delimiter=%2F&amp;encoding-type=url&amp;list-type=2&amp;prefix=
+host:bucket1.s3g.internal:9878
+x-amz-content-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+x-amz-date:20260211T182844Z
+
+host;x-amz-content-sha256;x-amz-date
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2026-02-11 18:28:44,167 - MainThread - botocore.auth - DEBUG - StringToSign:
+AWS4-HMAC-SHA256
+20260211T182844Z
+20260211/us-west-1/s3/aws4_request
+e1750d4c5f9e2fa779235fa17421659723eb2c3fa237fb74e07827df7ec23c1f
+2026-02-11 18:28:44,167 - MainThread - botocore.auth - DEBUG - Signature:
+bdd3f0668e1d393a3f38e60792d3bf965a5c1b1c7302fae2368e10902804e8c5
+2026-02-11 18:28:44,167 - MainThread - botocore.hooks - DEBUG - Event request-created.s3.ListObjectsV2: calling handler &lt;bound method UserAgentString.rebuild_and_replace_user_agent_handler of &lt;botocore.useragent.UserAgentString object at 0x7f5a3d47ff40&gt;&gt;
+2026-02-11 18:28:44,167 - MainThread - botocore.hooks - DEBUG - Event request-created.s3.ListObjectsV2: calling handler &lt;function add_retry_headers at 0x7f5a3eb80280&gt;
+2026-02-11 18:28:44,167 - MainThread - botocore.endpoint - DEBUG - Sending http request: &lt;AWSPreparedRequest stream_output=False, method=GET, url=http://bucket1.s3g.internal:9878/?list-type=2&amp;prefix=&amp;delimiter=%2F&amp;encoding-type=url, headers={'User-Agent': b'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/C,N cfg/retry-mode#legacy botocore/1.37.15', 'X-Amz-Date': b'20260211T182844Z', 'X-Amz-Content-SHA256': b'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization': b'AWS4-HMAC-SHA256 Credential=testuser/s3g@EXAMPLE.COM/20260211/us-west-1/s3/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=bdd3f0668e1d393a3f38e60792d3bf965a5c1b1c7302fae2368e10902804e8c5', 'amz-sdk-invocation-id': b'1c256ba0-84a2-4c4f-a507-3ae2ecfc69c3', 'amz-sdk-request': b'attempt=1'}&gt;
+2026-02-11 18:28:44,168 - MainThread - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): bucket1.s3g.internal:9878
+2026-02-11 18:28:44,407 - MainThread - urllib3.connectionpool - DEBUG - http://bucket1.s3g.internal:9878 "GET /?list-type=2&amp;prefix=&amp;delimiter=%2F&amp;encoding-type=url HTTP/1.1" 200 680
+2026-02-11 18:28:44,407 - MainThread - botocore.hooks - DEBUG - Event before-parse.s3.ListObjectsV2: calling handler &lt;function _handle_200_error at 0x7f5a3eb80790&gt;
+2026-02-11 18:28:44,407 - MainThread - botocore.hooks - DEBUG - Event before-parse.s3.ListObjectsV2: calling handler &lt;function handle_expires_header at 0x7f5a3eb805e0&gt;
+2026-02-11 18:28:44,408 - MainThread - botocore.parsers - DEBUG - Response headers: {'Date': 'Wed, 11 Feb 2026 18:28:44 GMT', 'Cache-Control': 'no-cache', 'Expires': 'Wed, 11 Feb 2026 18:28:44 GMT', 'Pragma': 'no-cache', 'Content-Type': 'application/xml', 'X-Content-Type-Options': 'nosniff', 'X-XSS-Protection': '1; mode=block', 'X-FRAME-OPTIONS': 'SAMEORIGIN', 'Server': 'Ozone', 'x-amz-id-2': 'Fa7SekREMiiIga', 'x-amz-request-id': '41dd7e0b-8b35-4677-9c9f-1cd6d8697361', 'Content-Length': '680'}
+2026-02-11 18:28:44,408 - MainThread - botocore.parsers - DEBUG - Response body:
+b'&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"&gt;&lt;Name&gt;bucket1&lt;/Name&gt;&lt;Marker&gt;&lt;/Marker&gt;&lt;MaxKeys&gt;1000&lt;/MaxKeys&gt;&lt;KeyCount&gt;2&lt;/KeyCount&gt;&lt;Delimiter&gt;/&lt;/Delimiter&gt;&lt;EncodingType&gt;url&lt;/EncodingType&gt;&lt;IsTruncated&gt;false&lt;/IsTruncated&gt;&lt;Contents&gt;&lt;Key&gt;testfile&lt;/Key&gt;&lt;Owner&gt;&lt;DisplayName&gt;testuser&lt;/DisplayName&gt;&lt;ID&gt;bb2bd7ca4a327f84e6cd3979f8fa3828a50a08893c1b68f9d6715352c8d07b93&lt;/ID&gt;&lt;/Owner&gt;&lt;LastModified&gt;2026-02-11T18:28:42.729Z&lt;/LastModified&gt;&lt;ETag&gt;"468c03a22b8be862868f1c401ee52673"&lt;/ETag&gt;&lt;Size&gt;29&lt;/Size&gt;&lt;StorageClass&gt;STANDARD&lt;/StorageClass&gt;&lt;/Contents&gt;&lt;CommonPrefixes&gt;&lt;Prefix&gt;dir1/&lt;/Prefix&gt;&lt;/CommonPrefixes&gt;&lt;/ListBucketResult&gt;'
+2026-02-11 18:28:44,408 - MainThread - botocore.hooks - DEBUG - Event needs-retry.s3.ListObjectsV2: calling handler &lt;function _update_status_code at 0x7f5a3eb808b0&gt;
+2026-02-11 18:28:44,408 - MainThread - botocore.hooks - DEBUG - Event needs-retry.s3.ListObjectsV2: calling handler &lt;botocore.retryhandler.RetryHandler object at 0x7f5a3d48f520&gt;
+2026-02-11 18:28:44,409 - MainThread - botocore.retryhandler - DEBUG - No retry needed.
+2026-02-11 18:28:44,409 - MainThread - botocore.hooks - DEBUG - Event needs-retry.s3.ListObjectsV2: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_error of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f5a3d48f5e0&gt;&gt;
+2026-02-11 18:28:44,409 - MainThread - botocore.hooks - DEBUG - Event after-call.s3.ListObjectsV2: calling handler &lt;function decode_list_object_v2 at 0x7f5a3eb7f820&gt;
+2026-02-11 18:28:44,409 - MainThread - botocore.hooks - DEBUG - Event after-call.s3.ListObjectsV2: calling handler &lt;function enhance_error_msg at 0x7f5a3e006ee0&gt;
+                           PRE dir1/
+2026-02-11 18:28:42         29 testfile</msg>
+<status status="PASS" starttime="20260211 18:28:44.458" endtime="20260211 18:28:44.459"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:44.459" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:44.459" endtime="20260211 18:28:44.459"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:43.708" endtime="20260211 18:28:44.460"/>
+</kw>
+<msg timestamp="20260211 18:28:44.460" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:43.708" endtime="20260211 18:28:44.460"/>
+</kw>
+<msg timestamp="20260211 18:28:44.460" level="INFO">${output} = 2026-02-11 18:28:44,065 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,066 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:43.708" endtime="20260211 18:28:44.460"/>
+</kw>
+<msg timestamp="20260211 18:28:44.460" level="INFO">${result} = 2026-02-11 18:28:44,065 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,066 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:43.707" endtime="20260211 18:28:44.460"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>url=http://bucket1.s3g.internal:9878/</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.460" endtime="20260211 18:28:44.461"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>testfile</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.461" endtime="20260211 18:28:44.461"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>dir1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.461" endtime="20260211 18:28:44.461"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>dir2</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.461" endtime="20260211 18:28:44.462"/>
+</kw>
+<kw name="Execute AWSS3Cli" library="commonawslib">
+<var>${result}</var>
+<arg>ls s3://${BUCKET}/dir1/ --debug</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3 --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:44.465" level="INFO">Running command 'aws s3 --endpoint-url http://s3g.internal:9878 ls s3://bucket1/dir1/ --debug 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:44.965" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:44.965" level="INFO">${output} = 2026-02-11 18:28:44,785 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,785 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:44.463" endtime="20260211 18:28:44.965"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:44.966" level="INFO">2026-02-11 18:28:44,785 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,785 - MainThread - awscli.clidriver - DEBUG - Arguments entered to CLI: ['s3', '--endpoint-url', 'http://s3g.internal:9878', 'ls', 's3://bucket1/dir1/', '--debug']
+2026-02-11 18:28:44,786 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function add_scalar_parsers at 0x7f02385009d0&gt;
+2026-02-11 18:28:44,786 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function register_uri_param_handler at 0x7f0238e4da60&gt;
+2026-02-11 18:28:44,786 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function inject_assume_role_provider_cache at 0x7f0238ad4ca0&gt;
+2026-02-11 18:28:44,787 - MainThread - botocore.utils - DEBUG - IMDS ENDPOINT: http://169.254.169.254/
+2026-02-11 18:28:44,790 - MainThread - botocore.hooks - DEBUG - Event session-initialized: calling handler &lt;function attach_history_handler at 0x7f023856b550&gt;
+2026-02-11 18:28:44,790 - MainThread - botocore.hooks - DEBUG - Event building-command-table.s3: calling handler &lt;function add_waiters at 0x7f02384a00d0&gt;
+2026-02-11 18:28:44,790 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3: calling handler &lt;function update_endpoint_url at 0x7f02385823a0&gt;
+2026-02-11 18:28:44,790 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.s3.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,790 - MainThread - botocore.hooks - DEBUG - Event building-command-table.ls: calling handler &lt;function add_waiters at 0x7f02384a00d0&gt;
+2026-02-11 18:28:44,790 - MainThread - botocore.hooks - DEBUG - Event before-building-argument-table-parser.s3.ls: calling handler &lt;function update_endpoint_url at 0x7f02385823a0&gt;
+2026-02-11 18:28:44,791 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.paths: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,791 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.anonymous: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,791 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.page-size: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,791 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.human-readable: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,791 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.ls: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f0238b24730&gt;
+2026-02-11 18:28:44,792 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.summarize: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,792 - MainThread - botocore.hooks - DEBUG - Event process-cli-arg.custom.ls: calling handler &lt;awscli.argprocess.ParamShorthandParser object at 0x7f0238b24730&gt;
+2026-02-11 18:28:44,792 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.request-payer: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,792 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.bucket-name-prefix: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,792 - MainThread - botocore.hooks - DEBUG - Event load-cli-arg.custom.ls.bucket-region: calling handler &lt;awscli.paramfile.URIArgumentHandler object at 0x7f02383efc70&gt;
+2026-02-11 18:28:44,792 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: env
+2026-02-11 18:28:44,792 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role
+2026-02-11 18:28:44,792 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: assume-role-with-web-identity
+2026-02-11 18:28:44,792 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: sso
+2026-02-11 18:28:44,792 - MainThread - botocore.credentials - DEBUG - Looking for credentials via: shared-credentials-file
+2026-02-11 18:28:44,793 - MainThread - botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+2026-02-11 18:28:44,794 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/endpoints.json
+2026-02-11 18:28:44,819 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/sdk-default-configuration.json
+2026-02-11 18:28:44,820 - MainThread - botocore.hooks - DEBUG - Event choose-service-name: calling handler &lt;function handle_service_name_alias at 0x7f023a13db80&gt;
+2026-02-11 18:28:44,827 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.json.gz
+2026-02-11 18:28:44,835 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/service-2.sdk-extras.json
+2026-02-11 18:28:44,856 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/endpoint-rule-set-1.json.gz
+2026-02-11 18:28:44,860 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/partitions.json
+2026-02-11 18:28:44,862 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_post at 0x7f023914cf70&gt;
+2026-02-11 18:28:44,862 - MainThread - botocore.hooks - DEBUG - Event creating-client-class.s3: calling handler &lt;function add_generate_presigned_url at 0x7f023914cd30&gt;
+2026-02-11 18:28:44,862 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:44,865 - MainThread - botocore.endpoint - DEBUG - Setting s3 timeout as (60, 60)
+2026-02-11 18:28:44,867 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/_retry.json
+2026-02-11 18:28:44,867 - MainThread - botocore.client - DEBUG - Registering retry handlers for service: s3
+2026-02-11 18:28:44,867 - MainThread - botocore.utils - DEBUG - Registering S3 region redirector handler
+2026-02-11 18:28:44,868 - MainThread - botocore.client - DEBUG - Switching signature version for service s3 to version s3v4 based on config file override.
+2026-02-11 18:28:44,868 - MainThread - botocore.utils - DEBUG - Registering S3Express Identity Resolver
+2026-02-11 18:28:44,885 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/paginators-1.json
+2026-02-11 18:28:44,885 - MainThread - botocore.loaders - DEBUG - Loading JSON file: /usr/local/lib/python3.9/site-packages/botocore/data/s3/2006-03-01/paginators-1.sdk-extras.json
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function set_list_objects_encoding_type_url at 0x7f0239076700&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function validate_bucket_name at 0x7f0239075430&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function remove_bucket_from_url_paths_from_model at 0x7f0239077310&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;bound method S3RegionRedirectorv2.annotate_request_context of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f02379865e0&gt;&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;bound method ClientCreator._inject_s3_input_parameters of &lt;botocore.client.ClientCreator object at 0x7f0238ab2280&gt;&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function generate_idempotent_uuid at 0x7f0239075280&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-parameter-build.s3.ListObjectsV2: calling handler &lt;function _handle_request_validation_mode_member at 0x7f02390779d0&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;function customize_endpoint_resolver_builtins at 0x7f02390774c0&gt;
+2026-02-11 18:28:44,886 - MainThread - botocore.hooks - DEBUG - Event before-endpoint-resolution.s3: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_cache of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f02379865e0&gt;&gt;
+2026-02-11 18:28:44,887 - MainThread - botocore.regions - DEBUG - Calling endpoint provider with parameters: {'Bucket': 'bucket1', 'Region': 'us-west-1', 'UseFIPS': False, 'UseDualStack': False, 'Endpoint': 'http://s3g.internal:9878', 'ForcePathStyle': False, 'Accelerate': False, 'UseGlobalEndpoint': False, 'Prefix': 'dir1/', 'DisableMultiRegionAccessPoints': False, 'UseArnRegion': True}
+2026-02-11 18:28:44,888 - MainThread - botocore.regions - DEBUG - Endpoint provider result: http://bucket1.s3g.internal:9878
+2026-02-11 18:28:44,888 - MainThread - botocore.regions - DEBUG - Selecting from endpoint provider's list of auth schemes: "sigv4". User selected auth scheme is: "None"
+2026-02-11 18:28:44,888 - MainThread - botocore.regions - DEBUG - Selected auth type "v4" as "v4" with signing context params: {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function add_expect_header at 0x7f0239075790&gt;
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;bound method S3ExpressIdentityResolver.apply_signing_cache_key of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7f02379865b0&gt;&gt;
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function add_recursion_detection_header at 0x7f023906de50&gt;
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function add_query_compatibility_header at 0x7f0239077940&gt;
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event before-call.s3.ListObjectsV2: calling handler &lt;function inject_api_version_header_if_needed at 0x7f0239076af0&gt;
+2026-02-11 18:28:44,889 - MainThread - botocore.endpoint - DEBUG - Making request for OperationModel(name=ListObjectsV2) with params: {'url_path': '?list-type=2', 'query_string': {'prefix': 'dir1/', 'delimiter': '/', 'encoding-type': 'url'}, 'method': 'GET', 'headers': {'User-Agent': 'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/C,N cfg/retry-mode#legacy botocore/1.37.15'}, 'body': b'', 'auth_path': '/bucket1/', 'url': 'http://bucket1.s3g.internal:9878/?list-type=2&amp;prefix=dir1%2F&amp;delimiter=%2F&amp;encoding-type=url', 'context': {'client_region': 'us-west-1', 'client_config': &lt;botocore.config.Config object at 0x7f0237a0c7f0&gt;, 'has_streaming_input': False, 'auth_type': 'v4', 'unsigned_payload': None, 'encoding_type_auto_set': True, 's3_redirect': {'redirected': False, 'bucket': 'bucket1', 'params': {'Bucket': 'bucket1', 'Prefix': 'dir1/', 'Delimiter': '/', 'EncodingType': 'url'}}, 'input_params': {'Bucket': 'bucket1', 'Prefix': 'dir1/'}, 'signing': {'region': 'us-west-1', 'signing_name': 's3', 'disableDoubleEncoding': True}, 'endpoint_properties': {'authSchemes': [{'disableDoubleEncoding': True, 'name': 'sigv4', 'signingName': 's3', 'signingRegion': 'us-west-1'}]}}}
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event request-created.s3.ListObjectsV2: calling handler &lt;bound method RequestSigner.handler of &lt;botocore.signers.RequestSigner object at 0x7f0237a0c640&gt;&gt;
+2026-02-11 18:28:44,889 - MainThread - botocore.hooks - DEBUG - Event choose-signer.s3.ListObjectsV2: calling handler &lt;function set_operation_specific_signer at 0x7f02390750d0&gt;
+2026-02-11 18:28:44,890 - MainThread - botocore.hooks - DEBUG - Event before-sign.s3.ListObjectsV2: calling handler &lt;function remove_arn_from_signing_path at 0x7f0239077430&gt;
+2026-02-11 18:28:44,890 - MainThread - botocore.hooks - DEBUG - Event before-sign.s3.ListObjectsV2: calling handler &lt;function _set_extra_headers_for_unsigned_request at 0x7f0239077a60&gt;
+2026-02-11 18:28:44,890 - MainThread - botocore.hooks - DEBUG - Event before-sign.s3.ListObjectsV2: calling handler &lt;bound method S3ExpressIdentityResolver.resolve_s3express_identity of &lt;botocore.utils.S3ExpressIdentityResolver object at 0x7f02379865b0&gt;&gt;
+2026-02-11 18:28:44,890 - MainThread - botocore.auth - DEBUG - Calculating signature using v4 auth.
+2026-02-11 18:28:44,890 - MainThread - botocore.auth - DEBUG - CanonicalRequest:
+GET
+/
+delimiter=%2F&amp;encoding-type=url&amp;list-type=2&amp;prefix=dir1%2F
+host:bucket1.s3g.internal:9878
+x-amz-content-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+x-amz-date:20260211T182844Z
+
+host;x-amz-content-sha256;x-amz-date
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2026-02-11 18:28:44,890 - MainThread - botocore.auth - DEBUG - StringToSign:
+AWS4-HMAC-SHA256
+20260211T182844Z
+20260211/us-west-1/s3/aws4_request
+ca8951a542077a0863bdaa75afcc8aa443adf7ccc5d16c9b0b58732e0e03a526
+2026-02-11 18:28:44,890 - MainThread - botocore.auth - DEBUG - Signature:
+28fb995a727021908017c6a5f05f87fe8cc4285f77300bea10a362205febd24b
+2026-02-11 18:28:44,890 - MainThread - botocore.hooks - DEBUG - Event request-created.s3.ListObjectsV2: calling handler &lt;bound method UserAgentString.rebuild_and_replace_user_agent_handler of &lt;botocore.useragent.UserAgentString object at 0x7f0237976f40&gt;&gt;
+2026-02-11 18:28:44,890 - MainThread - botocore.hooks - DEBUG - Event request-created.s3.ListObjectsV2: calling handler &lt;function add_retry_headers at 0x7f0239077280&gt;
+2026-02-11 18:28:44,891 - MainThread - botocore.endpoint - DEBUG - Sending http request: &lt;AWSPreparedRequest stream_output=False, method=GET, url=http://bucket1.s3g.internal:9878/?list-type=2&amp;prefix=dir1%2F&amp;delimiter=%2F&amp;encoding-type=url, headers={'User-Agent': b'aws-cli/1.38.15 md/Botocore#1.37.15 ua/2.1 os/linux#6.11.0-1018-azure md/arch#x86_64 lang/python#3.9.25 md/pyimpl#CPython m/C,N cfg/retry-mode#legacy botocore/1.37.15', 'X-Amz-Date': b'20260211T182844Z', 'X-Amz-Content-SHA256': b'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization': b'AWS4-HMAC-SHA256 Credential=testuser/s3g@EXAMPLE.COM/20260211/us-west-1/s3/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=28fb995a727021908017c6a5f05f87fe8cc4285f77300bea10a362205febd24b', 'amz-sdk-invocation-id': b'61804505-aca9-43e7-b1b5-66df96819d1c', 'amz-sdk-request': b'attempt=1'}&gt;
+2026-02-11 18:28:44,891 - MainThread - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): bucket1.s3g.internal:9878
+2026-02-11 18:28:44,916 - MainThread - urllib3.connectionpool - DEBUG - http://bucket1.s3g.internal:9878 "GET /?list-type=2&amp;prefix=dir1%2F&amp;delimiter=%2F&amp;encoding-type=url HTTP/1.1" 200 392
+2026-02-11 18:28:44,916 - MainThread - botocore.hooks - DEBUG - Event before-parse.s3.ListObjectsV2: calling handler &lt;function _handle_200_error at 0x7f0239077790&gt;
+2026-02-11 18:28:44,916 - MainThread - botocore.hooks - DEBUG - Event before-parse.s3.ListObjectsV2: calling handler &lt;function handle_expires_header at 0x7f02390775e0&gt;
+2026-02-11 18:28:44,916 - MainThread - botocore.parsers - DEBUG - Response headers: {'Date': 'Wed, 11 Feb 2026 18:28:44 GMT', 'Cache-Control': 'no-cache', 'Expires': 'Wed, 11 Feb 2026 18:28:44 GMT', 'Pragma': 'no-cache', 'Content-Type': 'application/xml', 'X-Content-Type-Options': 'nosniff', 'X-XSS-Protection': '1; mode=block', 'X-FRAME-OPTIONS': 'SAMEORIGIN', 'Server': 'Ozone', 'x-amz-id-2': 'GxtVc1fErY1Kj1', 'x-amz-request-id': '86472d2c-6b41-4010-a7fe-c2d97d097ab3', 'Content-Length': '392'}
+2026-02-11 18:28:44,917 - MainThread - botocore.parsers - DEBUG - Response body:
+b'&lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;&lt;ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"&gt;&lt;Name&gt;bucket1&lt;/Name&gt;&lt;Prefix&gt;dir1/&lt;/Prefix&gt;&lt;Marker&gt;&lt;/Marker&gt;&lt;MaxKeys&gt;1000&lt;/MaxKeys&gt;&lt;KeyCount&gt;1&lt;/KeyCount&gt;&lt;Delimiter&gt;/&lt;/Delimiter&gt;&lt;EncodingType&gt;url&lt;/EncodingType&gt;&lt;IsTruncated&gt;false&lt;/IsTruncated&gt;&lt;CommonPrefixes&gt;&lt;Prefix&gt;dir1/dir2/&lt;/Prefix&gt;&lt;/CommonPrefixes&gt;&lt;/ListBucketResult&gt;'
+2026-02-11 18:28:44,917 - MainThread - botocore.hooks - DEBUG - Event needs-retry.s3.ListObjectsV2: calling handler &lt;function _update_status_code at 0x7f02390778b0&gt;
+2026-02-11 18:28:44,917 - MainThread - botocore.hooks - DEBUG - Event needs-retry.s3.ListObjectsV2: calling handler &lt;botocore.retryhandler.RetryHandler object at 0x7f0237986520&gt;
+2026-02-11 18:28:44,917 - MainThread - botocore.retryhandler - DEBUG - No retry needed.
+2026-02-11 18:28:44,917 - MainThread - botocore.hooks - DEBUG - Event needs-retry.s3.ListObjectsV2: calling handler &lt;bound method S3RegionRedirectorv2.redirect_from_error of &lt;botocore.utils.S3RegionRedirectorv2 object at 0x7f02379865e0&gt;&gt;
+2026-02-11 18:28:44,917 - MainThread - botocore.hooks - DEBUG - Event after-call.s3.ListObjectsV2: calling handler &lt;function decode_list_object_v2 at 0x7f0239076820&gt;
+2026-02-11 18:28:44,917 - MainThread - botocore.hooks - DEBUG - Event after-call.s3.ListObjectsV2: calling handler &lt;function enhance_error_msg at 0x7f02384fdee0&gt;
+                           PRE dir2/</msg>
+<status status="PASS" starttime="20260211 18:28:44.966" endtime="20260211 18:28:44.967"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:44.967" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:44.967" endtime="20260211 18:28:44.967"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:44.463" endtime="20260211 18:28:44.967"/>
+</kw>
+<msg timestamp="20260211 18:28:44.967" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:44.462" endtime="20260211 18:28:44.968"/>
+</kw>
+<msg timestamp="20260211 18:28:44.968" level="INFO">${output} = 2026-02-11 18:28:44,785 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,785 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:44.462" endtime="20260211 18:28:44.968"/>
+</kw>
+<msg timestamp="20260211 18:28:44.968" level="INFO">${result} = 2026-02-11 18:28:44,785 - MainThread - awscli.clidriver - DEBUG - CLI version: aws-cli/1.38.15 Python/3.9.25 Linux/6.11.0-1018-azure botocore/1.37.15
+2026-02-11 18:28:44,785 - MainThread - awscli.clid...</msg>
+<status status="PASS" starttime="20260211 18:28:44.462" endtime="20260211 18:28:44.968"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>url=http://bucket1.s3g.internal:9878/</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.968" endtime="20260211 18:28:44.969"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>prefix=dir1</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.969" endtime="20260211 18:28:44.969"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>testfile</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.969" endtime="20260211 18:28:44.969"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>dir2/</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:44.969" endtime="20260211 18:28:44.970"/>
+</kw>
+<kw name="Execute AWSS3Cli" library="commonawslib">
+<var>${result}</var>
+<arg>ls s3://${BUCKET}/dir1/dir2/file</arg>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>aws s3 --endpoint-url ${ENDPOINT_URL} ${command}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260211 18:28:44.973" level="INFO">Running command 'aws s3 --endpoint-url http://s3g.internal:9878 ls s3://bucket1/dir1/dir2/file 2&gt;&amp;1'.</msg>
+<msg timestamp="20260211 18:28:45.474" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260211 18:28:45.474" level="INFO">${output} = 2026-02-11 18:28:43         29 file</msg>
+<status status="PASS" starttime="20260211 18:28:44.971" endtime="20260211 18:28:45.474"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260211 18:28:45.475" level="INFO">2026-02-11 18:28:43         29 file</msg>
+<status status="PASS" starttime="20260211 18:28:45.474" endtime="20260211 18:28:45.475"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260211 18:28:45.476" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260211 18:28:45.475" endtime="20260211 18:28:45.476"/>
+</kw>
+<status status="PASS" starttime="20260211 18:28:44.971" endtime="20260211 18:28:45.476"/>
+</kw>
+<msg timestamp="20260211 18:28:45.476" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260211 18:28:44.970" endtime="20260211 18:28:45.476"/>
+</kw>
+<msg timestamp="20260211 18:28:45.476" level="INFO">${output} = 2026-02-11 18:28:43         29 file</msg>
+<status status="PASS" starttime="20260211 18:28:44.970" endtime="20260211 18:28:45.476"/>
+</kw>
+<msg timestamp="20260211 18:28:45.476" level="INFO">${result} = 2026-02-11 18:28:43         29 file</msg>
+<status status="PASS" starttime="20260211 18:28:44.970" endtime="20260211 18:28:45.476"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>testfile</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:45.476" endtime="20260211 18:28:45.477"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>dir1</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:45.477" endtime="20260211 18:28:45.477"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>dir2</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:45.477" endtime="20260211 18:28:45.477"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>file</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260211 18:28:45.478" endtime="20260211 18:28:45.478"/>
+</kw>
+<tag>virtual-host</tag>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260211 18:28:39.028" endtime="20260211 18:28:45.478"/>
+</test>
+<doc>S3 gateway test with aws cli using virtual host style address</doc>
+<status status="PASS" starttime="20260211 18:28:34.169" endtime="20260211 18:28:45.479"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">virtual-host</stat>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="ozonesecure-ha-s3g-virtual-host">ozonesecure-ha-s3g-virtual-host</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
