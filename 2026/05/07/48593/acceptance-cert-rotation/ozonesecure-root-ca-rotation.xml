@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.25 on linux)" generated="20260507 19:22:25.775" rpa="false" schemaversion="4">
+<suite id="s1" name="ozonesecure-root-ca-rotation">
+<suite id="s1-s1" name="Kinit" source="/opt/hadoop/smoketest/kinit.robot">
+<test id="s1-s1-t1" name="Kinit" line="27">
+<kw name="Kinit test user" library="commonlib">
+<arg>${USER}</arg>
+<arg>${USER}.keytab</arg>
+<kw name="Get Security Enabled From Config" library="commonlib">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260507 19:21:15.094" endtime="20260507 19:21:15.094"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260507 19:21:15.096" level="INFO">Running command 'ozone getconf confKey ozone.security.enabled 2&gt;&amp;1'.</msg>
+<msg timestamp="20260507 19:21:15.688" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260507 19:21:15.688" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20260507 19:21:15.095" endtime="20260507 19:21:15.688"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260507 19:21:15.689" level="INFO">true</msg>
+<status status="PASS" starttime="20260507 19:21:15.689" endtime="20260507 19:21:15.689"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260507 19:21:15.689" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260507 19:21:15.689" endtime="20260507 19:21:15.689"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.095" endtime="20260507 19:21:15.690"/>
+</kw>
+<msg timestamp="20260507 19:21:15.690" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260507 19:21:15.094" endtime="20260507 19:21:15.690"/>
+</kw>
+<msg timestamp="20260507 19:21:15.690" level="INFO">${value} = true</msg>
+<status status="PASS" starttime="20260507 19:21:15.094" endtime="20260507 19:21:15.690"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260507 19:21:15.690" endtime="20260507 19:21:15.690"/>
+</kw>
+<status status="NOT RUN" starttime="20260507 19:21:15.690" endtime="20260507 19:21:15.690"/>
+</branch>
+<status status="PASS" starttime="20260507 19:21:15.690" endtime="20260507 19:21:15.690"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260507 19:21:15.690" level="INFO">${SECURITY_ENABLED} = true</msg>
+<status status="PASS" starttime="20260507 19:21:15.690" endtime="20260507 19:21:15.690"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.094" endtime="20260507 19:21:15.691"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Skip in unsecure cluster</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20260507 19:21:15.691" endtime="20260507 19:21:15.691"/>
+</kw>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260507 19:21:15.693" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260507 19:21:15.696" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260507 19:21:15.696" level="INFO">${output} = scm</msg>
+<status status="PASS" starttime="20260507 19:21:15.692" endtime="20260507 19:21:15.696"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260507 19:21:15.697" level="INFO">scm</msg>
+<status status="PASS" starttime="20260507 19:21:15.697" endtime="20260507 19:21:15.697"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260507 19:21:15.697" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260507 19:21:15.697" endtime="20260507 19:21:15.697"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.691" endtime="20260507 19:21:15.697"/>
+</kw>
+<msg timestamp="20260507 19:21:15.697" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260507 19:21:15.691" endtime="20260507 19:21:15.697"/>
+</kw>
+<msg timestamp="20260507 19:21:15.698" level="INFO">${instance} = scm</msg>
+<status status="PASS" starttime="20260507 19:21:15.691" endtime="20260507 19:21:15.698"/>
+</kw>
+<msg timestamp="20260507 19:21:15.698" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260507 19:21:15.691" endtime="20260507 19:21:15.698"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20260507 19:21:15.698" level="INFO">${TEST_USER} = testuser/scm@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260507 19:21:15.698" endtime="20260507 19:21:15.698"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260507 19:21:15.700" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/scm@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20260507 19:21:15.740" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260507 19:21:15.740" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260507 19:21:15.699" endtime="20260507 19:21:15.740"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260507 19:21:15.740" level="INFO"/>
+<status status="PASS" starttime="20260507 19:21:15.740" endtime="20260507 19:21:15.740"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260507 19:21:15.741" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260507 19:21:15.740" endtime="20260507 19:21:15.741"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.699" endtime="20260507 19:21:15.741"/>
+</kw>
+<msg timestamp="20260507 19:21:15.741" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260507 19:21:15.698" endtime="20260507 19:21:15.741"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.698" endtime="20260507 19:21:15.741"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.698" endtime="20260507 19:21:15.741"/>
+</kw>
+<status status="PASS" starttime="20260507 19:21:15.094" endtime="20260507 19:21:15.741"/>
+</kw>
+<timeout value="2 minutes"/>
+<status status="PASS" starttime="20260507 19:21:15.093" endtime="20260507 19:21:15.741"/>
+</test>
+<doc>Kinit test user</doc>
+<status status="PASS" starttime="20260507 19:21:15.072" endtime="20260507 19:21:15.742"/>
+</suite>
+<suite id="s1-s2" name="Kinit" source="/opt/hadoop/smoketest/kinit.robot">
+<test id="s1-s2-t1" name="Kinit" line="27">
+<kw name="Kinit test user" library="commonlib">
+<arg>${USER}</arg>
+<arg>${USER}.keytab</arg>
+<kw name="Get Security Enabled From Config" library="commonlib">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260507 19:22:12.955" endtime="20260507 19:22:12.955"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260507 19:22:12.957" level="INFO">Running command 'ozone getconf confKey ozone.security.enabled 2&gt;&amp;1'.</msg>
+<msg timestamp="20260507 19:22:13.549" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260507 19:22:13.549" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20260507 19:22:12.955" endtime="20260507 19:22:13.549"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260507 19:22:13.550" level="INFO">true</msg>
+<status status="PASS" starttime="20260507 19:22:13.550" endtime="20260507 19:22:13.550"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260507 19:22:13.551" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260507 19:22:13.550" endtime="20260507 19:22:13.551"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:12.955" endtime="20260507 19:22:13.551"/>
+</kw>
+<msg timestamp="20260507 19:22:13.551" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260507 19:22:12.955" endtime="20260507 19:22:13.551"/>
+</kw>
+<msg timestamp="20260507 19:22:13.551" level="INFO">${value} = true</msg>
+<status status="PASS" starttime="20260507 19:22:12.955" endtime="20260507 19:22:13.551"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260507 19:22:13.551" endtime="20260507 19:22:13.551"/>
+</kw>
+<status status="NOT RUN" starttime="20260507 19:22:13.551" endtime="20260507 19:22:13.551"/>
+</branch>
+<status status="PASS" starttime="20260507 19:22:13.551" endtime="20260507 19:22:13.551"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260507 19:22:13.552" level="INFO">${SECURITY_ENABLED} = true</msg>
+<status status="PASS" starttime="20260507 19:22:13.551" endtime="20260507 19:22:13.552"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:12.955" endtime="20260507 19:22:13.552"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Skip in unsecure cluster</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20260507 19:22:13.552" endtime="20260507 19:22:13.552"/>
+</kw>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<kw name="Execute" library="os">
+<var>${instance}</var>
+<arg>hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260507 19:22:13.555" level="INFO">Running command 'hostname | sed 's/scm[0-9].org/scm/;s/scm[0-9]/scm/;s/om[0-9]/om/' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260507 19:22:13.557" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260507 19:22:13.557" level="INFO">${output} = dn</msg>
+<status status="PASS" starttime="20260507 19:22:13.553" endtime="20260507 19:22:13.558"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260507 19:22:13.558" level="INFO">dn</msg>
+<status status="PASS" starttime="20260507 19:22:13.558" endtime="20260507 19:22:13.558"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260507 19:22:13.558" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260507 19:22:13.558" endtime="20260507 19:22:13.558"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:13.553" endtime="20260507 19:22:13.559"/>
+</kw>
+<msg timestamp="20260507 19:22:13.559" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260507 19:22:13.552" endtime="20260507 19:22:13.559"/>
+</kw>
+<msg timestamp="20260507 19:22:13.559" level="INFO">${instance} = dn</msg>
+<status status="PASS" starttime="20260507 19:22:13.552" endtime="20260507 19:22:13.559"/>
+</kw>
+<msg timestamp="20260507 19:22:13.559" level="INFO">${TEST_USER} = testuser/dn@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260507 19:22:13.552" endtime="20260507 19:22:13.559"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20260507 19:22:13.559" level="INFO">${TEST_USER} = testuser/dn@EXAMPLE.COM</msg>
+<status status="PASS" starttime="20260507 19:22:13.559" endtime="20260507 19:22:13.559"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<kw name="Execute" library="os">
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260507 19:22:13.561" level="INFO">Running command 'kinit -k -t /etc/security/keytabs/testuser.keytab testuser/dn@EXAMPLE.COM 2&gt;&amp;1'.</msg>
+<msg timestamp="20260507 19:22:13.623" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260507 19:22:13.623" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260507 19:22:13.560" endtime="20260507 19:22:13.623"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260507 19:22:13.624" level="INFO"/>
+<status status="PASS" starttime="20260507 19:22:13.623" endtime="20260507 19:22:13.624"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260507 19:22:13.624" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260507 19:22:13.624" endtime="20260507 19:22:13.624"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:13.560" endtime="20260507 19:22:13.624"/>
+</kw>
+<msg timestamp="20260507 19:22:13.624" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260507 19:22:13.560" endtime="20260507 19:22:13.625"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:13.559" endtime="20260507 19:22:13.625"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:13.559" endtime="20260507 19:22:13.625"/>
+</kw>
+<status status="PASS" starttime="20260507 19:22:12.954" endtime="20260507 19:22:13.625"/>
+</kw>
+<timeout value="2 minutes"/>
+<status status="PASS" starttime="20260507 19:22:12.954" endtime="20260507 19:22:13.625"/>
+</test>
+<doc>Kinit test user</doc>
+<status status="PASS" starttime="20260507 19:22:12.932" endtime="20260507 19:22:13.625"/>
+</suite>
+<status status="PASS" starttime="N/A" endtime="N/A" elapsedtime="1363"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="ozonesecure-root-ca-rotation">ozonesecure-root-ca-rotation</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s1" name="Kinit">ozonesecure-root-ca-rotation.Kinit</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s2" name="Kinit">ozonesecure-root-ca-rotation.Kinit</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
