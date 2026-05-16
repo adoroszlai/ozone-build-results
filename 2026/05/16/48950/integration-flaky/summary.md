@@ -1,0 +1,4 @@
+# Failed Tests
+
+ * org.apache.hadoop.hdds.upgrade.TestScmHAFinalization
+ * org.apache.hadoop.ozone.recon.TestReconAndAdminContainerCLI
