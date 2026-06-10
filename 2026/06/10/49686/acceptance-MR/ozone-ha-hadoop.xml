@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.25 on linux)" generated="20260610 16:08:53.490" rpa="false" schemaversion="4">
+<suite id="s1" name="ozone-ha-hadoop" source="/opt/hadoop/smoketest/createmrenv.robot">
+<test id="s1-t1" name="Create test volume, bucket and key" line="38">
+<kw name="Execute And Ignore Error" library="os">
+<var>${result}</var>
+<arg>ozone sh bucket info /${volume}/${bucket}</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:06:58.005" level="INFO">Running command 'ozone sh bucket info /volume1/bucket1 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:01.672" level="INFO">${rc} = 255</msg>
+<msg timestamp="20260610 16:07:01.672" level="INFO">${output} = VOLUME_NOT_FOUND Volume volume1 is not found</msg>
+<status status="PASS" starttime="20260610 16:06:58.002" endtime="20260610 16:07:01.673"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:01.673" level="INFO">VOLUME_NOT_FOUND Volume volume1 is not found</msg>
+<status status="PASS" starttime="20260610 16:07:01.673" endtime="20260610 16:07:01.674"/>
+</kw>
+<msg timestamp="20260610 16:07:01.674" level="INFO">${result} = VOLUME_NOT_FOUND Volume volume1 is not found</msg>
+<status status="PASS" starttime="20260610 16:06:58.002" endtime="20260610 16:07:01.674"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>"VOLUME_NOT_FOUND" in """${result}"""</arg>
+<arg>Create volume</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Create volume">
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone sh volume create /${volume} --user hadoop --space-quota 100TB --namespace-quota 100</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:01.678" level="INFO">Running command 'ozone sh volume create /volume1 --user hadoop --space-quota 100TB --namespace-quota 100 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:05.388" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:05.388" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:01.675" endtime="20260610 16:07:05.388"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:05.389" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:05.388" endtime="20260610 16:07:05.389"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:05.389" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:05.389" endtime="20260610 16:07:05.389"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:01.675" endtime="20260610 16:07:05.389"/>
+</kw>
+<msg timestamp="20260610 16:07:05.389" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:01.675" endtime="20260610 16:07:05.390"/>
+</kw>
+<msg timestamp="20260610 16:07:05.390" level="INFO">${result} = </msg>
+<status status="PASS" starttime="20260610 16:07:01.675" endtime="20260610 16:07:05.390"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Failed</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260610 16:07:05.390" endtime="20260610 16:07:05.390"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:01.674" endtime="20260610 16:07:05.390"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:01.674" endtime="20260610 16:07:05.390"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>"VOLUME_NOT_FOUND" in """${result}"""</arg>
+<arg>Create bucket</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Create bucket">
+<kw name="Execute" library="os">
+<arg>ozone sh bucket create /${volume}/${bucket} --space-quota 1TB --layout fso</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:05.394" level="INFO">Running command 'ozone sh bucket create /volume1/bucket1 --space-quota 1TB --layout fso 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:08.766" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:08.766" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:05.392" endtime="20260610 16:07:08.766"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:08.767" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:08.766" endtime="20260610 16:07:08.767"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:08.767" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:08.767" endtime="20260610 16:07:08.767"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:05.391" endtime="20260610 16:07:08.767"/>
+</kw>
+<msg timestamp="20260610 16:07:08.767" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:05.391" endtime="20260610 16:07:08.767"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:05.391" endtime="20260610 16:07:08.767"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:05.391" endtime="20260610 16:07:08.767"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:05.390" endtime="20260610 16:07:08.767"/>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>"BUCKET_NOT_FOUND" in """${result}"""</arg>
+<arg>Create bucket</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260610 16:07:08.768" endtime="20260610 16:07:08.768"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone sh bucket info /${volume}/${bucket}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:08.771" level="INFO">Running command 'ozone sh bucket info /volume1/bucket1 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:12.324" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:12.324" level="INFO">${output} = {
+  "metadata" : { },
+  "volumeName" : "volume1",
+  "name" : "bucket1",
+  "storageType" : "DISK",
+  "versioning" : false,
+  "listCacheSize" : 1000,
+  "usedBytes" : 0,
+  "usedNamespace" : 0,
+  "creatio...</msg>
+<status status="PASS" starttime="20260610 16:07:08.769" endtime="20260610 16:07:12.324"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:12.325" level="INFO">{
+  "metadata" : { },
+  "volumeName" : "volume1",
+  "name" : "bucket1",
+  "storageType" : "DISK",
+  "versioning" : false,
+  "listCacheSize" : 1000,
+  "usedBytes" : 0,
+  "usedNamespace" : 0,
+  "creationTime" : "2026-06-10T16:07:08.653Z",
+  "modificationTime" : "2026-06-10T16:07:08.653Z",
+  "sourcePathExist" : true,
+  "quotaInBytes" : 1099511627776,
+  "quotaInNamespace" : -1,
+  "bucketLayout" : "FILE_SYSTEM_OPTIMIZED",
+  "owner" : "hadoop",
+  "pendingDeleteBytes" : 0,
+  "pendingDeleteNamespace" : 0,
+  "link" : false
+}</msg>
+<status status="PASS" starttime="20260610 16:07:12.324" endtime="20260610 16:07:12.325"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:12.325" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:12.325" endtime="20260610 16:07:12.325"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:08.769" endtime="20260610 16:07:12.326"/>
+</kw>
+<msg timestamp="20260610 16:07:12.326" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:08.768" endtime="20260610 16:07:12.326"/>
+</kw>
+<msg timestamp="20260610 16:07:12.326" level="INFO">${result} = {
+  "metadata" : { },
+  "volumeName" : "volume1",
+  "name" : "bucket1",
+  "storageType" : "DISK",
+  "versioning" : false,
+  "listCacheSize" : 1000,
+  "usedBytes" : 0,
+  "usedNamespace" : 0,
+  "creatio...</msg>
+<status status="PASS" starttime="20260610 16:07:08.768" endtime="20260610 16:07:12.326"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>NOT_FOUND</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260610 16:07:12.326" endtime="20260610 16:07:12.326"/>
+</kw>
+<kw name="Format FS URL" library="fs">
+<var>${dir}</var>
+<arg>${SCHEME}</arg>
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>input</arg>
+<kw name="Run Keyword If" library="BuiltIn">
+<var>${url}</var>
+<arg>'${scheme}' == 'o3fs'</arg>
+<arg>Format o3fs URL</arg>
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>${path}</arg>
+<arg>ELSE IF</arg>
+<arg>'${scheme}' == 'ofs'</arg>
+<arg>Format ofs URL</arg>
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>${path}</arg>
+<arg>ELSE</arg>
+<arg>Fail</arg>
+<arg>Unsupported FS scheme: ${scheme}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Format o3fs URL" library="fs">
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>${path}</arg>
+<kw name="Run Keyword If" library="BuiltIn">
+<var>${om_with_leading}</var>
+<arg>'${om}' != '${EMPTY}'</arg>
+<arg>Ensure Leading</arg>
+<arg>.</arg>
+<arg>${om}</arg>
+<arg>ELSE</arg>
+<arg>Set Variable</arg>
+<arg>${EMPTY}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Ensure Leading" library="string">
+<arg>.</arg>
+<arg>${om}</arg>
+<kw name="Get Substring" library="String">
+<var>${first}</var>
+<arg>${string}</arg>
+<arg>0</arg>
+<arg>1</arg>
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<msg timestamp="20260610 16:07:12.329" level="INFO">${first} = o</msg>
+<status status="PASS" starttime="20260610 16:07:12.329" endtime="20260610 16:07:12.329"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${result}</var>
+<arg>'${first}' == '${char}'</arg>
+<arg>${string}</arg>
+<arg>${char}${string}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20260610 16:07:12.329" level="INFO">${result} = .omservice</msg>
+<status status="PASS" starttime="20260610 16:07:12.329" endtime="20260610 16:07:12.329"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:12.328" endtime="20260610 16:07:12.330"/>
+</kw>
+<msg timestamp="20260610 16:07:12.330" level="INFO">${om_with_leading} = .omservice</msg>
+<status status="PASS" starttime="20260610 16:07:12.328" endtime="20260610 16:07:12.330"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:12.327" endtime="20260610 16:07:12.330"/>
+</kw>
+<msg timestamp="20260610 16:07:12.330" level="INFO">${url} = o3fs://bucket1.volume1.omservice/input</msg>
+<status status="PASS" starttime="20260610 16:07:12.327" endtime="20260610 16:07:12.330"/>
+</kw>
+<msg timestamp="20260610 16:07:12.330" level="INFO">${dir} = o3fs://bucket1.volume1.omservice/input</msg>
+<status status="PASS" starttime="20260610 16:07:12.326" endtime="20260610 16:07:12.330"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone fs -mkdir ${dir}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:12.333" level="INFO">Running command 'ozone fs -mkdir o3fs://bucket1.volume1.omservice/input 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:15.628" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:15.628" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:12.331" endtime="20260610 16:07:15.628"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:15.629" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:15.629" endtime="20260610 16:07:15.629"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:15.630" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:15.630" endtime="20260610 16:07:15.630"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:12.330" endtime="20260610 16:07:15.630"/>
+</kw>
+<msg timestamp="20260610 16:07:15.630" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:12.330" endtime="20260610 16:07:15.630"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:12.330" endtime="20260610 16:07:15.630"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh key put /${volume}/${bucket}/input/key1 LICENSE.txt</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:15.634" level="INFO">Running command 'ozone sh key put /volume1/bucket1/input/key1 LICENSE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:21.919" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:21.919" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:15.631" endtime="20260610 16:07:21.919"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:21.920" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:21.920" endtime="20260610 16:07:21.920"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:21.921" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:21.921" endtime="20260610 16:07:21.921"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:15.631" endtime="20260610 16:07:21.921"/>
+</kw>
+<msg timestamp="20260610 16:07:21.921" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:15.631" endtime="20260610 16:07:21.921"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:15.630" endtime="20260610 16:07:21.921"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh key put /${volume}/${bucket}/input/key2 NOTICE.txt</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:21.926" level="INFO">Running command 'ozone sh key put /volume1/bucket1/input/key2 NOTICE.txt 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:27.078" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:27.078" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:21.923" endtime="20260610 16:07:27.078"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:27.079" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:27.078" endtime="20260610 16:07:27.079"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:27.079" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:27.079" endtime="20260610 16:07:27.079"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:21.923" endtime="20260610 16:07:27.079"/>
+</kw>
+<msg timestamp="20260610 16:07:27.079" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:21.922" endtime="20260610 16:07:27.079"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:21.922" endtime="20260610 16:07:27.080"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone sh key put /${volume}/${bucket}/input/key3 README.md</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:27.083" level="INFO">Running command 'ozone sh key put /volume1/bucket1/input/key3 README.md 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:32.263" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:32.263" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:27.081" endtime="20260610 16:07:32.263"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:32.264" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:32.263" endtime="20260610 16:07:32.264"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:32.264" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:32.264" endtime="20260610 16:07:32.264"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:27.080" endtime="20260610 16:07:32.265"/>
+</kw>
+<msg timestamp="20260610 16:07:32.265" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:27.080" endtime="20260610 16:07:32.265"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:27.080" endtime="20260610 16:07:32.265"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260610 16:06:58.001" endtime="20260610 16:07:32.265"/>
+</test>
+<test id="s1-t2" name="Create user dir for hadoop" line="51">
+<kw name="Format FS URL" library="fs">
+<var>${dir}</var>
+<arg>${SCHEME}</arg>
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>user</arg>
+<kw name="Run Keyword If" library="BuiltIn">
+<var>${url}</var>
+<arg>'${scheme}' == 'o3fs'</arg>
+<arg>Format o3fs URL</arg>
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>${path}</arg>
+<arg>ELSE IF</arg>
+<arg>'${scheme}' == 'ofs'</arg>
+<arg>Format ofs URL</arg>
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>${path}</arg>
+<arg>ELSE</arg>
+<arg>Fail</arg>
+<arg>Unsupported FS scheme: ${scheme}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Format o3fs URL" library="fs">
+<arg>${volume}</arg>
+<arg>${bucket}</arg>
+<arg>${path}</arg>
+<kw name="Run Keyword If" library="BuiltIn">
+<var>${om_with_leading}</var>
+<arg>'${om}' != '${EMPTY}'</arg>
+<arg>Ensure Leading</arg>
+<arg>.</arg>
+<arg>${om}</arg>
+<arg>ELSE</arg>
+<arg>Set Variable</arg>
+<arg>${EMPTY}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<kw name="Ensure Leading" library="string">
+<arg>.</arg>
+<arg>${om}</arg>
+<kw name="Get Substring" library="String">
+<var>${first}</var>
+<arg>${string}</arg>
+<arg>0</arg>
+<arg>1</arg>
+<doc>Returns a substring from ``start`` index to ``end`` index.</doc>
+<msg timestamp="20260610 16:07:32.269" level="INFO">${first} = o</msg>
+<status status="PASS" starttime="20260610 16:07:32.268" endtime="20260610 16:07:32.269"/>
+</kw>
+<kw name="Set Variable If" library="BuiltIn">
+<var>${result}</var>
+<arg>'${first}' == '${char}'</arg>
+<arg>${string}</arg>
+<arg>${char}${string}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<msg timestamp="20260610 16:07:32.269" level="INFO">${result} = .omservice</msg>
+<status status="PASS" starttime="20260610 16:07:32.269" endtime="20260610 16:07:32.269"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:32.268" endtime="20260610 16:07:32.269"/>
+</kw>
+<msg timestamp="20260610 16:07:32.269" level="INFO">${om_with_leading} = .omservice</msg>
+<status status="PASS" starttime="20260610 16:07:32.267" endtime="20260610 16:07:32.269"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:32.267" endtime="20260610 16:07:32.269"/>
+</kw>
+<msg timestamp="20260610 16:07:32.269" level="INFO">${url} = o3fs://bucket1.volume1.omservice/user</msg>
+<status status="PASS" starttime="20260610 16:07:32.266" endtime="20260610 16:07:32.269"/>
+</kw>
+<msg timestamp="20260610 16:07:32.269" level="INFO">${dir} = o3fs://bucket1.volume1.omservice/user</msg>
+<status status="PASS" starttime="20260610 16:07:32.266" endtime="20260610 16:07:32.269"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone fs -mkdir ${dir}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:32.273" level="INFO">Running command 'ozone fs -mkdir o3fs://bucket1.volume1.omservice/user 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:35.531" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:35.531" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:32.270" endtime="20260610 16:07:35.531"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:35.532" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:35.532" endtime="20260610 16:07:35.533"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:35.533" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:35.533" endtime="20260610 16:07:35.533"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:32.270" endtime="20260610 16:07:35.533"/>
+</kw>
+<msg timestamp="20260610 16:07:35.533" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:32.270" endtime="20260610 16:07:35.533"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:32.269" endtime="20260610 16:07:35.533"/>
+</kw>
+<kw name="Execute" library="os">
+<arg>ozone fs -mkdir ${dir}/hadoop</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260610 16:07:35.537" level="INFO">Running command 'ozone fs -mkdir o3fs://bucket1.volume1.omservice/user/hadoop 2&gt;&amp;1'.</msg>
+<msg timestamp="20260610 16:07:38.714" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260610 16:07:38.714" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260610 16:07:35.534" endtime="20260610 16:07:38.714"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260610 16:07:38.715" level="INFO"/>
+<status status="PASS" starttime="20260610 16:07:38.714" endtime="20260610 16:07:38.715"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260610 16:07:38.715" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260610 16:07:38.715" endtime="20260610 16:07:38.715"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:35.534" endtime="20260610 16:07:38.715"/>
+</kw>
+<msg timestamp="20260610 16:07:38.715" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260610 16:07:35.534" endtime="20260610 16:07:38.715"/>
+</kw>
+<status status="PASS" starttime="20260610 16:07:35.534" endtime="20260610 16:07:38.715"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260610 16:07:32.265" endtime="20260610 16:07:38.716"/>
+</test>
+<doc>Create directories required for MR test</doc>
+<status status="PASS" starttime="20260610 16:06:57.964" endtime="20260610 16:07:38.716"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="ozone-ha-hadoop">ozone-ha-hadoop</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
