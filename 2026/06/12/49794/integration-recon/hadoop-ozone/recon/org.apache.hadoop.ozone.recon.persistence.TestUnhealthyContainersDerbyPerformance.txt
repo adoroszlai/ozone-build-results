@@ -1,0 +1,167 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 1, Errors: 3, Skipped: 0, Time elapsed: 488.0 s <<< FAILURE! -- in org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance
+org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testAtomicReplaceDeleteAndInsertInSingleTransaction -- Time elapsed: 411.8 s <<< ERROR!
+java.util.concurrent.TimeoutException: testAtomicReplaceDeleteAndInsertInSingleTransaction() timed out after 5 minutes
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+	Suppressed: org.jooq.exception.DataAccessException: SQL [insert into "UNHEALTHY_CONTAINERS" ("container_id", "container_state", "in_state_since", "expected_replica_count", "actual_replica_count", "replica_delta", "reason") values (cast(? as bigint), cast(? as varchar(32672)), cast(? as bigint), cast(? as int), cast(? as int), cast(? as int), cast(? as varchar(32672)))]; Connection closed by unknown interrupt.
+		at org.jooq_3.11.9.DERBY.debug(Unknown Source)
+		at org.jooq.impl.Tools.translate(Tools.java:2429)
+		at org.jooq.impl.DefaultExecuteContext.sqlException(DefaultExecuteContext.java:832)
+		at org.jooq.impl.BatchSingle.executePrepared(BatchSingle.java:253)
+		at org.jooq.impl.BatchSingle.execute(BatchSingle.java:176)
+		at org.jooq.impl.BatchCRUD.executePrepared(BatchCRUD.java:155)
+		at org.jooq.impl.BatchCRUD.execute(BatchCRUD.java:96)
+		at org.apache.hadoop.ozone.recon.persistence.ContainerHealthSchemaManager.batchInsertInChunks(ContainerHealthSchemaManager.java:131)
+		at org.apache.hadoop.ozone.recon.persistence.ContainerHealthSchemaManager.lambda$replaceUnhealthyContainerRecordsAtomically$2(ContainerHealthSchemaManager.java:201)
+		at org.jooq.impl.DefaultDSLContext$3.run(DefaultDSLContext.java:584)
+		at org.jooq.impl.DefaultDSLContext$3.run(DefaultDSLContext.java:581)
+		at org.jooq.impl.DefaultDSLContext.lambda$transactionResult0$0(DefaultDSLContext.java:521)
+		at org.jooq.impl.Tools$10$1.block(Tools.java:4422)
+		at java.base/java.util.concurrent.ForkJoinPool.compensatedBlock(ForkJoinPool.java:3740)
+		at java.base/java.util.concurrent.ForkJoinPool.managedBlock(ForkJoinPool.java:3723)
+		at org.jooq.impl.Tools$10.get(Tools.java:4419)
+		at org.jooq.impl.DefaultDSLContext.transactionResult0(DefaultDSLContext.java:564)
+		at org.jooq.impl.DefaultDSLContext.transactionResult(DefaultDSLContext.java:491)
+		at org.jooq.impl.DefaultDSLContext.transaction(DefaultDSLContext.java:581)
+		at org.apache.hadoop.ozone.recon.persistence.ContainerHealthSchemaManager.replaceUnhealthyContainerRecordsAtomically(ContainerHealthSchemaManager.java:195)
+		at org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testAtomicReplaceDeleteAndInsertInSingleTransaction(TestUnhealthyContainersDerbyPerformance.java:574)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+		... 5 more
+		Suppressed: org.jooq.exception.DataAccessException: Cannot set autoCommit
+			at org.jooq.impl.DefaultConnectionProvider.setAutoCommit(DefaultConnectionProvider.java:217)
+			at org.jooq.impl.DefaultTransactionProvider.brace(DefaultTransactionProvider.java:245)
+			at org.jooq.impl.DefaultTransactionProvider.rollback(DefaultTransactionProvider.java:228)
+			at org.jooq.impl.DefaultDSLContext.lambda$transactionResult0$0(DefaultDSLContext.java:541)
+			... 15 more
+		Caused by: java.sql.SQLNonTransientConnectionException: No current connection.
+			at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+			at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+			at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+			at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+			at org.apache.derby.impl.jdbc.Util.noCurrentConnection(Unknown Source)
+			at org.apache.derby.impl.jdbc.EmbedConnection.checkIfClosed(Unknown Source)
+			at org.apache.derby.impl.jdbc.EmbedConnection.setAutoCommit(Unknown Source)
+			at org.jooq.impl.DefaultConnectionProvider.setAutoCommit(DefaultConnectionProvider.java:214)
+			... 18 more
+		Caused by: ERROR 08003: No current connection.
+			at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
+			at org.apache.derby.impl.jdbc.SQLExceptionFactory.wrapArgsForTransportAcrossDRDA(Unknown Source)
+			... 26 more
+	Caused by: java.sql.BatchUpdateException: Connection closed by unknown interrupt.
+		at org.apache.derby.impl.jdbc.EmbedStatement.executeLargeBatch(Unknown Source)
+		at org.apache.derby.impl.jdbc.EmbedStatement.executeBatch(Unknown Source)
+		at org.jooq.tools.jdbc.DefaultStatement.executeBatch(DefaultStatement.java:100)
+		at org.jooq.impl.BatchSingle.executePrepared(BatchSingle.java:233)
+		... 23 more
+	Caused by: java.sql.SQLNonTransientConnectionException: Connection closed by unknown interrupt.
+		at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+		at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+		at org.apache.derby.impl.jdbc.TransactionResourceImpl.wrapInSQLException(Unknown Source)
+		at org.apache.derby.impl.jdbc.TransactionResourceImpl.handleException(Unknown Source)
+		at org.apache.derby.impl.jdbc.EmbedConnection.handleException(Unknown Source)
+		at org.apache.derby.impl.jdbc.ConnectionChild.handleException(Unknown Source)
+		... 27 more
+	Caused by: ERROR 08000: Connection closed by unknown interrupt.
+		at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
+		at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
+		at org.apache.derby.iapi.util.InterruptStatus.setInterrupted(Unknown Source)
+		at org.apache.derby.iapi.util.InterruptStatus.throwIf(Unknown Source)
+		... 27 more
+
+org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testExistingInStateSinceLookupChunksLargeContainerIdList -- Time elapsed: 0.009 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: Lookup should return one record per existing container/state pair ==> expected: <100000> but was: <0>
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:563)
+	at org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testExistingInStateSinceLookupChunksLargeContainerIdList(TestUnhealthyContainersDerbyPerformance.java:630)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+
+org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testBatchDeletePerformanceOneMillionRecords -- Time elapsed: 0.012 s <<< ERROR!
+org.jooq.exception.DataAccessException: SQL [delete from "UNHEALTHY_CONTAINERS" where ("UNHEALTHY_CONTAINERS"."container_id" in (cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint), cast(? as bigint)) and "UNHEALTHY_CONTAINERS"."container_state" in (cast(? as varchar(32672)), cast(? as varchar(32672)), cast(? as varchar(32672)), cast(? as varchar(32672)), cast(? as varchar(32672)), cast(? as varchar(32672)), cast(? as varchar(32672))))]; No current connection.
+	at org.jooq_3.11.9.DERBY.debug(Unknown Source)
+	at org.jooq.impl.Tools.translate(Tools.java:2429)
+	at org.jooq.impl.DefaultExecuteContext.sqlException(DefaultExecuteContext.java:832)
+	at org.jooq.impl.AbstractQuery.execute(AbstractQuery.java:364)
+	at org.jooq.impl.AbstractDelegatingQuery.execute(AbstractDelegatingQuery.java:127)
+	at org.apache.hadoop.ozone.recon.persistence.ContainerHealthSchemaManager.deleteScmStatesForContainers(ContainerHealthSchemaManager.java:224)
+	at org.apache.hadoop.ozone.recon.persistence.ContainerHealthSchemaManager.batchDeleteSCMStatesForContainers(ContainerHealthSchemaManager.java:177)
+	at org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testBatchDeletePerformanceOneMillionRecords(TestUnhealthyContainersDerbyPerformance.java:679)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.sql.SQLNonTransientConnectionException: No current connection.
+	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.Util.noCurrentConnection(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.checkIfClosed(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.setupContextStack(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.prepareStatement(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.prepareStatement(Unknown Source)
+	at org.jooq.impl.ProviderEnabledConnection.prepareStatement(ProviderEnabledConnection.java:109)
+	at org.jooq.impl.SettingsEnabledConnection.prepareStatement(SettingsEnabledConnection.java:73)
+	at org.jooq.impl.AbstractQuery.prepare(AbstractQuery.java:416)
+	at org.jooq.impl.AbstractDMLQuery.prepare(AbstractDMLQuery.java:512)
+	at org.jooq.impl.AbstractQuery.execute(AbstractQuery.java:322)
+	... 10 more
+Caused by: ERROR 08003: No current connection.
+	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
+	at org.apache.derby.impl.jdbc.SQLExceptionFactory.wrapArgsForTransportAcrossDRDA(Unknown Source)
+	... 24 more
+
+org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testCountByStateAfterFullDelete -- Time elapsed: 0.002 s <<< ERROR!
+org.jooq.exception.DataAccessException: SQL [select count(*) from "UNHEALTHY_CONTAINERS" where "UNHEALTHY_CONTAINERS"."container_state" = cast(? as varchar(32672))]; No current connection.
+	at org.jooq_3.11.9.DERBY.debug(Unknown Source)
+	at org.jooq.impl.Tools.translate(Tools.java:2429)
+	at org.jooq.impl.DefaultExecuteContext.sqlException(DefaultExecuteContext.java:832)
+	at org.jooq.impl.AbstractQuery.execute(AbstractQuery.java:364)
+	at org.jooq.impl.AbstractResultQuery.fetchLazy(AbstractResultQuery.java:393)
+	at org.jooq.impl.AbstractResultQuery.fetchLazy(AbstractResultQuery.java:380)
+	at org.jooq.impl.AbstractResultQuery.fetchOne(AbstractResultQuery.java:545)
+	at org.jooq.impl.AbstractResultQuery.fetchOne(AbstractResultQuery.java:497)
+	at org.jooq.impl.AbstractResultQuery.fetchOne(AbstractResultQuery.java:503)
+	at org.jooq.impl.SelectImpl.fetchOne(SelectImpl.java:2839)
+	at org.apache.hadoop.ozone.recon.persistence.TestUnhealthyContainersDerbyPerformance.testCountByStateAfterFullDelete(TestUnhealthyContainersDerbyPerformance.java:722)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+Caused by: java.sql.SQLNonTransientConnectionException: No current connection.
+	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.SQLExceptionFactory.getSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.Util.generateCsSQLException(Unknown Source)
+	at org.apache.derby.impl.jdbc.Util.noCurrentConnection(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.checkIfClosed(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.setupContextStack(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.prepareStatement(Unknown Source)
+	at org.apache.derby.impl.jdbc.EmbedConnection.prepareStatement(Unknown Source)
+	at org.jooq.impl.ProviderEnabledConnection.prepareStatement(ProviderEnabledConnection.java:109)
+	at org.jooq.impl.SettingsEnabledConnection.prepareStatement(SettingsEnabledConnection.java:73)
+	at org.jooq.impl.AbstractResultQuery.prepare(AbstractResultQuery.java:239)
+	at org.jooq.impl.AbstractQuery.execute(AbstractQuery.java:322)
+	... 13 more
+Caused by: ERROR 08003: No current connection.
+	at org.apache.derby.iapi.error.StandardException.newException(Unknown Source)
+	at org.apache.derby.impl.jdbc.SQLExceptionFactory.wrapArgsForTransportAcrossDRDA(Unknown Source)
+	... 26 more
+
