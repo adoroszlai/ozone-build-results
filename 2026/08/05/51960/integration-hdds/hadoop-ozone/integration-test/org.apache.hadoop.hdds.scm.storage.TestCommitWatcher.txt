@@ -1,0 +1,47 @@
+-------------------------------------------------------------------------------
+Test set: org.apache.hadoop.hdds.scm.storage.TestCommitWatcher
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 68.64 s <<< FAILURE! -- in org.apache.hadoop.hdds.scm.storage.TestCommitWatcher
+org.apache.hadoop.hdds.scm.storage.TestCommitWatcher.testReleaseBuffersOnException -- Time elapsed: 33.18 s <<< ERROR!
+java.util.concurrent.ExecutionException: org.apache.ratis.protocol.exceptions.AlreadyClosedException: SlidingWindow$Client:client-28CF6E226D1A->RAFT is closed.
+	at java.base/java.util.concurrent.CompletableFuture.wrapInExecutionException(CompletableFuture.java:345)
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:440)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2094)
+	at org.apache.hadoop.hdds.scm.storage.TestCommitWatcher.testReleaseBuffersOnException(TestCommitWatcher.java:262)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:511)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1450)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:2019)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:187)
+Caused by: org.apache.ratis.protocol.exceptions.AlreadyClosedException: SlidingWindow$Client:client-28CF6E226D1A->RAFT is closed.
+	at org.apache.ratis.util.SlidingWindow$Client.alreadyClosed(SlidingWindow.java:409)
+	at org.apache.ratis.util.SlidingWindow$Client.fail(SlidingWindow.java:397)
+	at org.apache.ratis.client.impl.OrderedAsync.failAllAsyncRequests(OrderedAsync.java:155)
+	at org.apache.ratis.client.impl.OrderedAsync.handleException(OrderedAsync.java:239)
+	at org.apache.ratis.client.impl.OrderedAsync.lambda$sendRequestWithRetry$7(OrderedAsync.java:217)
+	at java.base/java.util.concurrent.CompletableFuture.uniExceptionally(CompletableFuture.java:1011)
+	at java.base/java.util.concurrent.CompletableFuture$UniExceptionally.tryFire(CompletableFuture.java:995)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:531)
+	at java.base/java.util.concurrent.CompletableFuture.completeExceptionally(CompletableFuture.java:2221)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers.completeReplyExceptionally(GrpcClientProtocolClient.java:383)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers.access$000(GrpcClientProtocolClient.java:289)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:303)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:294)
+	at org.apache.ratis.thirdparty.io.grpc.stub.ClientCalls$StreamObserverToCallListenerAdapter.onMessage(ClientCalls.java:568)
+	at org.apache.ratis.thirdparty.io.grpc.ForwardingClientCallListener.onMessage(ForwardingClientCallListener.java:33)
+	at org.apache.ratis.thirdparty.io.grpc.internal.DelayedClientCall$DelayedListener.onMessage(DelayedClientCall.java:471)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInternal(ClientCallImpl.java:662)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1MessagesAvailable.runInContext(ClientCallImpl.java:649)
+	at org.apache.ratis.thirdparty.io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+	at org.apache.ratis.thirdparty.io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1090)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:614)
+	at java.base/java.lang.Thread.run(Thread.java:1474)
+Caused by: org.apache.ratis.protocol.exceptions.RaftRetryFailureException: Failed RaftClientRequest:client-28CF6E226D1A->8a22905f-b9ad-4cd1-abdb-c73461fd2277@group-25CC15EB14F7, cid=26, seq=1*, Watch(0), null for 3 attempts with RequestTypeDependentRetryPolicy{WRITE->ExceptionDependentRetry(maxAttempts=2147483647; defaultPolicy=MultipleLinearRandomRetry[6x5s]; map={org.apache.ratis.protocol.exceptions.GroupMismatchException->NoRetry, org.apache.ratis.protocol.exceptions.NotReplicatedException->NoRetry, org.apache.ratis.protocol.exceptions.ResourceUnavailableException->org.apache.ratis.retry.ExponentialBackoffRetry@3127ec58, org.apache.ratis.protocol.exceptions.StateMachineException->NoRetry, org.apache.ratis.protocol.exceptions.TimeoutIOException->org.apache.ratis.retry.ExponentialBackoffRetry@3127ec58}), WATCH->ExceptionDependentRetry(maxAttempts=2147483647; defaultPolicy=MultipleLinearRandomRetry[6x5s]; map={org.apache.ratis.protocol.exceptions.GroupMismatchException->NoRetry, org.apache.ratis.protocol.exceptions.NotReplicatedException->NoRetry, org.apache.ratis.protocol.exceptions.ResourceUnavailableException->org.apache.ratis.retry.ExponentialBackoffRetry@3127ec58, org.apache.ratis.protocol.exceptions.StateMachineException->NoRetry, org.apache.ratis.protocol.exceptions.TimeoutIOException->NoRetry})}
+	at org.apache.ratis.client.impl.RaftClientImpl.noMoreRetries(RaftClientImpl.java:352)
+	... 20 more
+Caused by: org.apache.ratis.protocol.exceptions.NotLeaderException: Server 8a22905f-b9ad-4cd1-abdb-c73461fd2277@group-25CC15EB14F7 is not the leader, suggested leader is: d91a0434-a6ad-4653-8ee9-d1047b262f0c|127.0.0.1:15063
+	at org.apache.ratis.client.impl.ClientProtoUtils.toRaftClientReply(ClientProtoUtils.java:402)
+	at org.apache.ratis.grpc.client.GrpcClientProtocolClient$AsyncStreamObservers$1.onNext(GrpcClientProtocolClient.java:299)
+	... 11 more
+
