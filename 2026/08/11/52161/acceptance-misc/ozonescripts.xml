@@ -1,0 +1,4486 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.25 on linux)" generated="20260811 12:07:14.335" rpa="false" schemaversion="4">
+<suite id="s1" name="ozonescripts">
+<suite id="s1-s1" name="Single Node" source="/opt/hadoop/smoketest/basic/single_node.robot">
+<kw name="Get Security Enabled From Config" library="commonlib" type="SETUP">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260811 12:06:08.657" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:08.656" endtime="20260811 12:06:08.657"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<status status="NOT RUN" starttime="20260811 12:06:08.657" endtime="20260811 12:06:08.657"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260811 12:06:08.658" endtime="20260811 12:06:08.658"/>
+</kw>
+<status status="NOT RUN" starttime="20260811 12:06:08.657" endtime="20260811 12:06:08.658"/>
+</branch>
+<status status="NOT RUN" starttime="20260811 12:06:08.657" endtime="20260811 12:06:08.658"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" starttime="20260811 12:06:08.658" endtime="20260811 12:06:08.658"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:08.655" endtime="20260811 12:06:08.658"/>
+</kw>
+<test id="s1-s1-t1" name="Basic Freon smoketest for one datanode" line="26">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260811 12:06:08.659" endtime="20260811 12:06:08.659"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>10</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20260811 12:06:08.660" level="INFO">${random} = LS4bkRpCBr</msg>
+<status status="PASS" starttime="20260811 12:06:08.660" endtime="20260811 12:06:08.660"/>
+</kw>
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=${random}</arg>
+<arg>args=--replication ONE --replication-type RATIS</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:08.667" level="INFO">Running command 'ozone freon ockg  -t 1 -n1 -p LS4bkRpCBr --replication ONE --replication-type RATIS 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:21.117" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:21.117" level="INFO">${output} = 2026-08-11 12:06:10,536 [main] INFO tracing.TracingUtil: Sampling Trace Config = '1.0'
+2026-08-11 12:06:10,537 [main] INFO tracing.TracingUtil: Sampling Span Config = ''
+2026-08-11 12:06:10,683 [main]...</msg>
+<status status="PASS" starttime="20260811 12:06:08.662" endtime="20260811 12:06:21.117"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:21.118" level="INFO">2026-08-11 12:06:10,536 [main] INFO tracing.TracingUtil: Sampling Trace Config = '1.0'
+2026-08-11 12:06:10,537 [main] INFO tracing.TracingUtil: Sampling Span Config = ''
+2026-08-11 12:06:10,683 [main] INFO tracing.TracingUtil: Initialized tracing service: freon (enabled=false, applicationAware=true)
+2026-08-11 12:06:10,705 [main] INFO freon.BaseFreonGenerator: Executing test with prefix LS4bkRpCBr and number-of-tests 1
+2026-08-11 12:06:10,750 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:11,751 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:12,751 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:13,519 [main] INFO retry.RetryInvocationHandler: com.google.protobuf.ServiceException: org.apache.hadoop.ipc_.RemoteException(org.apache.hadoop.ozone.om.exceptions.OMNotLeaderException): OM:om1 is not the leader. Could not determine the leader node.
+	at org.apache.hadoop.ozone.om.ratis.OzoneManagerRatisServer.newOMNotLeaderException(OzoneManagerRatisServer.java:901)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.createLeaderErrorException(OzoneManagerProtocolServerSideTranslatorPB.java:432)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitReadRequestToOmDefault(OzoneManagerProtocolServerSideTranslatorPB.java:375)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitReadRequestToOM(OzoneManagerProtocolServerSideTranslatorPB.java:249)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.internalProcessRequest(OzoneManagerProtocolServerSideTranslatorPB.java:194)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.processRequest(OzoneManagerProtocolServerSideTranslatorPB.java:140)
+	at org.apache.hadoop.hdds.server.OzoneProtocolMessageDispatcher.processRequest(OzoneProtocolMessageDispatcher.java:91)
+	at org.apache.hadoop.ozone.protocolPB.OzoneManagerProtocolServerSideTranslatorPB.submitRequest(OzoneManagerProtocolServerSideTranslatorPB.java:129)
+	at org.apache.hadoop.ozone.protocol.proto.OzoneManagerProtocolProtos$OzoneManagerService$2.callBlockingMethod(OzoneManagerProtocolProtos.java)
+	at org.apache.hadoop.ipc_.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:419)
+	at org.apache.hadoop.ipc_.ProtobufRpcEngine$Server$ProtoBufRpcInvoker.call(ProtobufRpcEngine.java:388)
+	at org.apache.hadoop.ipc_.RPC$Server.call(RPC.java:769)
+	at org.apache.hadoop.ipc_.Server$RpcCall.run(Server.java:831)
+	at org.apache.hadoop.ipc_.Server$RpcCall.run(Server.java:764)
+	at java.base/jdk.internal.vm.ScopedValueContainer.callWithoutScope(ScopedValueContainer.java:162)
+	at java.base/jdk.internal.vm.ScopedValueContainer.call(ScopedValueContainer.java:147)
+	at java.base/java.lang.ScopedValue$Carrier.call(ScopedValue.java:419)
+	at java.base/javax.security.auth.Subject.callAs(Subject.java:331)
+	at org.apache.hadoop.security.authentication.util.SubjectUtil.callAs(SubjectUtil.java:161)
+	at org.apache.hadoop.security.authentication.util.SubjectUtil.doAs(SubjectUtil.java:233)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1951)
+	at org.apache.hadoop.ipc_.Server$Handler.run(Server.java:2664)
+, while invoking $Proxy18.submitRequest over [nodeId=om1,nodeAddress=om:9862] after 1 failover attempts. Trying to failover after sleeping for 4000ms. Current retry count: 1.
+2026-08-11 12:06:13,752 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:14,752 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:15,752 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:16,753 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:17,754 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:18,406 [main] INFO rpc.RpcClient: Creating Volume: vol1, with hadoop as owner and space quota set to -1 bytes, counts quota set to -1
+2026-08-11 12:06:18,508 [main] INFO rpc.RpcClient: Creating Bucket: vol1/bucket1, with server-side default bucket layout, hadoop as owner, Versioning false, Storage Type set to DISK and Encryption set to false, Replication Type set to server-side default replication type, Namespace Quota set to -1, Space Quota set to -1 
+2026-08-11 12:06:18,755 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:18,879 [pool-4-thread-1] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2026-08-11 12:06:19,756 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:20,757 [Thread-5] INFO freon.ProgressBar: Progress: 100.00 % (1 out of 1)
+2026-08-11 12:06:20,783 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-create, count=1, min=1504.217295, max=1504.217295, mean=1504.217295, stddev=0.0, median=1504.217295, p75=1504.217295, p95=1504.217295, p98=1504.217295, p99=1504.217295, p999=1504.217295, mean_rate=0.4488475642417284, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2026-08-11 12:06:20,784 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 10
+2026-08-11 12:06:20,784 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2026-08-11 12:06:20,784 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 1</msg>
+<status status="PASS" starttime="20260811 12:06:21.117" endtime="20260811 12:06:21.118"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:21.118" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:21.118" endtime="20260811 12:06:21.119"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:08.662" endtime="20260811 12:06:21.119"/>
+</kw>
+<msg timestamp="20260811 12:06:21.119" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:08.662" endtime="20260811 12:06:21.119"/>
+</kw>
+<msg timestamp="20260811 12:06:21.119" level="INFO">${result} = 2026-08-11 12:06:10,536 [main] INFO tracing.TracingUtil: Sampling Trace Config = '1.0'
+2026-08-11 12:06:10,537 [main] INFO tracing.TracingUtil: Sampling Span Config = ''
+2026-08-11 12:06:10,683 [main]...</msg>
+<status status="PASS" starttime="20260811 12:06:08.661" endtime="20260811 12:06:21.119"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:21.119" endtime="20260811 12:06:21.120"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:08.660" endtime="20260811 12:06:21.120"/>
+</kw>
+<kw name="Freon OCKV" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockv ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:21.124" level="INFO">Running command 'ozone freon ockv  -t 1 -n1 -p LS4bkRpCBr  2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:26.171" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:26.172" level="INFO">${output} = 2026-08-11 12:06:22,619 [main] INFO tracing.TracingUtil: Sampling Trace Config = '1.0'
+2026-08-11 12:06:22,620 [main] INFO tracing.TracingUtil: Sampling Span Config = ''
+2026-08-11 12:06:22,750 [main]...</msg>
+<status status="PASS" starttime="20260811 12:06:21.122" endtime="20260811 12:06:26.172"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:26.173" level="INFO">2026-08-11 12:06:22,619 [main] INFO tracing.TracingUtil: Sampling Trace Config = '1.0'
+2026-08-11 12:06:22,620 [main] INFO tracing.TracingUtil: Sampling Span Config = ''
+2026-08-11 12:06:22,750 [main] INFO tracing.TracingUtil: Initialized tracing service: freon (enabled=false, applicationAware=true)
+2026-08-11 12:06:22,767 [main] INFO freon.BaseFreonGenerator: Executing test with prefix LS4bkRpCBr and number-of-tests 1
+2026-08-11 12:06:22,815 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:23,816 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:24,655 [main] WARN impl.MetricsSystemImpl: ozone-freon metrics system already initialized!
+2026-08-11 12:06:24,689 [main] INFO scm.XceiverClientGrpc: XceiverClientGrpc is created for pipeline Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: STANDALONE/ONE, State:OPEN, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}
+2026-08-11 12:06:24,816 [Thread-5] INFO freon.ProgressBar: Progress: 0.00 % (0 out of 1)
+2026-08-11 12:06:25,817 [Thread-5] INFO freon.ProgressBar: Progress: 100.00 % (1 out of 1)
+2026-08-11 12:06:25,838 [shutdown-hook-0] INFO metrics: type=TIMER, name=key-validate, count=1, min=25.63113, max=25.63113, mean=25.63113, stddev=0.0, median=25.63113, p75=25.63113, p95=25.63113, p98=25.63113, p99=25.63113, p999=25.63113, mean_rate=1.9902003648546758, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2026-08-11 12:06:25,838 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Total execution time (sec): 3
+2026-08-11 12:06:25,838 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Failures: 0
+2026-08-11 12:06:25,838 [shutdown-hook-0] INFO freon.BaseFreonGenerator: Successful executions: 1</msg>
+<status status="PASS" starttime="20260811 12:06:26.172" endtime="20260811 12:06:26.173"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:26.173" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:26.173" endtime="20260811 12:06:26.173"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:21.121" endtime="20260811 12:06:26.173"/>
+</kw>
+<msg timestamp="20260811 12:06:26.174" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:21.121" endtime="20260811 12:06:26.174"/>
+</kw>
+<msg timestamp="20260811 12:06:26.174" level="INFO">${result} = 2026-08-11 12:06:22,619 [main] INFO tracing.TracingUtil: Sampling Trace Config = '1.0'
+2026-08-11 12:06:22,620 [main] INFO tracing.TracingUtil: Sampling Span Config = ''
+2026-08-11 12:06:22,750 [main]...</msg>
+<status status="PASS" starttime="20260811 12:06:21.121" endtime="20260811 12:06:26.174"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:26.174" endtime="20260811 12:06:26.174"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:21.120" endtime="20260811 12:06:26.174"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:08.658" endtime="20260811 12:06:26.174"/>
+</test>
+<doc>Smoketest for one datanode</doc>
+<status status="PASS" starttime="20260811 12:06:08.575" endtime="20260811 12:06:26.175"/>
+</suite>
+<suite id="s1-s2" name="Pipeline" source="/opt/hadoop/smoketest/admincli/pipeline.robot">
+<kw name="Kinit test user" library="commonlib" type="SETUP">
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<kw name="Get Security Enabled From Config" library="commonlib">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<msg timestamp="20260811 12:06:26.768" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:26.767" endtime="20260811 12:06:26.768"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<status status="NOT RUN" starttime="20260811 12:06:26.768" endtime="20260811 12:06:26.768"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260811 12:06:26.768" endtime="20260811 12:06:26.768"/>
+</kw>
+<status status="NOT RUN" starttime="20260811 12:06:26.768" endtime="20260811 12:06:26.768"/>
+</branch>
+<status status="NOT RUN" starttime="20260811 12:06:26.768" endtime="20260811 12:06:26.768"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="NOT RUN" starttime="20260811 12:06:26.768" endtime="20260811 12:06:26.768"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:26.767" endtime="20260811 12:06:26.769"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'false'</arg>
+<arg>Skip in unsecure cluster</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<msg timestamp="20260811 12:06:26.769" level="INFO">Execution passed with message:
+Skip in unsecure cluster</msg>
+<status status="PASS" starttime="20260811 12:06:26.769" endtime="20260811 12:06:26.769"/>
+</kw>
+<kw name="Get test user principal" library="commonlib">
+<var>${TEST_USER}</var>
+<arg>${user}</arg>
+<status status="NOT RUN" starttime="20260811 12:06:26.769" endtime="20260811 12:06:26.769"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${TEST_USER}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" starttime="20260811 12:06:26.769" endtime="20260811 12:06:26.769"/>
+</kw>
+<kw name="Wait Until Keyword Succeeds" library="BuiltIn">
+<arg>2min</arg>
+<arg>10sec</arg>
+<arg>Execute</arg>
+<arg>kinit -k -t /etc/security/keytabs/${keytab} ${TEST_USER}</arg>
+<doc>Runs the specified keyword and retries if it fails.</doc>
+<status status="NOT RUN" starttime="20260811 12:06:26.769" endtime="20260811 12:06:26.769"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:26.767" endtime="20260811 12:06:26.769"/>
+</kw>
+<test id="s1-s2-t1" name="List pipelines" line="34">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:26.773" level="INFO">Running command 'ozone admin pipeline list 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:29.182" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:29.183" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:26.771" endtime="20260811 12:06:29.183"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:29.183" level="INFO">Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}</msg>
+<status status="PASS" starttime="20260811 12:06:29.183" endtime="20260811 12:06:29.184"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:29.184" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:29.184" endtime="20260811 12:06:29.184"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:26.770" endtime="20260811 12:06:29.184"/>
+</kw>
+<msg timestamp="20260811 12:06:29.184" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:26.770" endtime="20260811 12:06:29.184"/>
+</kw>
+<msg timestamp="20260811 12:06:29.185" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:26.770" endtime="20260811 12:06:29.185"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>RATIS/ONE</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:29.185" endtime="20260811 12:06:29.185"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${pipeline}</var>
+<arg>echo '${output}' | grep 'ReplicationConfig: RATIS/ONE' | head -n 1 | cut -d' ' -f3 | sed 's/,$//'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:29.188" level="INFO">Running command 'echo 'Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}' | grep 'ReplicationConfig: RATIS/ONE' | head -n 1 | cut -d' ' -f3 | sed 's/,$//' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:29.192" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:29.192" level="INFO">${output} = 3d37193e-fa40-46eb-bec9-d9c83e7a9192</msg>
+<status status="PASS" starttime="20260811 12:06:29.186" endtime="20260811 12:06:29.192"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:29.193" level="INFO">3d37193e-fa40-46eb-bec9-d9c83e7a9192</msg>
+<status status="PASS" starttime="20260811 12:06:29.193" endtime="20260811 12:06:29.193"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:29.194" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:29.193" endtime="20260811 12:06:29.194"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:29.186" endtime="20260811 12:06:29.194"/>
+</kw>
+<msg timestamp="20260811 12:06:29.194" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:29.186" endtime="20260811 12:06:29.194"/>
+</kw>
+<msg timestamp="20260811 12:06:29.194" level="INFO">${pipeline} = 3d37193e-fa40-46eb-bec9-d9c83e7a9192</msg>
+<status status="PASS" starttime="20260811 12:06:29.185" endtime="20260811 12:06:29.194"/>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<arg>${PIPELINE}</arg>
+<arg>${pipeline}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<msg timestamp="20260811 12:06:29.194" level="INFO">${PIPELINE} = 3d37193e-fa40-46eb-bec9-d9c83e7a9192</msg>
+<status status="PASS" starttime="20260811 12:06:29.194" endtime="20260811 12:06:29.195"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:26.769" endtime="20260811 12:06:29.195"/>
+</test>
+<test id="s1-s2-t2" name="List pipeline with json option" line="40">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --json</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:29.199" level="INFO">Running command 'ozone admin pipeline list --json 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:31.590" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:31.591" level="INFO">${output} = [ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" ...</msg>
+<status status="PASS" starttime="20260811 12:06:29.196" endtime="20260811 12:06:31.591"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:31.592" level="INFO">[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:31.466385695Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false
+} ]</msg>
+<status status="PASS" starttime="20260811 12:06:31.591" endtime="20260811 12:06:31.592"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:31.592" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:31.592" endtime="20260811 12:06:31.592"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:29.196" endtime="20260811 12:06:31.592"/>
+</kw>
+<msg timestamp="20260811 12:06:31.592" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:29.196" endtime="20260811 12:06:31.593"/>
+</kw>
+<msg timestamp="20260811 12:06:31.593" level="INFO">${output} = [ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" ...</msg>
+<status status="PASS" starttime="20260811 12:06:29.196" endtime="20260811 12:06:31.593"/>
+</kw>
+<kw name="List Should Have Ratis Pipeline">
+<arg>${output}</arg>
+<arg>ONE</arg>
+<kw name="Execute" library="os">
+<var>${actual}</var>
+<arg>echo '${json}' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "${factor}", "replicationType": "RATIS"}])'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:31.597" level="INFO">Running command 'echo '[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:31.466385695Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false
+} ]' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:31.602" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:31.602" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20260811 12:06:31.594" endtime="20260811 12:06:31.602"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:31.603" level="INFO">true</msg>
+<status status="PASS" starttime="20260811 12:06:31.602" endtime="20260811 12:06:31.603"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:31.603" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:31.603" endtime="20260811 12:06:31.603"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:31.594" endtime="20260811 12:06:31.603"/>
+</kw>
+<msg timestamp="20260811 12:06:31.603" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:31.594" endtime="20260811 12:06:31.603"/>
+</kw>
+<msg timestamp="20260811 12:06:31.604" level="INFO">${actual} = true</msg>
+<status status="PASS" starttime="20260811 12:06:31.593" endtime="20260811 12:06:31.604"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${expected}'</arg>
+<arg>'${actual}'</arg>
+<arg>ignore_case=True</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260811 12:06:31.604" endtime="20260811 12:06:31.604"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:31.593" endtime="20260811 12:06:31.604"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:29.195" endtime="20260811 12:06:31.604"/>
+</test>
+<test id="s1-s2-t3" name="List pipelines with explicit host" line="44">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --scm ${SCM}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:31.608" level="INFO">Running command 'ozone admin pipeline list --scm scm 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:33.919" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:33.919" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:31.606" endtime="20260811 12:06:33.919"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:33.920" level="INFO">Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}</msg>
+<status status="PASS" starttime="20260811 12:06:33.920" endtime="20260811 12:06:33.920"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:33.921" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:33.920" endtime="20260811 12:06:33.921"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:31.606" endtime="20260811 12:06:33.921"/>
+</kw>
+<msg timestamp="20260811 12:06:33.921" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:31.605" endtime="20260811 12:06:33.921"/>
+</kw>
+<msg timestamp="20260811 12:06:33.921" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:31.605" endtime="20260811 12:06:33.921"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>RATIS/ONE</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:33.921" endtime="20260811 12:06:33.921"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:31.605" endtime="20260811 12:06:33.922"/>
+</test>
+<test id="s1-s2-t4" name="List pipelines with explicit host and json option" line="48">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --scm ${SCM} --json</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:33.926" level="INFO">Running command 'ozone admin pipeline list --scm scm --json 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:36.269" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:36.269" level="INFO">${output} = [ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" ...</msg>
+<status status="PASS" starttime="20260811 12:06:33.923" endtime="20260811 12:06:36.269"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:36.270" level="INFO">[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:36.145045266Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false,
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  }
+} ]</msg>
+<status status="PASS" starttime="20260811 12:06:36.269" endtime="20260811 12:06:36.270"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:36.270" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:36.270" endtime="20260811 12:06:36.271"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:33.923" endtime="20260811 12:06:36.271"/>
+</kw>
+<msg timestamp="20260811 12:06:36.271" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:33.923" endtime="20260811 12:06:36.271"/>
+</kw>
+<msg timestamp="20260811 12:06:36.271" level="INFO">${output} = [ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" ...</msg>
+<status status="PASS" starttime="20260811 12:06:33.923" endtime="20260811 12:06:36.271"/>
+</kw>
+<kw name="List Should Have Ratis Pipeline">
+<arg>${output}</arg>
+<arg>ONE</arg>
+<kw name="Execute" library="os">
+<var>${actual}</var>
+<arg>echo '${json}' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "${factor}", "replicationType": "RATIS"}])'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:36.275" level="INFO">Running command 'echo '[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:36.145045266Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false,
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  }
+} ]' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:36.281" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:36.281" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20260811 12:06:36.273" endtime="20260811 12:06:36.281"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:36.282" level="INFO">true</msg>
+<status status="PASS" starttime="20260811 12:06:36.281" endtime="20260811 12:06:36.282"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:36.282" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:36.282" endtime="20260811 12:06:36.282"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:36.272" endtime="20260811 12:06:36.282"/>
+</kw>
+<msg timestamp="20260811 12:06:36.282" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:36.272" endtime="20260811 12:06:36.283"/>
+</kw>
+<msg timestamp="20260811 12:06:36.283" level="INFO">${actual} = true</msg>
+<status status="PASS" starttime="20260811 12:06:36.272" endtime="20260811 12:06:36.283"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${expected}'</arg>
+<arg>'${actual}'</arg>
+<arg>ignore_case=True</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260811 12:06:36.283" endtime="20260811 12:06:36.283"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:36.271" endtime="20260811 12:06:36.283"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:33.922" endtime="20260811 12:06:36.283"/>
+</test>
+<test id="s1-s2-t5" name="List pipeline respects deprecated option -ffc" line="52">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list --json -ffc ONE 2&gt;/dev/null</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:36.287" level="INFO">Running command 'ozone admin pipeline list --json -ffc ONE 2&gt;/dev/null'.</msg>
+<msg timestamp="20260811 12:06:38.831" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:38.832" level="INFO">${output} = [ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" ...</msg>
+<status status="PASS" starttime="20260811 12:06:36.285" endtime="20260811 12:06:38.832"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:38.833" level="INFO">[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:38.635125032Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false,
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  }
+} ]</msg>
+<status status="PASS" starttime="20260811 12:06:38.832" endtime="20260811 12:06:38.833"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:38.833" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:38.833" endtime="20260811 12:06:38.833"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:36.285" endtime="20260811 12:06:38.833"/>
+</kw>
+<msg timestamp="20260811 12:06:38.834" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:36.285" endtime="20260811 12:06:38.834"/>
+</kw>
+<msg timestamp="20260811 12:06:38.834" level="INFO">${output} = [ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" ...</msg>
+<status status="PASS" starttime="20260811 12:06:36.284" endtime="20260811 12:06:38.834"/>
+</kw>
+<kw name="List Should Have Ratis Pipeline">
+<arg>${output}</arg>
+<arg>ONE</arg>
+<kw name="Execute" library="os">
+<var>${actual}</var>
+<arg>echo '${json}' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "${factor}", "replicationType": "RATIS"}])'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:38.838" level="INFO">Running command 'echo '[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:38.635125032Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false,
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  }
+} ]' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "ONE", "replicationType": "RATIS"}])' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:38.843" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:38.843" level="INFO">${output} = true</msg>
+<status status="PASS" starttime="20260811 12:06:38.835" endtime="20260811 12:06:38.843"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:38.844" level="INFO">true</msg>
+<status status="PASS" starttime="20260811 12:06:38.844" endtime="20260811 12:06:38.844"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:38.845" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:38.844" endtime="20260811 12:06:38.845"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:38.835" endtime="20260811 12:06:38.845"/>
+</kw>
+<msg timestamp="20260811 12:06:38.845" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:38.835" endtime="20260811 12:06:38.845"/>
+</kw>
+<msg timestamp="20260811 12:06:38.845" level="INFO">${actual} = true</msg>
+<status status="PASS" starttime="20260811 12:06:38.834" endtime="20260811 12:06:38.845"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${expected}'</arg>
+<arg>'${actual}'</arg>
+<arg>ignore_case=True</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260811 12:06:38.845" endtime="20260811 12:06:38.846"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:38.834" endtime="20260811 12:06:38.846"/>
+</kw>
+<kw name="List Should Have Ratis Pipeline">
+<arg>${output}</arg>
+<arg>THREE</arg>
+<arg>${FALSE}</arg>
+<kw name="Execute" library="os">
+<var>${actual}</var>
+<arg>echo '${json}' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "${factor}", "replicationType": "RATIS"}])'</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:38.850" level="INFO">Running command 'echo '[ {
+  "id" : {
+    "id" : "3d37193e-fa40-46eb-bec9-d9c83e7a9192"
+  },
+  "replicationConfig" : {
+    "replicationFactor" : "ONE",
+    "requiredNodes" : 1,
+    "minimumNodes" : 1,
+    "replicationType" : "RATIS"
+  },
+  "replicaIndexes" : {
+    "0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4)" : 0
+  },
+  "nodesInOrder" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "creationTimestamp" : "2026-08-11T12:05:53.901Z",
+  "suggestedLeaderId" : {
+    "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "byteString" : {
+      "validUtf8" : true,
+      "empty" : false
+    }
+  },
+  "stateEnterTime" : "2026-08-11T12:06:38.635125032Z",
+  "empty" : false,
+  "type" : "RATIS",
+  "pipelineState" : "OPEN",
+  "nodes" : [ {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  } ],
+  "leaderNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "healthy" : false,
+  "closestNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  },
+  "firstNode" : {
+    "level" : 3,
+    "cost" : 0,
+    "id" : {
+      "uuid" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "byteString" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ipAddress" : "172.18.0.4",
+    "hostName" : "ozonescripts-datanode-1.ozonescripts_default",
+    "ports" : [ {
+      "name" : "STANDALONE",
+      "value" : 9859
+    }, {
+      "name" : "RATIS",
+      "value" : 9858
+    }, {
+      "name" : "REPLICATION",
+      "value" : 9886
+    }, {
+      "name" : "RATIS_ADMIN",
+      "value" : 9857
+    }, {
+      "name" : "RATIS_SERVER",
+      "value" : 9856
+    }, {
+      "name" : "HTTP",
+      "value" : 9882
+    }, {
+      "name" : "CLIENT_RPC",
+      "value" : 19864
+    } ],
+    "setupTime" : 0,
+    "persistedOpState" : "IN_SERVICE",
+    "persistedOpStateExpiryEpochSec" : 0,
+    "initialVersion" : 0,
+    "currentVersion" : 4,
+    "hostNameAsByteString" : {
+      "string" : "ozonescripts-datanode-1.ozonescripts_default",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "maintenance" : false,
+    "uuidString" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "ipAddressAsByteString" : {
+      "string" : "172.18.0.4",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "ratisPort" : {
+      "name" : "RATIS",
+      "value" : 9858
+    },
+    "standalonePort" : {
+      "name" : "STANDALONE",
+      "value" : 9859
+    },
+    "decommissioned" : false,
+    "networkName" : "0a206e86-5401-4050-aed7-3257c05dc703",
+    "networkLocationAsByteString" : {
+      "string" : "/default-rack",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkNameAsByteString" : {
+      "string" : "0a206e86-5401-4050-aed7-3257c05dc703",
+      "bytes" : {
+        "validUtf8" : true,
+        "empty" : false
+      }
+    },
+    "networkLocation" : "/default-rack",
+    "networkFullPath" : "/default-rack/0a206e86-5401-4050-aed7-3257c05dc703",
+    "numOfLeaves" : 1
+  }
+} ]' | jq 'map(.replicationConfig) | contains([{"replicationFactor": "THREE", "replicationType": "RATIS"}])' 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:38.857" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:38.857" level="INFO">${output} = false</msg>
+<status status="PASS" starttime="20260811 12:06:38.847" endtime="20260811 12:06:38.857"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:38.858" level="INFO">false</msg>
+<status status="PASS" starttime="20260811 12:06:38.858" endtime="20260811 12:06:38.858"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:38.859" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:38.859" endtime="20260811 12:06:38.860"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:38.847" endtime="20260811 12:06:38.860"/>
+</kw>
+<msg timestamp="20260811 12:06:38.860" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:38.846" endtime="20260811 12:06:38.860"/>
+</kw>
+<msg timestamp="20260811 12:06:38.860" level="INFO">${actual} = false</msg>
+<status status="PASS" starttime="20260811 12:06:38.846" endtime="20260811 12:06:38.860"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>'${expected}'</arg>
+<arg>'${actual}'</arg>
+<arg>ignore_case=True</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20260811 12:06:38.860" endtime="20260811 12:06:38.861"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:38.846" endtime="20260811 12:06:38.861"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:36.284" endtime="20260811 12:06:38.861"/>
+</test>
+<test id="s1-s2-t6" name="List pipeline respects deprecated option -fst" line="57">
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list -fst DORMANT</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:38.865" level="INFO">Running command 'ozone admin pipeline list -fst DORMANT 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:41.176" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:41.176" level="INFO">${output} = WARNING: Option '-fst' is deprecated. Use '--filter-by-state' instead.</msg>
+<status status="PASS" starttime="20260811 12:06:38.863" endtime="20260811 12:06:41.176"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:41.177" level="INFO">WARNING: Option '-fst' is deprecated. Use '--filter-by-state' instead.</msg>
+<status status="PASS" starttime="20260811 12:06:41.176" endtime="20260811 12:06:41.177"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:41.177" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:41.177" endtime="20260811 12:06:41.177"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:38.862" endtime="20260811 12:06:41.177"/>
+</kw>
+<msg timestamp="20260811 12:06:41.178" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:38.862" endtime="20260811 12:06:41.178"/>
+</kw>
+<msg timestamp="20260811 12:06:41.178" level="INFO">${output} = WARNING: Option '-fst' is deprecated. Use '--filter-by-state' instead.</msg>
+<status status="PASS" starttime="20260811 12:06:38.862" endtime="20260811 12:06:41.178"/>
+</kw>
+<kw name="Should Not Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>DORMANT</arg>
+<doc>Fails if ``container`` contains ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:41.178" endtime="20260811 12:06:41.178"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:38.861" endtime="20260811 12:06:41.178"/>
+</test>
+<test id="s1-s2-t7" name="Deactivate pipeline" line="61">
+<kw name="Execute" library="os">
+<arg>ozone admin pipeline deactivate "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:41.182" level="INFO">Running command 'ozone admin pipeline deactivate "3d37193e-fa40-46eb-bec9-d9c83e7a9192" 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:43.442" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:43.442" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260811 12:06:41.180" endtime="20260811 12:06:43.442"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:43.443" level="INFO"/>
+<status status="PASS" starttime="20260811 12:06:43.443" endtime="20260811 12:06:43.443"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:43.444" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:43.444" endtime="20260811 12:06:43.444"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:41.180" endtime="20260811 12:06:43.444"/>
+</kw>
+<msg timestamp="20260811 12:06:43.444" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:41.180" endtime="20260811 12:06:43.444"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:41.179" endtime="20260811 12:06:43.444"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list | grep "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:43.448" level="INFO">Running command 'ozone admin pipeline list | grep "3d37193e-fa40-46eb-bec9-d9c83e7a9192" 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:45.646" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:45.646" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:43.445" endtime="20260811 12:06:45.647"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:45.647" level="INFO">Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:DORMANT, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}</msg>
+<status status="PASS" starttime="20260811 12:06:45.647" endtime="20260811 12:06:45.648"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:45.648" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:45.648" endtime="20260811 12:06:45.648"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:43.445" endtime="20260811 12:06:45.648"/>
+</kw>
+<msg timestamp="20260811 12:06:45.648" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:43.445" endtime="20260811 12:06:45.649"/>
+</kw>
+<msg timestamp="20260811 12:06:45.649" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:43.444" endtime="20260811 12:06:45.649"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>DORMANT</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:45.649" endtime="20260811 12:06:45.649"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:41.179" endtime="20260811 12:06:45.649"/>
+</test>
+<test id="s1-s2-t8" name="Activate pipeline" line="66">
+<kw name="Execute" library="os">
+<arg>ozone admin pipeline activate "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:45.654" level="INFO">Running command 'ozone admin pipeline activate "3d37193e-fa40-46eb-bec9-d9c83e7a9192" 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:47.826" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:47.826" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260811 12:06:45.651" endtime="20260811 12:06:47.826"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:47.827" level="INFO"/>
+<status status="PASS" starttime="20260811 12:06:47.826" endtime="20260811 12:06:47.827"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:47.827" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:47.827" endtime="20260811 12:06:47.828"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:45.651" endtime="20260811 12:06:47.828"/>
+</kw>
+<msg timestamp="20260811 12:06:47.828" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:45.651" endtime="20260811 12:06:47.828"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:45.650" endtime="20260811 12:06:47.828"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list | grep "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:47.831" level="INFO">Running command 'ozone admin pipeline list | grep "3d37193e-fa40-46eb-bec9-d9c83e7a9192" 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:50.099" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:50.100" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:47.829" endtime="20260811 12:06:50.100"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:50.100" level="INFO">Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:OPEN, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}</msg>
+<status status="PASS" starttime="20260811 12:06:50.100" endtime="20260811 12:06:50.101"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:50.101" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:50.101" endtime="20260811 12:06:50.101"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:47.829" endtime="20260811 12:06:50.101"/>
+</kw>
+<msg timestamp="20260811 12:06:50.101" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:47.828" endtime="20260811 12:06:50.101"/>
+</kw>
+<msg timestamp="20260811 12:06:50.101" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:47.828" endtime="20260811 12:06:50.101"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>OPEN</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:50.101" endtime="20260811 12:06:50.102"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:45.650" endtime="20260811 12:06:50.102"/>
+</test>
+<test id="s1-s2-t9" name="Close pipeline" line="71">
+<kw name="Execute" library="os">
+<arg>ozone admin pipeline close "${PIPELINE}"</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:50.106" level="INFO">Running command 'ozone admin pipeline close "3d37193e-fa40-46eb-bec9-d9c83e7a9192" 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:52.319" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:52.319" level="INFO">${output} = </msg>
+<status status="PASS" starttime="20260811 12:06:50.103" endtime="20260811 12:06:52.319"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:52.320" level="INFO"/>
+<status status="PASS" starttime="20260811 12:06:52.319" endtime="20260811 12:06:52.320"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:52.320" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:52.320" endtime="20260811 12:06:52.321"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:50.103" endtime="20260811 12:06:52.321"/>
+</kw>
+<msg timestamp="20260811 12:06:52.321" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:50.103" endtime="20260811 12:06:52.321"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:50.103" endtime="20260811 12:06:52.321"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline list</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:52.324" level="INFO">Running command 'ozone admin pipeline list 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:54.680" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:54.680" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:52.322" endtime="20260811 12:06:54.680"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:54.681" level="INFO">Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:CLOSED, leaderId:0a206e86-5401-4050-aed7-3257c05dc703, CreationTimestamp2026-08-11T12:05:53.901Z[Etc/UTC]}</msg>
+<status status="PASS" starttime="20260811 12:06:54.680" endtime="20260811 12:06:54.681"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260811 12:06:54.681" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260811 12:06:54.681" endtime="20260811 12:06:54.681"/>
+</kw>
+<status status="PASS" starttime="20260811 12:06:52.322" endtime="20260811 12:06:54.681"/>
+</kw>
+<msg timestamp="20260811 12:06:54.681" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260811 12:06:52.321" endtime="20260811 12:06:54.681"/>
+</kw>
+<msg timestamp="20260811 12:06:54.682" level="INFO">${output} = Pipeline{ Id: 3d37193e-fa40-46eb-bec9-d9c83e7a9192, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATI...</msg>
+<status status="PASS" starttime="20260811 12:06:52.321" endtime="20260811 12:06:54.682"/>
+</kw>
+<kw name="Pass Execution If" library="BuiltIn">
+<arg>'${PIPELINE}' not in '''${output}'''</arg>
+<arg>Pipeline already scrubbed</arg>
+<doc>Conditionally skips rest of the current test, setup, or teardown with PASS status.</doc>
+<status status="PASS" starttime="20260811 12:06:54.682" endtime="20260811 12:06:54.682"/>
+</kw>
+<kw name="Should Match Regexp" library="BuiltIn">
+<arg>${output}</arg>
+<arg>${PIPELINE}.*CLOSED</arg>
+<doc>Fails if ``string`` does not match ``pattern`` as a regular expression.</doc>
+<status status="PASS" starttime="20260811 12:06:54.682" endtime="20260811 12:06:54.683"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:50.102" endtime="20260811 12:06:54.683"/>
+</test>
+<test id="s1-s2-t10" name="Incomplete command" line="77">
+<kw name="Execute And Ignore Error" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:54.686" level="INFO">Running command 'ozone admin pipeline 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:56.321" level="INFO">${rc} = 2</msg>
+<msg timestamp="20260811 12:06:56.321" level="INFO">${output} = Missing required subcommand
+Usage: ozone admin pipeline [-hV] [--verbose] [COMMAND]
+Pipeline specific operations
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version info...</msg>
+<status status="PASS" starttime="20260811 12:06:54.684" endtime="20260811 12:06:56.321"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:56.322" level="INFO">Missing required subcommand
+Usage: ozone admin pipeline [-hV] [--verbose] [COMMAND]
+Pipeline specific operations
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version information and exit.
+      --verbose   More verbose output. Show the stack trace of the errors.
+Commands:
+  list        List all active pipelines
+  activate    Activates the given Pipeline
+  deactivate  Deactivates the given Pipeline
+  create      create pipeline
+  close       Close pipeline</msg>
+<status status="PASS" starttime="20260811 12:06:56.321" endtime="20260811 12:06:56.322"/>
+</kw>
+<msg timestamp="20260811 12:06:56.322" level="INFO">${output} = Missing required subcommand
+Usage: ozone admin pipeline [-hV] [--verbose] [COMMAND]
+Pipeline specific operations
+  -h, --help      Show this help message and exit.
+  -V, --version   Print version info...</msg>
+<status status="PASS" starttime="20260811 12:06:54.684" endtime="20260811 12:06:56.322"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>Missing required subcommand</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:56.322" endtime="20260811 12:06:56.323"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>close</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:56.323" endtime="20260811 12:06:56.323"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>create</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:56.323" endtime="20260811 12:06:56.323"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>deactivate</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:56.323" endtime="20260811 12:06:56.324"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${output}</arg>
+<arg>list</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260811 12:06:56.324" endtime="20260811 12:06:56.324"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:54.683" endtime="20260811 12:06:56.324"/>
+</test>
+<test id="s1-s2-t11" name="Create pipeline" line="85">
+<kw name="Execute And Ignore Error" library="os">
+<var>${output}</var>
+<arg>ozone admin pipeline create -t RATIS -f ONE</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260811 12:06:56.328" level="INFO">Running command 'ozone admin pipeline create -t RATIS -f ONE 2&gt;&amp;1'.</msg>
+<msg timestamp="20260811 12:06:58.753" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260811 12:06:58.753" level="INFO">${output} = Pipeline-30d04cde-5714-4215-8d47-27d548247de0 is created. Pipeline{ Id: 30d04cde-5714-4215-8d47-27d548247de0, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_defaul...</msg>
+<status status="PASS" starttime="20260811 12:06:56.325" endtime="20260811 12:06:58.753"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260811 12:06:58.754" level="INFO">Pipeline-30d04cde-5714-4215-8d47-27d548247de0 is created. Pipeline{ Id: 30d04cde-5714-4215-8d47-27d548247de0, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_default/172.18.0.4), ReplicaIndex: 0},], ReplicationConfig: RATIS/ONE, State:ALLOCATED, leaderId:, CreationTimestamp2026-08-11T12:06:58.493Z[Etc/UTC]}</msg>
+<status status="PASS" starttime="20260811 12:06:58.753" endtime="20260811 12:06:58.754"/>
+</kw>
+<msg timestamp="20260811 12:06:58.754" level="INFO">${output} = Pipeline-30d04cde-5714-4215-8d47-27d548247de0 is created. Pipeline{ Id: 30d04cde-5714-4215-8d47-27d548247de0, Nodes: [ {0a206e86-5401-4050-aed7-3257c05dc703(ozonescripts-datanode-1.ozonescripts_defaul...</msg>
+<status status="PASS" starttime="20260811 12:06:56.325" endtime="20260811 12:06:58.754"/>
+</kw>
+<kw name="Should Contain Any" library="BuiltIn">
+<arg>${output}</arg>
+<arg>is created.</arg>
+<arg>RATIS/ONE</arg>
+<arg>Cannot create pipeline</arg>
+<doc>Fails if ``container`` does not contain any of the ``*items``.</doc>
+<status status="PASS" starttime="20260811 12:06:58.754" endtime="20260811 12:06:58.755"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260811 12:06:56.325" endtime="20260811 12:06:58.755"/>
+</test>
+<doc>Test ozone admin pipeline command</doc>
+<status status="PASS" starttime="20260811 12:06:26.728" endtime="20260811 12:06:58.756"/>
+</suite>
+<status status="PASS" starttime="N/A" endtime="N/A" elapsedtime="49628"/>
+</suite>
+<statistics>
+<total>
+<stat pass="12" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="12" fail="0" skip="0" id="s1" name="ozonescripts">ozonescripts</stat>
+<stat pass="1" fail="0" skip="0" id="s1-s1" name="Single Node">ozonescripts.Single Node</stat>
+<stat pass="11" fail="0" skip="0" id="s1-s2" name="Pipeline">ozonescripts.Pipeline</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
