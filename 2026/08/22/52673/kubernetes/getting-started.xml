@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.25 on linux)" generated="20260822 16:41:07.413" rpa="false" schemaversion="4">
+<suite id="s1" name="getting-started" source="/opt/hadoop/smoketest/basic/basic.robot">
+<kw name="Get Security Enabled From Config" library="commonlib" type="SETUP">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260822 16:40:36.266" endtime="20260822 16:40:36.266"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260822 16:40:36.268" level="INFO">Running command 'ozone getconf confKey ozone.security.enabled 2&gt;&amp;1'.</msg>
+<msg timestamp="20260822 16:40:36.679" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260822 16:40:36.679" level="INFO">${output} = false</msg>
+<status status="PASS" starttime="20260822 16:40:36.266" endtime="20260822 16:40:36.679"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260822 16:40:36.679" level="INFO">false</msg>
+<status status="PASS" starttime="20260822 16:40:36.679" endtime="20260822 16:40:36.679"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260822 16:40:36.679" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260822 16:40:36.679" endtime="20260822 16:40:36.679"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:36.266" endtime="20260822 16:40:36.680"/>
+</kw>
+<msg timestamp="20260822 16:40:36.680" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260822 16:40:36.266" endtime="20260822 16:40:36.680"/>
+</kw>
+<msg timestamp="20260822 16:40:36.680" level="INFO">${value} = false</msg>
+<status status="PASS" starttime="20260822 16:40:36.266" endtime="20260822 16:40:36.680"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260822 16:40:36.680" endtime="20260822 16:40:36.680"/>
+</kw>
+<status status="NOT RUN" starttime="20260822 16:40:36.680" endtime="20260822 16:40:36.680"/>
+</branch>
+<status status="PASS" starttime="20260822 16:40:36.680" endtime="20260822 16:40:36.680"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260822 16:40:36.680" level="INFO">${SECURITY_ENABLED} = false</msg>
+<status status="PASS" starttime="20260822 16:40:36.680" endtime="20260822 16:40:36.680"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:36.266" endtime="20260822 16:40:36.680"/>
+</kw>
+<test id="s1-t1" name="Check webui static resources" line="30">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit HTTP user</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260822 16:40:36.681" endtime="20260822 16:40:36.681"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>curl --negotiate -u : -s -I http://${SCM}:9876/static/bootstrap-3.4.1/js/bootstrap.min.js</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260822 16:40:36.683" level="INFO">Running command 'curl --negotiate -u : -s -I http://scm:9876/static/bootstrap-3.4.1/js/bootstrap.min.js 2&gt;&amp;1'.</msg>
+<msg timestamp="20260822 16:40:36.698" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260822 16:40:36.698" level="INFO">${output} = HTTP/1.1 200 OK
+Date: Sat, 22 Aug 2026 16:40:36 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Thu, 11 Jun 2026 07:31:18 GMT
+Content-Typ...</msg>
+<status status="PASS" starttime="20260822 16:40:36.682" endtime="20260822 16:40:36.698"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260822 16:40:36.698" level="INFO">HTTP/1.1 200 OK
+Date: Sat, 22 Aug 2026 16:40:36 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Thu, 11 Jun 2026 07:31:18 GMT
+Content-Type: application/javascript
+Accept-Ranges: bytes
+Content-Length: 39680
+</msg>
+<status status="PASS" starttime="20260822 16:40:36.698" endtime="20260822 16:40:36.698"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260822 16:40:36.698" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260822 16:40:36.698" endtime="20260822 16:40:36.698"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:36.682" endtime="20260822 16:40:36.698"/>
+</kw>
+<msg timestamp="20260822 16:40:36.699" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260822 16:40:36.681" endtime="20260822 16:40:36.699"/>
+</kw>
+<msg timestamp="20260822 16:40:36.699" level="INFO">${result} = HTTP/1.1 200 OK
+Date: Sat, 22 Aug 2026 16:40:36 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Thu, 11 Jun 2026 07:31:18 GMT
+Content-Typ...</msg>
+<status status="PASS" starttime="20260822 16:40:36.681" endtime="20260822 16:40:36.699"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>200</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260822 16:40:36.699" endtime="20260822 16:40:36.699"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260822 16:40:36.681" endtime="20260822 16:40:36.699"/>
+</test>
+<test id="s1-t2" name="Basic Freon smoketest" line="35">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260822 16:40:36.700" endtime="20260822 16:40:36.700"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>10</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20260822 16:40:36.700" level="INFO">${random} = jTQSTXeRCu</msg>
+<status status="PASS" starttime="20260822 16:40:36.700" endtime="20260822 16:40:36.700"/>
+</kw>
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260822 16:40:36.703" level="INFO">Running command 'ozone freon ockg  -t 1 -n1 -p jTQSTXeRCu  2&gt;&amp;1'.</msg>
+<msg timestamp="20260822 16:40:39.838" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260822 16:40:39.838" level="INFO">${output} = 2026-08-22 16:40:37 INFO  TracingUtil:258 - Sampling Trace Config = '1.0'
+2026-08-22 16:40:37 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-08-22 16:40:37 INFO  TracingUtil:87 - Initialized t...</msg>
+<status status="PASS" starttime="20260822 16:40:36.701" endtime="20260822 16:40:39.838"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260822 16:40:39.839" level="INFO">2026-08-22 16:40:37 INFO  TracingUtil:258 - Sampling Trace Config = '1.0'
+2026-08-22 16:40:37 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-08-22 16:40:37 INFO  TracingUtil:87 - Initialized tracing service: freon (enabled=false, applicationAware=true)
+2026-08-22 16:40:37 INFO  BaseFreonGenerator:317 - Executing test with prefix jTQSTXeRCu and number-of-tests 1
+2026-08-22 16:40:37 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-08-22 16:40:38 INFO  RpcClient:464 - Creating Volume: vol1, with hadoop as owner and space quota set to -1 bytes, counts quota set to -1
+2026-08-22 16:40:38 INFO  RpcClient:689 - Creating Bucket: vol1/bucket1, with server-side default bucket layout, hadoop as owner, Versioning false, Storage Type set to DISK and Encryption set to false, Replication Type set to server-side default replication type, Namespace Quota set to -1, Space Quota set to -1 
+2026-08-22 16:40:38 WARN  MetricsSystemImpl:151 - ozone-freon metrics system already initialized!
+2026-08-22 16:40:38 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-08-22 16:40:39 INFO  ProgressBar:167 - Progress: 100.00 % (1 out of 1)
+2026-08-22 16:40:39 INFO  metrics:373 - type=TIMER, name=key-create, count=1, min=823.861087, max=823.861087, mean=823.861087, stddev=0.0, median=823.861087, p75=823.861087, p95=823.861087, p98=823.861087, p99=823.861087, p999=823.861087, mean_rate=0.8057889457206908, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2026-08-22 16:40:39 INFO  BaseFreonGenerator:75 - Total execution time (sec): 2
+2026-08-22 16:40:39 INFO  BaseFreonGenerator:75 - Failures: 0
+2026-08-22 16:40:39 INFO  BaseFreonGenerator:75 - Successful executions: 1</msg>
+<status status="PASS" starttime="20260822 16:40:39.838" endtime="20260822 16:40:39.839"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260822 16:40:39.839" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260822 16:40:39.839" endtime="20260822 16:40:39.839"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:36.701" endtime="20260822 16:40:39.839"/>
+</kw>
+<msg timestamp="20260822 16:40:39.839" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260822 16:40:36.701" endtime="20260822 16:40:39.839"/>
+</kw>
+<msg timestamp="20260822 16:40:39.839" level="INFO">${result} = 2026-08-22 16:40:37 INFO  TracingUtil:258 - Sampling Trace Config = '1.0'
+2026-08-22 16:40:37 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-08-22 16:40:37 INFO  TracingUtil:87 - Initialized t...</msg>
+<status status="PASS" starttime="20260822 16:40:36.701" endtime="20260822 16:40:39.839"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260822 16:40:39.839" endtime="20260822 16:40:39.839"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:36.700" endtime="20260822 16:40:39.839"/>
+</kw>
+<kw name="Freon OCKV" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockv ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260822 16:40:39.842" level="INFO">Running command 'ozone freon ockv  -t 1 -n1 -p jTQSTXeRCu  2&gt;&amp;1'.</msg>
+<msg timestamp="20260822 16:40:43.427" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260822 16:40:43.427" level="INFO">${output} = 2026-08-22 16:40:40 INFO  TracingUtil:258 - Sampling Trace Config = '1.0'
+2026-08-22 16:40:40 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-08-22 16:40:41 INFO  TracingUtil:87 - Initialized t...</msg>
+<status status="PASS" starttime="20260822 16:40:39.841" endtime="20260822 16:40:43.427"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260822 16:40:43.428" level="INFO">2026-08-22 16:40:40 INFO  TracingUtil:258 - Sampling Trace Config = '1.0'
+2026-08-22 16:40:40 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-08-22 16:40:41 INFO  TracingUtil:87 - Initialized tracing service: freon (enabled=false, applicationAware=true)
+2026-08-22 16:40:41 INFO  BaseFreonGenerator:317 - Executing test with prefix jTQSTXeRCu and number-of-tests 1
+2026-08-22 16:40:41 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-08-22 16:40:42 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-08-22 16:40:42 WARN  MetricsSystemImpl:151 - ozone-freon metrics system already initialized!
+2026-08-22 16:40:42 INFO  XceiverClientGrpc:141 - XceiverClientGrpc is created for pipeline Pipeline{ Id: 64091299-096c-4c72-b76d-dd18e458ce7a, Nodes: [ {105b1ee8-6779-4a7d-86f5-3fe99b936037(datanode-1.datanode.default.svc.cluster.local/10.42.0.15), ReplicaIndex: 0}, {79164554-c8ed-4e02-abcc-1fa92ff145af(datanode-2.datanode.default.svc.cluster.local/10.42.0.16), ReplicaIndex: 0}, {d1b42101-8af5-4d8a-8bc8-0314302e0bc2(datanode-0.datanode.default.svc.cluster.local/10.42.0.11), ReplicaIndex: 0},], ReplicationConfig: STANDALONE/THREE, State:OPEN, leaderId:79164554-c8ed-4e02-abcc-1fa92ff145af, CreationTimestamp2026-08-22T16:40:24.513Z[Etc/UTC]}
+2026-08-22 16:40:43 INFO  ProgressBar:167 - Progress: 100.00 % (1 out of 1)
+2026-08-22 16:40:43 INFO  metrics:373 - type=TIMER, name=key-validate, count=1, min=22.848909, max=22.848909, mean=22.848909, stddev=0.0, median=22.848909, p75=22.848909, p95=22.848909, p98=22.848909, p99=22.848909, p999=22.848909, mean_rate=1.8391456915196442, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2026-08-22 16:40:43 INFO  BaseFreonGenerator:75 - Total execution time (sec): 2
+2026-08-22 16:40:43 INFO  BaseFreonGenerator:75 - Failures: 0
+2026-08-22 16:40:43 INFO  BaseFreonGenerator:75 - Successful executions: 1</msg>
+<status status="PASS" starttime="20260822 16:40:43.428" endtime="20260822 16:40:43.428"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260822 16:40:43.428" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260822 16:40:43.428" endtime="20260822 16:40:43.429"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:39.840" endtime="20260822 16:40:43.429"/>
+</kw>
+<msg timestamp="20260822 16:40:43.429" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260822 16:40:39.840" endtime="20260822 16:40:43.429"/>
+</kw>
+<msg timestamp="20260822 16:40:43.429" level="INFO">${result} = 2026-08-22 16:40:40 INFO  TracingUtil:258 - Sampling Trace Config = '1.0'
+2026-08-22 16:40:40 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-08-22 16:40:41 INFO  TracingUtil:87 - Initialized t...</msg>
+<status status="PASS" starttime="20260822 16:40:39.840" endtime="20260822 16:40:43.429"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260822 16:40:43.429" endtime="20260822 16:40:43.429"/>
+</kw>
+<status status="PASS" starttime="20260822 16:40:39.840" endtime="20260822 16:40:43.429"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260822 16:40:36.699" endtime="20260822 16:40:43.429"/>
+</test>
+<doc>Smoketest ozone cluster startup</doc>
+<status status="PASS" starttime="20260822 16:40:36.242" endtime="20260822 16:40:43.430"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="getting-started">getting-started</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
