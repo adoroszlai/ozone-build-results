@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Rebot 6.1.1 (Python 3.9.25 on linux)" generated="20260924 09:11:42.646" rpa="false" schemaversion="4">
+<suite id="s1" name="ozone-dev" source="/opt/hadoop/smoketest/basic/basic.robot">
+<kw name="Get Security Enabled From Config" library="commonlib" type="SETUP">
+<kw name="Return From Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' != ''</arg>
+<doc>Returns from the enclosing user keyword if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260924 09:11:34.298" endtime="20260924 09:11:34.298"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${value}</var>
+<arg>ozone getconf confKey ozone.security.enabled</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260924 09:11:34.300" level="INFO">Running command 'ozone getconf confKey ozone.security.enabled 2&gt;&amp;1'.</msg>
+<msg timestamp="20260924 09:11:34.743" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260924 09:11:34.743" level="INFO">${output} = false</msg>
+<status status="PASS" starttime="20260924 09:11:34.299" endtime="20260924 09:11:34.743"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260924 09:11:34.744" level="INFO">false</msg>
+<status status="PASS" starttime="20260924 09:11:34.743" endtime="20260924 09:11:34.744"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260924 09:11:34.744" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260924 09:11:34.744" endtime="20260924 09:11:34.744"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:34.299" endtime="20260924 09:11:34.744"/>
+</kw>
+<msg timestamp="20260924 09:11:34.744" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260924 09:11:34.298" endtime="20260924 09:11:34.744"/>
+</kw>
+<msg timestamp="20260924 09:11:34.744" level="INFO">${value} = false</msg>
+<status status="PASS" starttime="20260924 09:11:34.298" endtime="20260924 09:11:34.744"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' != 'true' and '${value}' != 'false'">
+<kw name="Set Variable" library="BuiltIn">
+<var>${value}</var>
+<arg>false</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" starttime="20260924 09:11:34.744" endtime="20260924 09:11:34.744"/>
+</kw>
+<status status="NOT RUN" starttime="20260924 09:11:34.744" endtime="20260924 09:11:34.744"/>
+</branch>
+<status status="PASS" starttime="20260924 09:11:34.744" endtime="20260924 09:11:34.744"/>
+</if>
+<kw name="Set Global Variable" library="BuiltIn">
+<arg>${SECURITY_ENABLED}</arg>
+<arg>${value}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<msg timestamp="20260924 09:11:34.745" level="INFO">${SECURITY_ENABLED} = false</msg>
+<status status="PASS" starttime="20260924 09:11:34.745" endtime="20260924 09:11:34.745"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:34.298" endtime="20260924 09:11:34.745"/>
+</kw>
+<test id="s1-t1" name="Check webui static resources" line="30">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit HTTP user</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260924 09:11:34.745" endtime="20260924 09:11:34.746"/>
+</kw>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>curl --negotiate -u : -s -I http://${SCM}:9876/static/bootstrap-3.4.1/js/bootstrap.min.js</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260924 09:11:34.748" level="INFO">Running command 'curl --negotiate -u : -s -I http://scm:9876/static/bootstrap-3.4.1/js/bootstrap.min.js 2&gt;&amp;1'.</msg>
+<msg timestamp="20260924 09:11:34.763" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260924 09:11:34.763" level="INFO">${output} = HTTP/1.1 200 OK
+Date: Thu, 24 Sep 2026 09:11:34 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Thu, 11 Jun 2026 07:31:18 GMT
+Content-Typ...</msg>
+<status status="PASS" starttime="20260924 09:11:34.746" endtime="20260924 09:11:34.763"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260924 09:11:34.764" level="INFO">HTTP/1.1 200 OK
+Date: Thu, 24 Sep 2026 09:11:34 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Thu, 11 Jun 2026 07:31:18 GMT
+Content-Type: application/javascript
+Accept-Ranges: bytes
+Content-Length: 39680
+</msg>
+<status status="PASS" starttime="20260924 09:11:34.763" endtime="20260924 09:11:34.764"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260924 09:11:34.764" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260924 09:11:34.764" endtime="20260924 09:11:34.764"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:34.746" endtime="20260924 09:11:34.764"/>
+</kw>
+<msg timestamp="20260924 09:11:34.764" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260924 09:11:34.746" endtime="20260924 09:11:34.764"/>
+</kw>
+<msg timestamp="20260924 09:11:34.764" level="INFO">${result} = HTTP/1.1 200 OK
+Date: Thu, 24 Sep 2026 09:11:34 GMT
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-FRAME-OPTIONS: SAMEORIGIN
+Last-Modified: Thu, 11 Jun 2026 07:31:18 GMT
+Content-Typ...</msg>
+<status status="PASS" starttime="20260924 09:11:34.746" endtime="20260924 09:11:34.764"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>200</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260924 09:11:34.764" endtime="20260924 09:11:34.765"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260924 09:11:34.745" endtime="20260924 09:11:34.765"/>
+</test>
+<test id="s1-t2" name="Basic Freon smoketest" line="35">
+<kw name="Run Keyword If" library="BuiltIn">
+<arg>'${SECURITY_ENABLED}' == 'true'</arg>
+<arg>Kinit test user</arg>
+<arg>testuser</arg>
+<arg>testuser.keytab</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" starttime="20260924 09:11:34.765" endtime="20260924 09:11:34.766"/>
+</kw>
+<kw name="Generate Random String" library="String">
+<var>${random}</var>
+<arg>10</arg>
+<doc>Generates a string with a desired ``length`` from the given ``chars``.</doc>
+<msg timestamp="20260924 09:11:34.766" level="INFO">${random} = cSgBAhuTek</msg>
+<status status="PASS" starttime="20260924 09:11:34.766" endtime="20260924 09:11:34.766"/>
+</kw>
+<kw name="Freon OCKG" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockg ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260924 09:11:34.769" level="INFO">Running command 'ozone freon ockg  -t 1 -n1 -p cSgBAhuTek  2&gt;&amp;1'.</msg>
+<msg timestamp="20260924 09:11:38.952" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260924 09:11:38.952" level="INFO">${output} = 2026-09-24 09:11:35 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:35 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:35 ERROR TracingUtil:90 - Failed to in...</msg>
+<status status="PASS" starttime="20260924 09:11:34.768" endtime="20260924 09:11:38.952"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260924 09:11:38.953" level="INFO">2026-09-24 09:11:35 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:35 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:35 ERROR TracingUtil:90 - Failed to initialize tracing
+java.lang.IllegalArgumentException: Invalid endpoint, must start with http:// or https://: jaeger-0.jaeger
+	at io.opentelemetry.exporter.internal.EndpointUtil.validateEndpoint(EndpointUtil.java:32)
+	at io.opentelemetry.exporter.otlp.internal.GrpcExporterBuilder.setEndpoint(GrpcExporterBuilder.java:103)
+	at io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder.setEndpoint(OtlpGrpcSpanExporterBuilder.java:134)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.buildSdkTracerProvider(TracingUtil.java:266)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initOzoneSdk(TracingUtil.java:200)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initialize(TracingUtil.java:196)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:85)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:75)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:100)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:146)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:137)
+	at org.apache.hadoop.ozone.freon.Freon.execute(Freon.java:61)
+	at org.apache.hadoop.hdds.cli.GenericCli.run(GenericCli.java:84)
+	at org.apache.hadoop.ozone.freon.Freon.main(Freon.java:93)
+2026-09-24 09:11:35 INFO  BaseFreonGenerator:317 - Executing test with prefix cSgBAhuTek and number-of-tests 1
+2026-09-24 09:11:35 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-09-24 09:11:35 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:35 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:35 ERROR TracingUtil:90 - Failed to initialize tracing
+java.lang.IllegalArgumentException: Invalid endpoint, must start with http:// or https://: jaeger-0.jaeger
+	at io.opentelemetry.exporter.internal.EndpointUtil.validateEndpoint(EndpointUtil.java:32)
+	at io.opentelemetry.exporter.otlp.internal.GrpcExporterBuilder.setEndpoint(GrpcExporterBuilder.java:103)
+	at io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder.setEndpoint(OtlpGrpcSpanExporterBuilder.java:134)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.buildSdkTracerProvider(TracingUtil.java:266)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initOzoneSdk(TracingUtil.java:200)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initialize(TracingUtil.java:196)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:85)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:75)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:100)
+	at org.apache.hadoop.ozone.client.rpc.RpcClient.&lt;init&gt;(RpcClient.java:250)
+	at org.apache.hadoop.ozone.client.OzoneClientFactory.getClientProtocol(OzoneClientFactory.java:261)
+	at org.apache.hadoop.ozone.client.OzoneClientFactory.getClientProtocol(OzoneClientFactory.java:244)
+	at org.apache.hadoop.ozone.client.OzoneClientFactory.getRpcClient(OzoneClientFactory.java:164)
+	at org.apache.hadoop.ozone.freon.BaseFreonGenerator.createOzoneClient(BaseFreonGenerator.java:629)
+	at org.apache.hadoop.ozone.freon.OzoneClientKeyGenerator.call(OzoneClientKeyGenerator.java:110)
+	at org.apache.hadoop.ozone.freon.OzoneClientKeyGenerator.call(OzoneClientKeyGenerator.java:43)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2041)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at org.apache.hadoop.hdds.cli.GenericCli.execute(GenericCli.java:92)
+	at org.apache.hadoop.ozone.freon.Freon.lambda$execute$0(Freon.java:61)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.executeInSpan(TracingUtil.java:476)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.executeInNewSpan(TracingUtil.java:465)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:148)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:137)
+	at org.apache.hadoop.ozone.freon.Freon.execute(Freon.java:61)
+	at org.apache.hadoop.hdds.cli.GenericCli.run(GenericCli.java:84)
+	at org.apache.hadoop.ozone.freon.Freon.main(Freon.java:93)
+2026-09-24 09:11:36 INFO  RpcClient:471 - Creating Volume: vol1, with hadoop as owner and space quota set to -1 bytes, counts quota set to -1
+2026-09-24 09:11:36 INFO  RpcClient:696 - Creating Bucket: vol1/bucket1, with server-side default bucket layout, hadoop as owner, Versioning false, Storage Type set to DISK and Encryption set to false, Replication Type set to server-side default replication type, Namespace Quota set to -1, Space Quota set to -1 
+2026-09-24 09:11:36 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-09-24 09:11:36 WARN  MetricsSystemImpl:151 - ozone-freon metrics system already initialized!
+2026-09-24 09:11:37 INFO  GrpcConfigKeys:62 - raft.grpc.client.worker-group.size = 0 (default)
+Sep 24, 2026 9:11:37 AM org.apache.ratis.thirdparty.io.grpc.netty.TcpMetrics loadEpollInfo
+INFO: Epoll available during static init of TcpMetrics:true
+2026-09-24 09:11:37 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-09-24 09:11:38 INFO  ProgressBar:167 - Progress: 100.00 % (1 out of 1)
+2026-09-24 09:11:38 INFO  metrics:373 - type=TIMER, name=key-create, count=1, min=1513.978474, max=1513.978474, mean=1513.978474, stddev=0.0, median=1513.978474, p75=1513.978474, p95=1513.978474, p98=1513.978474, p99=1513.978474, p999=1513.978474, mean_rate=0.4925304169263724, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2026-09-24 09:11:38 INFO  BaseFreonGenerator:75 - Total execution time (sec): 3
+2026-09-24 09:11:38 INFO  BaseFreonGenerator:75 - Failures: 0
+2026-09-24 09:11:38 INFO  BaseFreonGenerator:75 - Successful executions: 1</msg>
+<status status="PASS" starttime="20260924 09:11:38.953" endtime="20260924 09:11:38.953"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260924 09:11:38.954" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260924 09:11:38.953" endtime="20260924 09:11:38.954"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:34.767" endtime="20260924 09:11:38.954"/>
+</kw>
+<msg timestamp="20260924 09:11:38.954" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260924 09:11:34.767" endtime="20260924 09:11:38.954"/>
+</kw>
+<msg timestamp="20260924 09:11:38.954" level="INFO">${result} = 2026-09-24 09:11:35 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:35 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:35 ERROR TracingUtil:90 - Failed to in...</msg>
+<status status="PASS" starttime="20260924 09:11:34.767" endtime="20260924 09:11:38.954"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260924 09:11:38.954" endtime="20260924 09:11:38.954"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:34.766" endtime="20260924 09:11:38.954"/>
+</kw>
+<kw name="Freon OCKV" library="freon">
+<arg>prefix=${random}</arg>
+<kw name="Execute" library="os">
+<var>${result}</var>
+<arg>ozone freon ockv ${OM_HA_PARAM} -t ${threads} -n${n} -p ${prefix} ${args}</arg>
+<kw name="Run Keyword And Return" library="BuiltIn">
+<arg>Execute and checkrc</arg>
+<arg>${command}</arg>
+<arg>0</arg>
+<doc>Runs the specified keyword and returns from the enclosing user keyword.</doc>
+<kw name="Execute and checkrc" library="os">
+<arg>${command}</arg>
+<arg>0</arg>
+<kw name="Run And Return Rc And Output" library="OperatingSystem">
+<var>${rc}</var>
+<var>${output}</var>
+<arg>${command}</arg>
+<doc>Runs the given command in the system and returns the RC and output.</doc>
+<msg timestamp="20260924 09:11:38.957" level="INFO">Running command 'ozone freon ockv  -t 1 -n1 -p cSgBAhuTek  2&gt;&amp;1'.</msg>
+<msg timestamp="20260924 09:11:42.107" level="INFO">${rc} = 0</msg>
+<msg timestamp="20260924 09:11:42.107" level="INFO">${output} = 2026-09-24 09:11:39 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:39 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:39 ERROR TracingUtil:90 - Failed to in...</msg>
+<status status="PASS" starttime="20260924 09:11:38.956" endtime="20260924 09:11:42.107"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${output}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20260924 09:11:42.108" level="INFO">2026-09-24 09:11:39 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:39 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:39 ERROR TracingUtil:90 - Failed to initialize tracing
+java.lang.IllegalArgumentException: Invalid endpoint, must start with http:// or https://: jaeger-0.jaeger
+	at io.opentelemetry.exporter.internal.EndpointUtil.validateEndpoint(EndpointUtil.java:32)
+	at io.opentelemetry.exporter.otlp.internal.GrpcExporterBuilder.setEndpoint(GrpcExporterBuilder.java:103)
+	at io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder.setEndpoint(OtlpGrpcSpanExporterBuilder.java:134)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.buildSdkTracerProvider(TracingUtil.java:266)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initOzoneSdk(TracingUtil.java:200)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initialize(TracingUtil.java:196)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:85)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:75)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:100)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:146)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:137)
+	at org.apache.hadoop.ozone.freon.Freon.execute(Freon.java:61)
+	at org.apache.hadoop.hdds.cli.GenericCli.run(GenericCli.java:84)
+	at org.apache.hadoop.ozone.freon.Freon.main(Freon.java:93)
+2026-09-24 09:11:39 INFO  BaseFreonGenerator:317 - Executing test with prefix cSgBAhuTek and number-of-tests 1
+2026-09-24 09:11:39 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+2026-09-24 09:11:39 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:39 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:39 ERROR TracingUtil:90 - Failed to initialize tracing
+java.lang.IllegalArgumentException: Invalid endpoint, must start with http:// or https://: jaeger-0.jaeger
+	at io.opentelemetry.exporter.internal.EndpointUtil.validateEndpoint(EndpointUtil.java:32)
+	at io.opentelemetry.exporter.otlp.internal.GrpcExporterBuilder.setEndpoint(GrpcExporterBuilder.java:103)
+	at io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporterBuilder.setEndpoint(OtlpGrpcSpanExporterBuilder.java:134)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.buildSdkTracerProvider(TracingUtil.java:266)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initOzoneSdk(TracingUtil.java:200)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initialize(TracingUtil.java:196)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:85)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:75)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.initTracing(TracingUtil.java:100)
+	at org.apache.hadoop.ozone.client.rpc.RpcClient.&lt;init&gt;(RpcClient.java:250)
+	at org.apache.hadoop.ozone.client.OzoneClientFactory.getClientProtocol(OzoneClientFactory.java:261)
+	at org.apache.hadoop.ozone.client.OzoneClientFactory.getClientProtocol(OzoneClientFactory.java:244)
+	at org.apache.hadoop.ozone.client.OzoneClientFactory.getRpcClient(OzoneClientFactory.java:164)
+	at org.apache.hadoop.ozone.freon.BaseFreonGenerator.createOzoneClient(BaseFreonGenerator.java:629)
+	at org.apache.hadoop.ozone.freon.OzoneClientKeyValidator.call(OzoneClientKeyValidator.java:90)
+	at org.apache.hadoop.ozone.freon.OzoneClientKeyValidator.call(OzoneClientKeyValidator.java:39)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:2041)
+	at picocli.CommandLine.access$1500(CommandLine.java:148)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2461)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2453)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2415)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2273)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2417)
+	at picocli.CommandLine.execute(CommandLine.java:2170)
+	at org.apache.hadoop.hdds.cli.GenericCli.execute(GenericCli.java:92)
+	at org.apache.hadoop.ozone.freon.Freon.lambda$execute$0(Freon.java:61)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.executeInSpan(TracingUtil.java:476)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.executeInNewSpan(TracingUtil.java:465)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:148)
+	at org.apache.hadoop.hdds.tracing.TracingUtil.execute(TracingUtil.java:137)
+	at org.apache.hadoop.ozone.freon.Freon.execute(Freon.java:61)
+	at org.apache.hadoop.hdds.cli.GenericCli.run(GenericCli.java:84)
+	at org.apache.hadoop.ozone.freon.Freon.main(Freon.java:93)
+2026-09-24 09:11:40 WARN  MetricsSystemImpl:151 - ozone-freon metrics system already initialized!
+2026-09-24 09:11:40 INFO  XceiverClientGrpc:141 - XceiverClientGrpc is created for pipeline Pipeline{ Id: 162ee96f-388d-4e1c-a581-f38087d127a3, Nodes: [ {bfed36f9-3c98-4913-8c3c-717a07ef0eb4(datanode-1.datanode.default.svc.cluster.local/10.42.0.33), ReplicaIndex: 0}, {0e45fed0-2495-45cb-9331-35ac78697be5(datanode-2.datanode.default.svc.cluster.local/10.42.0.34), ReplicaIndex: 0}, {b62105e1-9192-4f8b-be51-2bc452b97535(datanode-0.datanode.default.svc.cluster.local/10.42.0.26), ReplicaIndex: 0},], ReplicationConfig: STANDALONE/THREE, State:OPEN, leaderId:b62105e1-9192-4f8b-be51-2bc452b97535, CreationTimestamp2026-09-24T09:11:22.037Z[Etc/UTC]}
+2026-09-24 09:11:40 INFO  ProgressBar:167 - Progress: 0.00 % (0 out of 1)
+Sep 24, 2026 9:11:40 AM org.apache.ratis.thirdparty.io.grpc.netty.TcpMetrics loadEpollInfo
+INFO: Epoll available during static init of TcpMetrics:true
+2026-09-24 09:11:41 INFO  ProgressBar:167 - Progress: 100.00 % (1 out of 1)
+2026-09-24 09:11:41 INFO  metrics:373 - type=TIMER, name=key-validate, count=1, min=22.712517, max=22.712517, mean=22.712517, stddev=0.0, median=22.712517, p75=22.712517, p95=22.712517, p98=22.712517, p99=22.712517, p999=22.712517, mean_rate=1.2679149005695114, m1=0.0, m5=0.0, m15=0.0, rate_unit=events/second, duration_unit=milliseconds
+2026-09-24 09:11:41 INFO  BaseFreonGenerator:75 - Total execution time (sec): 2
+2026-09-24 09:11:41 INFO  BaseFreonGenerator:75 - Failures: 0
+2026-09-24 09:11:41 INFO  BaseFreonGenerator:75 - Successful executions: 1</msg>
+<status status="PASS" starttime="20260924 09:11:42.107" endtime="20260924 09:11:42.108"/>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<arg>${rc}</arg>
+<arg>${expected_error_code}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<msg timestamp="20260924 09:11:42.108" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<status status="PASS" starttime="20260924 09:11:42.108" endtime="20260924 09:11:42.108"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:38.955" endtime="20260924 09:11:42.108"/>
+</kw>
+<msg timestamp="20260924 09:11:42.108" level="INFO">Returning from the enclosing user keyword.</msg>
+<status status="PASS" starttime="20260924 09:11:38.955" endtime="20260924 09:11:42.108"/>
+</kw>
+<msg timestamp="20260924 09:11:42.108" level="INFO">${result} = 2026-09-24 09:11:39 INFO  TracingUtil:258 - Sampling Trace Config = '0.01'
+2026-09-24 09:11:39 INFO  TracingUtil:260 - Sampling Span Config = ''
+2026-09-24 09:11:39 ERROR TracingUtil:90 - Failed to in...</msg>
+<status status="PASS" starttime="20260924 09:11:38.955" endtime="20260924 09:11:42.108"/>
+</kw>
+<kw name="Should Contain" library="BuiltIn">
+<arg>${result}</arg>
+<arg>Successful executions: ${n}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" starttime="20260924 09:11:42.109" endtime="20260924 09:11:42.109"/>
+</kw>
+<status status="PASS" starttime="20260924 09:11:38.954" endtime="20260924 09:11:42.109"/>
+</kw>
+<timeout value="5 minutes"/>
+<status status="PASS" starttime="20260924 09:11:34.765" endtime="20260924 09:11:42.109"/>
+</test>
+<doc>Smoketest ozone cluster startup</doc>
+<status status="PASS" starttime="20260924 09:11:34.274" endtime="20260924 09:11:42.109"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="2" fail="0" skip="0" id="s1" name="ozone-dev">ozone-dev</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
