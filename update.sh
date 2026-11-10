@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-./ogh archive `pwd`
+./ogh archive -- workflow 406789529 `pwd`
 find * -size '+100M' | xargs rm -v
 git add .
 git config user.email "ci@github.com"
